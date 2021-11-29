@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CSC2031 Blog</title>
+    <title>Educational Assignment System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css"/>
 </head>
 
@@ -29,11 +29,14 @@
                         <a href="{{ url_for('index') }}" class="navbar-item">
                             Home
                         </a>
-                        <a href="{{ url_for('blog.blog') }}" class="navbar-item">
-                            Blog
+                        <a href="{{ url_for('school.approve') }}" class="navbar-item" >
+                            Approve
                         </a>
-                        <a href="{{ url_for('blog.create') }}" class="navbar-item" >
-                            Create Post
+                        <a href="{{ url_for('assignments.create') }}" class="navbar-item" >
+                            Create Assignment
+                        </a>
+                        <a href="{{ url_for('assignments.view') }}" class="navbar-item" >
+                            View Assignments
                         </a>
                         <a href="{{ url_for('users.register') }}" class="navbar-item">
                             Sign Up
