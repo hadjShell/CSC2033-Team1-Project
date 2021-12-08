@@ -6,13 +6,13 @@ body {
 body {
   display: flex;
   align-items: center;
-  padding-top: 40px;
+  padding-top: 20px;
   padding-bottom: 40px;
   background-color: #f5f5f5;
   font-family: 'Readex Pro', sans-serif;
 }
 
-.form-signin {
+.form-register {
   width: 100%;
   max-width: 330px;
   padding: 15px;
@@ -20,17 +20,17 @@ body {
 }
 
 
-.form-signin .form-floating:focus-within {
+.form-register .form-floating:focus-within {
   z-index: 2;
 }
 
-.form-signin input[type="email"] {
+.form-register input[type="email text"] {
   margin-bottom: -1px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-.form-signin input[type="password"] {
+.form-register input[type="password"] {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
