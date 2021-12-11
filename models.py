@@ -1,6 +1,14 @@
 from app import db
 from flask_login import UserMixin
 
+"""
+These classes link the python application to the tables within the database, providing easier reading, writing and 
+editing; rather than using pure SQL. Each class represents each table that is in the database: the User class 
+represents the table 'User' within the database.
+-------------------------------------------------------------------------------------------------------------------
+Created by Harry Sayer
+"""
+
 
 class User(db.Model, UserMixin):
     __tablename__ = 'User'

@@ -2,6 +2,11 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import sshtunnel
 
+"""
+This python file handles the launching of the application as well as connecting to the database via an SSH tunnel.
+-------------------------------------------------------------------------------------------------------------------
+Created by Harry Sayer
+"""
 app = Flask(__name__)
 
 tunnel = sshtunnel.SSHTunnelForwarder('linux.cs.ncl.ac.uk', ssh_username='UniUsername', ssh_password='UniPassword',
