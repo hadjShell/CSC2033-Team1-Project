@@ -54,6 +54,7 @@ class Course(db.Model):
     courseName = db.Column(db.String(100), nullable=False)
 
     engages = db.relationship('Engage')
+    assignments = db.relationship('Assignment')
 
     def __init__(self, CID, courseName):
         self.CID = CID
@@ -76,16 +77,18 @@ class Assignment(db.Model):
     assignmentName = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(100), nullable=False)
     deadline = db.Column(db.String(10), nullable=False)
+    CID = db.Column(db.String(15), nullable=False)
 
     # relationships to other tables
     takes = db.relationship('Take')
     creates = db.relationship('Create')
 
-    def __init__(self, AID, assignmentName, description, deadline):
+    def __init__(self, AID, assignmentName, description, deadline, CID):
         self.AID = AID
         self.assignmentName = assignmentName
         self.description = description
         self.deadline = deadline
+        self.CID = CID
 
 
 class Take(db.Model):
