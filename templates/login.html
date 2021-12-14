@@ -5,19 +5,19 @@
     <meta author="Jiayuan Zhang, Bootstrap contributors">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link href="css/login.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
+    <link href="{{ url_for('static',filename='css/login.css') }}" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300&display=swap" rel="stylesheet">
-    <script src="js/jquery-3.6.0.js"></script>
-    <script src="js/bootstrap.min.js"></script>  
+    <script src="../static/js/jquery-3.6.0.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
   </head>
 
   <body class="text-center">
     <main class="form-signin">
       <form>
-        <img class="mb-4" src="image/logo.png" alt="Logo" width="150" height="150">
+        <img class="mb-4" src="../static/image/logo.png" alt="Logo" width="150" height="150">
         <h1 class="h3 mb-3 fw-normal">Please Login in</h1>
 
         <div class="form-floating">

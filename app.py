@@ -25,6 +25,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://csc2033_team01:SonsArchVeer@127
 db = SQLAlchemy(app)
 
 
+# HOME PAGE VIEW
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -35,10 +36,11 @@ def register():
     return render_template('register.html')
 
 
-if __name__ == 'main':
+if __name__ == '__main__':
     my_host = "127.0.0.1"
     free_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     free_socket.bind((my_host, 0))
+    free_socket.listen(5)
     free_port = free_socket.getsockname()[1]
     free_socket.close()
 
