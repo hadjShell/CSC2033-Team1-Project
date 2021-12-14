@@ -14,8 +14,8 @@ Created by Harry Sayer
 
 app = Flask(__name__)
 
-tunnel = sshtunnel.SSHTunnelForwarder('linux.cs.ncl.ac.uk', ssh_username='c0028383',
-                                      ssh_password='PersonNorthProblem12062002',
+tunnel = sshtunnel.SSHTunnelForwarder('linux.cs.ncl.ac.uk', ssh_username='username',
+                                      ssh_password='password',
                                       remote_bind_address=('cs-db.ncl.ac.uk', 3306))
 tunnel.start()
 
@@ -35,10 +35,11 @@ def register():
     return render_template('register.html')
 
 
-if __name__ == 'main':
+if __name__ == "__main__":
     my_host = "127.0.0.1"
     free_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     free_socket.bind((my_host, 0))
+    free_socket.listen(5)
     free_port = free_socket.getsockname()[1]
     free_socket.close()
 
@@ -55,7 +56,6 @@ if __name__ == 'main':
 
 
     from users.views import users_blueprint
-
     app.register_blueprint(users_blueprint)
 
     app.run(host=my_host, port=free_port, debug=True)
