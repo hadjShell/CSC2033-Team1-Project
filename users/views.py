@@ -39,8 +39,6 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
-        logging.warning('SECURITY - User registration [%s, %s]', form.email.data, request.remote_addr)
-
         # sends user to login page
         return redirect((url_for('users.login')))
     # if request method is GET or form not valid re-render signup page
