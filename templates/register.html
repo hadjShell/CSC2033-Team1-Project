@@ -17,7 +17,7 @@
   <body class="text-center">
     <main class="form-register">
       <form>
-        <img class="mb-4" src="image/logo.png" alt="Logo" width="150" height="150">
+        <img class="mb-3" src="image/logo.png" alt="Logo" width="120" height="120">
         <h1 class="h3 mb-3 fw-normal">Register</h1>
 
         <div class="form-floating">
@@ -32,6 +32,10 @@
           <label for="floatingSchool">School</label>
         </div>
         <div class="form-floating">
+          <input type="text" class="form-control" id="floatingRole" placeholder="Role">
+          <label for="floatingSchool">Role</label>
+        </div>
+        <div class="form-floating">
           <input type="text" class="form-control" id="floatingFirstName" placeholder="First Name">
           <label for="floatingFirstName">First Name</label>
             {% for error in form.firstName.errors %}
@@ -44,6 +48,10 @@
             {% for error in form.lastName.errors %}
                 {{ error }}
             {% endfor %}
+        </div>
+        <div class="form-floating">
+          <input type="text" class="form-control" id="floatingID" placeholder="ID">
+          <label for="floatingSchool">ID</label>
         </div>
         <div class="form-floating">
           <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
