@@ -9,10 +9,13 @@ This python file handles the launching of the application as well as connecting 
 -------------------------------------------------------------------------------------------------------------------
 Created by Harry Sayer
 """
+
+# CONFIG
+
 app = Flask(__name__)
 
-tunnel = sshtunnel.SSHTunnelForwarder('linux.cs.ncl.ac.uk', ssh_username='username',
-                                      ssh_password='password',
+tunnel = sshtunnel.SSHTunnelForwarder('linux.cs.ncl.ac.uk', ssh_username='c0028383',
+                                      ssh_password='PersonNorthProblem12062002',
                                       remote_bind_address=('cs-db.ncl.ac.uk', 3306))
 tunnel.start()
 
@@ -25,6 +28,11 @@ db = SQLAlchemy(app)
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+@app.route('/register')
+def register():
+    return render_template('register.html')
 
 
 if __name__ == 'main':
@@ -40,9 +48,11 @@ if __name__ == 'main':
 
     from models import User
 
+
     @login_manager.user_loader
     def load_user(email):
         return User.query.get(email)
+
 
     from users.views import users_blueprint
 

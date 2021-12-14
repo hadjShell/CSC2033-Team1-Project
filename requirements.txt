@@ -16,5 +16,4 @@ WTForms
 cryptography
 Flask-WTF
 email-validator
-MariaDB
 sshtunnel
