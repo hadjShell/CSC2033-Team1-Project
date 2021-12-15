@@ -49,7 +49,9 @@ def login():
 
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user and (form.password == user.password):
+        if user and (form.password.data == user.password):
+
+            # TODO: override get_id
             login_user(user)
 
             # Go to welcome page based on role
@@ -58,6 +60,8 @@ def login():
             else:
                 # TODO: need to fix to student welcome page
                 return redirect(url_for('users.welcome_teacher'))
+        else:
+            flash("Please check your login detail and try again!")
 
     return render_template('login.html', form=form)
 
@@ -65,4 +69,4 @@ def login():
 # Teacher welcome view
 @users_blueprint.route('/welcome_teacher')
 def welcome_teacher():
-    render_template('teacher-welcome.html')
+    return render_template('teacher-welcome.html')
