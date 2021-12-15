@@ -53,3 +53,4 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and (form.password == user.password):
             login_user(user)
+    return render_template('login.html', form=form)

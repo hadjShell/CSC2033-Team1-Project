@@ -109,7 +109,7 @@ class Create(db.Model):
     __tablename__ = 'Create'
     email = db.Column(db.String(100), primary_key=True)
     AID = db.Column(db.String(15), primary_key=True)
-    CreateTime = db.Column(db.DateTime, nullable=False)
+    createTime = db.Column(db.DateTime, nullable=False)
 
     def __init__(self, email, AID, createTime):
         self.email = email
