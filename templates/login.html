@@ -16,19 +16,19 @@
 
   <body class="text-center">
     <main class="form-signin">
-
-        <!-- Flash error message if there is one -->
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="notification is-danger">
-                    {{ messages[0] }}
-                </div>
-            {% endif %}
-        {% endwith %}
         <form method="POST">
             {{ form.csrf_token() }}
             <img class="mb-4" src="../static/image/logo.png" alt="Logo" width="150" height="150">
             <h1 class="h3 mb-3 fw-normal">Please Login in</h1>
+
+            <!-- Flash error message if there is one -->
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <div class="bg-danger text-white rounded">
+                                {{ messages[0] }}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
 
             <div class="form-floating">
                 {{ form.email(class="input form-control", id="floatingInput", placeholder="Email") }}
