@@ -10,8 +10,6 @@ users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
 # VIEWS
 # view registration
-
-
 @users_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
     # create signup form object
@@ -53,3 +51,18 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and (form.password == user.password):
             login_user(user)
+
+            # Go to welcome page based on role
+            if current_user.role == 'teacher':
+                return redirect(url_for('users.welcome_teacher'))
+            else:
+                # TODO: need to fix to student welcome page
+                return redirect(url_for('users.welcome_teacher'))
+
+    return render_template('login.html', form=form)
+
+
+# Teacher welcome view
+@users_blueprint.route('/welcome_teacher')
+def welcome_teacher():
+    render_template('teacher-welcome.html')
