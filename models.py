@@ -41,6 +41,10 @@ class User(db.Model, UserMixin):
         self.surname = surname
         self.UID = UID
 
+    # override get_id
+    def get_id(self):
+        return self.email
+
 
 class Course(db.Model):
     __tablename__ = 'Course'
