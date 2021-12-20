@@ -49,7 +49,7 @@ class User(db.Model, UserMixin):
 class Course(db.Model):
     __tablename__ = 'Course'
 
-    CID = db.Column(db.String(15), primary_key=True)
+    CID = db.Column(db.Integer, primary_key=True)
     courseName = db.Column(db.String(100), nullable=False)
 
     def __init__(self, CID, courseName):
@@ -66,7 +66,7 @@ class Assignment(db.Model):
     created = db.Column(db.DateTime, nullable=False)
     description = db.Column(db.Text, nullable=False)
     deadline = db.Column(db.DateTime, nullable=False)
-    CID = db.Column(db.String(15), db.ForeignKey(Course.CID), nullable=False)
+    CID = db.Column(db.Integer, db.ForeignKey(Course.CID), nullable=False)
 
     def __init__(self, email, assignmentName, description, deadline, CID):
         self.email = email
@@ -81,7 +81,7 @@ class Assignment(db.Model):
 class Engage(db.Model):
     __tablename__ = 'Engage'
     email = db.Column(db.String(100), db.ForeignKey(User.email), primary_key=True)
-    CID = db.Column(db.String(15), db.ForeignKey(Course.CID), primary_key=True)
+    CID = db.Column(db.Integer, db.ForeignKey(Course.CID), primary_key=True)
 
     def __init__(self, email, CID):
         self.email = email
