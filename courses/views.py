@@ -9,9 +9,9 @@ courses_blueprint = Blueprint('courses', __name__, template_folder='templates')
 
 
 # displays all the courses the user is a part of
-@courses_blueprint.route('/courses', methods=['POST'])
+@courses_blueprint.route('/courses', methods=['POST', 'GET'])
 def courses():
-    get_courses = Engage.query.filter_by(email=current_user).all
+    get_courses = Engage.query.filter_by(email=current_user.email).all()
 
     user_courses = []
     for course in get_courses:

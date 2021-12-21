@@ -16,6 +16,8 @@ class School(db.Model):
     ID = db.Column(db.String(15), primary_key=True)
     schoolName = db.Column(db.String(100), nullable=False)
 
+    users = db.relationship('User')
+
     def __init__(self, ID, schoolName):
         self.ID = ID
         self.schoolName = schoolName
@@ -31,6 +33,10 @@ class User(db.Model, UserMixin):
     firstName = db.Column(db.String(30), nullable=False)
     surname = db.Column(db.String(30), nullable=False)
     UID = db.Column(db.String(36), nullable=False)
+
+    engages = db.relationship('Engage')
+    takes = db.relationship('Take')
+    creates = db.relationship('Create')
 
     def __init__(self, email, role, password, schoolID, firstName, surname, UID):
         self.email = email
@@ -52,6 +58,8 @@ class Course(db.Model):
     CID = db.Column(db.Integer, primary_key=True)
     courseName = db.Column(db.String(100), nullable=False)
 
+    engages = db.relationship('Engage')
+
     def __init__(self, CID, courseName):
         self.CID = CID
         self.courseName = courseName
@@ -67,6 +75,9 @@ class Assignment(db.Model):
     description = db.Column(db.Text, nullable=False)
     deadline = db.Column(db.DateTime, nullable=False)
     CID = db.Column(db.Integer, db.ForeignKey(Course.CID), nullable=False)
+
+    takes = db.relationship('Take')
+    creates = db.relationship('Create')
 
     def __init__(self, email, assignmentName, description, deadline, CID):
         self.email = email
