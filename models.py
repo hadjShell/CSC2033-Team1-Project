@@ -60,9 +60,8 @@ class Course(db.Model):
 
     engages = db.relationship('Engage')
 
-    def __init__(self, CID, courseName):
-        self.CID = CID
-        self.courseName = courseName
+    def __init__(self, coursename):
+        self.courseName = coursename
 
 
 class Assignment(db.Model):

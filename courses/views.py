@@ -15,23 +15,27 @@ def courses():
 
     user_courses = []
     for course in get_courses:
-        get_course = Course.query.filter_by(CID=course.CID)
+        get_course = Course.query.filter_by(CID=course.CID).first()
         user_courses.append(get_course)
 
     return render_template('course.html', course_list=user_courses)
 
 
-@courses_blueprint.route('/create-courses', methods=['GET', 'POST'])
+@courses_blueprint.route('/create-courses', methods=['POST', 'GET'])
 def createCourses():
     form = CourseForm()
 
-    if form.validate_on_submit():
-        latest_course = Course.query.filter_by(desc('CID')).first()
+    # couldn't get form.validate_on_submit() to return true so using this as a way to write the name into the db
+    if form.course_name.data is not None:
 
-        new_course = Course(CID=latest_course+1, courseName=form.course_name.data)
+        new_course = Course(coursename=form.course_name.data)
         db.session.add(new_course)
+
+        new_engage = Engage(email=current_user.email, CID=new_course.CID)
+        db.session.add(new_engage)
+
         db.session.commit()
 
-        return redirect(url_for('users.welcome_teacher'))
+        return courses()
 
-    return render_template('course.html', form=form)
+    return render_template('create-courses.html', form=form)
