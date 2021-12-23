@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+    <div class="column is-6 is-offset-3">
+        <h3 class="title is-3">Create Course</h3>
+            <form method="POST">
+                <div class="form-floating">
+                        {{ form.course_name(class="input form-control", id="floatingInput", placeholder="Course Name") }}
+                        {% for error in form.course_name.errors %}
+                            {{ error }}
+                        {% endfor %}
+                        <label for="floatingInput">Course Name</label>
+                {{ form.submit(class="button is-info is-centred") }}
+                </div>
+            </form>
+    </div>
+</html>

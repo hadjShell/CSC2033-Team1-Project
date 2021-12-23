@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta author="Harry Sayer, Bootstrap contributors">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Course</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link href="../static/css/register.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300&display=swap" rel="stylesheet">
+    <script src="../static/js/jquery-3.6.0.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+  </head>
+
+  <div class="row text-center">
+        <h4 class="title is-4">Your Courses</h4>
+        <div class="box">
+            {% if course_list %}
+                <div class="field">
+
+                    {% for course in course_list %}
+                        <p>{{ course.courseName }}</p>
+                    {% endfor %}
+
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="container">
+		<div class="row text-center">
+			<div class="col-gt-4 col-md-4 col-sm-12">
+				<section>
+					<h2>Create Course</h2>
+					<hr>
+					<a class="btn btn-primary btn-lg" href={{ url_for('courses.createCourses') }}>Create Course</a>
+				</section>
+			</div>
+
+</html>
