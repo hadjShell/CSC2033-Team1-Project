@@ -3,13 +3,17 @@
     <div class="column is-6 is-offset-3">
         <h3 class="title is-3">Create Course</h3>
             <form method="POST">
+                {{ form.csrf_token() }}
                 <div class="form-floating">
                         {{ form.course_name(class="input form-control", id="floatingInput", placeholder="Course Name") }}
                         {% for error in form.course_name.errors %}
                             {{ error }}
                         {% endfor %}
-                        <label for="floatingInput">Course Name</label>
-                {{ form.submit(class="button is-info is-centred") }}
+                </div>
+                <div>
+                    {{ form.hidden_tag() }}
+                    {{ form.added_students }}
+                    <button type="submit">Submit</button>
                 </div>
             </form>
     </div>

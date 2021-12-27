@@ -1,9 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for
 from flask_login import current_user, login_required
-from sqlalchemy import desc
 from app import db
 from courses.forms import CourseForm
-from models import Course, Engage
+from models import Course, Engage, User
 
 courses_blueprint = Blueprint('courses', __name__, template_folder='templates')
 
@@ -22,20 +21,38 @@ def courses():
 
 
 @courses_blueprint.route('/create-courses', methods=['POST', 'GET'])
-def createCourses():
+def create_courses():
     form = CourseForm()
+    form.added_students.choices = get_students()
 
-    # couldn't get form.validate_on_submit() to return true so using this as a way to write the name into the db
-    if form.course_name.data is not None:
-
+    if form.validate_on_submit():
         new_course = Course(coursename=form.course_name.data)
         db.session.add(new_course)
+        db.session.commit()
 
-        new_engage = Engage(email=current_user.email, CID=new_course.CID)
-        db.session.add(new_engage)
+        add_teacher = Engage(email=current_user.email, CID=new_course.CID)
+        db.session.add(add_teacher)
+        db.session.commit()
+
+        for student in form.added_students.data:
+            add_student = Engage(email=student, CID=new_course.CID)
+            db.session.add(add_student)
 
         db.session.commit()
 
-        return courses()
+        # commented out since there is no hot-bar
+        # return courses()
+        return render_template('teacher-welcome.html')
 
     return render_template('create-courses.html', form=form)
+
+
+def get_students():
+    students_of_school = User.query.filter_by(role="student", schoolID=current_user.schoolID).all()
+
+    choices = []
+    for student in students_of_school:
+        tup = (student.email, str(student.email + ": " + student.firstName + " " + student.surname))
+        choices.append(tup)
+
+    return choices
