@@ -69,7 +69,7 @@ def login():
 # Teacher welcome view
 @users_blueprint.route('/welcome_teacher')
 def welcome_teacher():
-    return render_template('teacher-welcome.html')
+    return render_template('teacher-welcome.html', name=current_user.firstName)
 
 
 # Profile view
