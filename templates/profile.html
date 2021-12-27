@@ -69,7 +69,7 @@
 		        <div id="navbarSupportedContent" class="collapse navbar-collapse">
 		           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 			        	<li class="nav-item">
-			            	<a class="nav-link active" href="profile.html"><span>Profile</span></a>
+			            	<a class="nav-link active" href="{{ url_for('users.profile') }}"><span>Profile</span></a>
 			            </li>
 			            <li class="nav-item">
 			            	<a class="nav-link" href=""><span>Courses</span></a>
@@ -93,27 +93,27 @@
 		<div class="list-group">
 		  <label class="list-group-item py-3">
 		    First Name
-		    <span class="d-block small opacity-50">Jiayuan</span>
+		    <span class="d-block small opacity-50">{{ firstName }}</span>
 		  </label>
 
 		  <label class="list-group-item py-3">
 		    Last Name
-		    <span class="d-block small opacity-50">Zhang</span>
+		    <span class="d-block small opacity-50">{{ surname }}</span>
 		  </label>
 
 		  <label class="list-group-item py-3">
 		    Email
-		    <span class="d-block small opacity-50">test@email.com</span>
+		    <span class="d-block small opacity-50">{{ email }}</span>
 		  </label>
 
 		  <label class="list-group-item py-3">
 		    School
-		    <span class="d-block small opacity-50">School of Computing</span>
+		    <span class="d-block small opacity-50">{{ school }}</span>
 		  </label>
 
 		  <label class="list-group-item py-3">
 		    ID
-		    <span class="d-block small opacity-50">00001111</span>
+		    <span class="d-block small opacity-50">{{ id }}</span>
 		  </label>
 		</div>
 		<div class="text-center"><a class="btn btn-primary btn-md" href="" type="button">Change Password</a></div>

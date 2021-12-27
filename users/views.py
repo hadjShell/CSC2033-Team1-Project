@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 import logging
 from app import db
-from models import User
+from models import User, School
 from users.forms import LoginForm, RegisterForm
 
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
@@ -70,3 +70,11 @@ def login():
 @users_blueprint.route('/welcome_teacher')
 def welcome_teacher():
     return render_template('teacher-welcome.html')
+
+
+# Profile view
+@users_blueprint.route('/profile')
+def profile():
+    return render_template('profile.html', firstName=current_user.firstName, surname=current_user.surname,
+                           email=current_user.email, id=current_user.UID,
+                           school=School.query.filter_by(ID=current_user.schoolID).first().schoolName)
