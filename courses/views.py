@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import current_user, login_required
 from app import db
 from courses.forms import CourseForm
@@ -42,7 +42,7 @@ def create_courses():
 
         # commented out since there is no hot-bar
         # return courses()
-        return render_template('teacher-welcome.html')
+        flash('Your course %s has been created.' % new_course.courseName)
 
     return render_template('create-courses.html', form=form)
 

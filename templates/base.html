@@ -71,7 +71,7 @@
 			            	<a class="nav-link" href=""><span>Profile</span></a>
 			            </li>
 			            <li class="nav-item">
-			            	<a class="nav-link" href=""><span>Courses</span></a>
+			            	<a class="nav-link" href={{ url_for('courses.courses') }}><span>Courses</span></a>
 			            </li>
 			            <li class="nav-item">
 			            	<a class="nav-link" href=""><span>Assignments</span></a>
@@ -88,13 +88,12 @@
 		</nav>	
 	</header>
 
-	<p style="margin: 20px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-	proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
+	<div class="hero-body">
+            <div class="container has-text-centered">
+               {% block content %}
+               {% endblock %}
+            </div>
+        </div>
 
 	<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
 	  <symbol id="instagram" viewBox="0 0 16 16">
