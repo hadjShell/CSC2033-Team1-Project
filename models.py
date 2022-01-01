@@ -49,28 +49,26 @@ class User(db.Model, UserMixin):
 class Course(db.Model):
     __tablename__ = 'Course'
 
-    CID = db.Column(db.Integer, primary_key=True)
+    CID = db.Column(db.String(15), primary_key=True)
     courseName = db.Column(db.String(100), nullable=False)
 
-    def __init__(self, coursename):
-        self.courseName = coursename
+    def __init__(self, CID, courseName):
+        self.CID = CID
+        self.courseName = courseName
 
 
 class Assignment(db.Model):
     __tablename__ = 'Assignment'
 
-    AID = db.Column(db.String(10), primary_key=True)
-    email = db.Column(db.String(100), db.ForeignKey(User.email), nullable=False)
-    assignmentName = db.Column(db.Text, nullable=False)
-    created = db.Column(db.DateTime, nullable=False)
-    description = db.Column(db.Text, nullable=False)
+    AID = db.Column(db.String(15), primary_key=True)
+    assignmentName = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.String(100), nullable=False)
     deadline = db.Column(db.DateTime, nullable=False)
-    CID = db.Column(db.Integer, db.ForeignKey(Course.CID), nullable=False)
+    CID = db.Column(db.String(15), db.ForeignKey(Course.CID), nullable=False)
 
     def __init__(self, email, assignmentName, description, deadline, CID):
         self.email = email
         self.assignmentName = assignmentName
-        self.created = datetime.now()
         self.description = description
         self.deadline = deadline
         self.CID = CID
@@ -80,7 +78,7 @@ class Assignment(db.Model):
 class Engage(db.Model):
     __tablename__ = 'Engage'
     email = db.Column(db.String(100), db.ForeignKey(User.email), primary_key=True)
-    CID = db.Column(db.Integer, db.ForeignKey(Course.CID), primary_key=True)
+    CID = db.Column(db.String(15), db.ForeignKey(Course.CID), primary_key=True)
 
     def __init__(self, email, CID):
         self.email = email
@@ -143,7 +141,36 @@ def init_db():
                  schoolID="001",
                  firstName="Steve",
                  surname="Jobs",
-                 UID="200511122")
+                 UID="200511133")
+
+    student1 = User(email="stu1@email.com",
+                    password="password",
+                    role="student",
+                    schoolID="001",
+                    firstName="Rob",
+                    surname="S",
+                    UID="000000001")
+    student2 = User(email="stu2@email.com",
+                    password="password",
+                    role="student",
+                    schoolID="001",
+                    firstName="Jelly",
+                    surname="S",
+                    UID="000000002")
+    student3 = User(email="stu3@email.com",
+                    password="password",
+                    role="student",
+                    schoolID="001",
+                    firstName="Bob",
+                    surname="S",
+                    UID="000000003")
+    student4 = User(email="stu4@email.com",
+                    password="password",
+                    role="student",
+                    schoolID="001",
+                    firstName="Jack",
+                    surname="S",
+                    UID="000000004")
 
     course1 = Course(CID="CSC1031", courseName="Discrete Mathematics")
     course2 = Course(CID="CSC1032", courseName="Computer System")
@@ -156,11 +183,19 @@ def init_db():
     engage3 = Engage(email="test@email.com", CID="CSC1033")
     engage4 = Engage(email="test@email.com", CID="CSC1034")
     engage5 = Engage(email="test2@email.com", CID="CSC1035")
+    engage6 = Engage(email="stu1@email.com", CID="CSC1031")
+    engage7 = Engage(email="stu2@email.com", CID="CSC1031")
+    engage8 = Engage(email="stu3@email.com", CID="CSC1031")
+    engage9 = Engage(email="stu4@email.com", CID="CSC1032")
 
     db.session.add(school)
     db.session.add(test)
     db.session.add(test2)
     db.session.add(test3)
+    db.session.add(student1)
+    db.session.add(student2)
+    db.session.add(student3)
+    db.session.add(student4)
     db.session.add(course1)
     db.session.add(course2)
     db.session.add(course3)
@@ -171,4 +206,8 @@ def init_db():
     db.session.add(engage3)
     db.session.add(engage4)
     db.session.add(engage5)
+    db.session.add(engage6)
+    db.session.add(engage7)
+    db.session.add(engage8)
+    db.session.add(engage9)
     db.session.commit()
