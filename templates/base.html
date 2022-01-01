@@ -56,7 +56,7 @@
 	<header>
 		<nav id="header-nav" class="navbar navbar-expand-lg navbar-light">
 			<div class="container">
-				<a class="navbar-brand" href="">
+				<a class="navbar-brand" href="{{ url_for('users.welcome_teacher') }}">
 					<img src="../static/image/logo.png" alt="Logo" width="40" height="37.6" class="d-inline-block align-text-center">
 					<span>Odin AMS</span>
 				</a>
@@ -71,7 +71,7 @@
 			            	<a class="nav-link" href="{{ url_for('users.profile') }}"><span>Profile</span></a>
 			            </li>
 			            <li class="nav-item">
-			            	<a class="nav-link" href=""><span>Courses</span></a>
+			            	<a class="nav-link" href="{{ url_for('courses.courses') }}"><span>Courses</span></a>
 			            </li>
 			            <li class="nav-item">
 			            	<a class="nav-link" href=""><span>Assignments</span></a>
