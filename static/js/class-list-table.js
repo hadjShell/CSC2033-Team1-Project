@@ -1,3 +1,3 @@
 $(document).ready(function() {
-    $('#example').DataTable();
+    $('#class-list').DataTable();
 } );
