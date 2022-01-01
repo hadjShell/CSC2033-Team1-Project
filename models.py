@@ -7,7 +7,7 @@ These classes link the python application to the tables within the database, pro
 editing; rather than using pure SQL. Each class represents each table that is in the database: the User class 
 represents the table 'User' within the database.
 -------------------------------------------------------------------------------------------------------------------
-Author: Harry Sayer, Jiayuan Zhang
+Author: Jiayuan Zhang, Harry Sayer
 """
 
 
@@ -94,10 +94,10 @@ class Take(db.Model):
     submitTime = db.Column(db.DateTime, nullable=False)
     grade = db.Column(db.Float, nullable=True)
 
-    def __init__(self, email, AID, submitTime, grade):
+    def __init__(self, email, AID, grade):
         self.email = email
         self.AID = AID
-        self.submitTime = submitTime
+        self.submitTime = datetime.now()
         self.grade = grade
 
 
@@ -109,10 +109,10 @@ class Create(db.Model):
     AID = db.Column(db.String(15), db.ForeignKey(Assignment.AID), primary_key=True)
     CreateTime = db.Column(db.DateTime, nullable=False)
 
-    def __init__(self, email, AID, createTime):
+    def __init__(self, email, AID):
         self.email = email
         self.AID = AID
-        self.createTime = createTime
+        self.createTime = datetime.now()
 
 
 def init_db():
