@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta author="Jiayuan Zhang, Bootstrap contributors">
 	<title>Courses</title>
-	<link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300&display=swap" rel="stylesheet">
@@ -72,7 +72,7 @@
 	<header>
 		<nav id="header-nav" class="navbar navbar-expand-lg navbar-light">
 			<div class="container">
-				<a class="navbar-brand" href="">
+				<a class="navbar-brand" href="{{ url_for('users.welcome_teacher') }}">
 					<img src="../static/image/logo.png" alt="Logo" width="40" height="37.6" class="d-inline-block align-text-center">
 					<span>Odin AMS</span>
 				</a>
@@ -87,7 +87,7 @@
 			            	<a class="nav-link" href="{{ url_for('users.profile') }}"><span>Profile</span></a>
 			            </li>
 			            <li class="nav-item">
-			            	<a class="nav-link active" href=""><span>Courses</span></a>
+			            	<a class="nav-link active" href="{{ url_for('courses.courses') }}"><span>Courses</span></a>
 			            </li>
 			            <li class="nav-item">
 			            	<a class="nav-link" href=""><span>Assignments</span></a>
@@ -120,67 +120,24 @@
 	  	<div class="album pb-5">
 			<div class="container">
 				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-					<div class="col">
-		          		<div class="card shadow-sm">
-		            		<div class="card-body">
-		            			<h5 class="card-title">CSC2033</h5>
-		              			<p class="card-text">Software Engineering</p>
-			              		<div class="d-flex justify-content-between align-items-center">
-					                  <a href="" class="btn btn-sm btn-outline-secondary">View</a>
-			              		</div>
-		            		</div>
-		          		</div>
-		        	</div>
+					{% if engaged_courses %}
+                        {% for course in engaged_courses %}
+                            <div class="col">
+                                <div class="card shadow-sm">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ course.CID }}</h5>
+                                        <p class="card-text">{{ course.courseName }}</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                              <a href="" class="btn btn-sm btn-outline-secondary">View</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
 
-		        	<div class="col">
-		          		<div class="card shadow-sm">
-		            		<div class="card-body">
-		            			<h5 class="card-title">CSC2033</h5>
-		              			<p class="card-text">Software Engineering</p>
-			              		<div class="d-flex justify-content-between align-items-center">
-					                  <a href="" class="btn btn-sm btn-outline-secondary">View</a>
-			              		</div>
-		            		</div>
-		          		</div>
-		        	</div>
-
-		        	<div class="col">
-		          		<div class="card shadow-sm">
-		            		<div class="card-body">
-		            			<h5 class="card-title">CSC2033</h5>
-		              			<p class="card-text">Software Engineering</p>
-			              		<div class="d-flex justify-content-between align-items-center">
-					                  <a href="" class="btn btn-sm btn-outline-secondary">View</a>
-			              		</div>
-		            		</div>
-		          		</div>
-		        	</div>
-
-		        	<div class="col">
-		          		<div class="card shadow-sm">
-		            		<div class="card-body">
-		            			<h5 class="card-title">CSC2033</h5>
-		              			<p class="card-text">Software Engineering</p>
-			              		<div class="d-flex justify-content-between align-items-center">
-					                  <a href="" class="btn btn-sm btn-outline-secondary">View</a>
-			              		</div>
-		            		</div>
-		          		</div>
-		        	</div>
-
-		        	<div class="col">
-		          		<div class="card shadow-sm">
-		            		<div class="card-body">
-		            			<h5 class="card-title">CSC2033</h5>
-		              			<p class="card-text">Software Engineering</p>
-			              		<div class="d-flex justify-content-between align-items-center">
-					                  <a href="" class="btn btn-sm btn-outline-secondary">View</a>
-			              		</div>
-		            		</div>
-		          		</div>
-		        	</div>
-
-
+                    {% else %}
+                        <p>You don't have any courses currently.</p>
+                    {% endif %}
 				</div>
 			</div>
 		</div>
