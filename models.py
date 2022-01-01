@@ -120,6 +120,7 @@ def init_db():
     db.create_all()
 
     school = School(ID="001", schoolName="NCL UNI")
+
     test = User(email="test@email.com",
                 password="password",
                 role="teacher",
@@ -127,7 +128,45 @@ def init_db():
                 firstName="John",
                 surname="Curry",
                 UID="200511111")
+    test2 = User(email="test2@email.com",
+                 password="password",
+                 role="teacher",
+                 schoolID="001",
+                 firstName="Mark",
+                 surname="Jones",
+                 UID="200511122")
+    test3 = User(email="test3@email.com",
+                 password="password",
+                 role="teacher",
+                 schoolID="001",
+                 firstName="Steve",
+                 surname="Jobs",
+                 UID="200511122")
+
+    course1 = Course(CID="CSC1031", courseName="Discrete Mathematics")
+    course2 = Course(CID="CSC1032", courseName="Computer System")
+    course3 = Course(CID="CSC1033", courseName="Database Management System")
+    course4 = Course(CID="CSC1034", courseName="Python")
+    course5 = Course(CID="CSC1035", courseName="Java")
+
+    engage1 = Engage(email="test@email.com", CID="CSC1031")
+    engage2 = Engage(email="test@email.com", CID="CSC1032")
+    engage3 = Engage(email="test@email.com", CID="CSC1033")
+    engage4 = Engage(email="test@email.com", CID="CSC1034")
+    engage5 = Engage(email="test2@email.com", CID="CSC1035")
 
     db.session.add(school)
     db.session.add(test)
+    db.session.add(test2)
+    db.session.add(test3)
+    db.session.add(course1)
+    db.session.add(course2)
+    db.session.add(course3)
+    db.session.add(course4)
+    db.session.add(course5)
+    db.session.add(engage1)
+    db.session.add(engage2)
+    db.session.add(engage3)
+    db.session.add(engage4)
+    db.session.add(engage5)
     db.session.commit()
