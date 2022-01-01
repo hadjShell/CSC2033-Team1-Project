@@ -7,14 +7,14 @@ import socket
 """
 This python file handles the launching of the application as well as connecting to the database via an SSH tunnel.
 -------------------------------------------------------------------------------------------------------------------
-Created by Harry Sayer
+Created by Harry Sayer, Jiayuan Zhang
 """
 
 # CONFIG
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'LongAndRandomSecretKey'
 
-# sqlight config
+# LOCAL DATABASE CONFIG
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///odin.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -64,8 +64,13 @@ if __name__ == '__main__':
         return User.query.get(email)
 
 
+    # BLUEPRINTS
+    # import blueprints
     from users.views import users_blueprint
+    from courses.views import courses_blueprint
 
+    # register blueprints with app
     app.register_blueprint(users_blueprint)
+    app.register_blueprint(courses_blueprint)
 
     app.run(host=my_host, port=free_port, debug=True)
