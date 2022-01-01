@@ -107,7 +107,7 @@ class Create(db.Model):
 
     email = db.Column(db.String(100), db.ForeignKey(User.email), primary_key=True)
     AID = db.Column(db.String(10), db.ForeignKey(Assignment.AID), primary_key=True)
-    CreateTime = db.Column(db.DateTime, nullable=False)
+    createTime = db.Column(db.DateTime, nullable=False)
 
     def __init__(self, email, AID):
         self.email = email
