@@ -49,26 +49,28 @@ class User(db.Model, UserMixin):
 class Course(db.Model):
     __tablename__ = 'Course'
 
-    CID = db.Column(db.String(15), primary_key=True)
+    CID = db.Column(db.Integer, primary_key=True)
     courseName = db.Column(db.String(100), nullable=False)
 
-    def __init__(self, CID, courseName):
-        self.CID = CID
-        self.courseName = courseName
+    def __init__(self, coursename):
+        self.courseName = coursename
 
 
 class Assignment(db.Model):
     __tablename__ = 'Assignment'
 
-    AID = db.Column(db.String(15), primary_key=True)
-    assignmentName = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.String(100), nullable=False)
+    AID = db.Column(db.String(10), primary_key=True)
+    email = db.Column(db.String(100), db.ForeignKey(User.email), nullable=False)
+    assignmentName = db.Column(db.Text, nullable=False)
+    created = db.Column(db.DateTime, nullable=False)
+    description = db.Column(db.Text, nullable=False)
     deadline = db.Column(db.DateTime, nullable=False)
-    CID = db.Column(db.String(15), db.ForeignKey(Course.CID), nullable=False)
+    CID = db.Column(db.Integer, db.ForeignKey(Course.CID), nullable=False)
 
-    def __init__(self, AID, assignmentName, description, deadline, CID):
-        self.AID = AID
+    def __init__(self, email, assignmentName, description, deadline, CID):
+        self.email = email
         self.assignmentName = assignmentName
+        self.created = datetime.now()
         self.description = description
         self.deadline = deadline
         self.CID = CID
@@ -78,7 +80,7 @@ class Assignment(db.Model):
 class Engage(db.Model):
     __tablename__ = 'Engage'
     email = db.Column(db.String(100), db.ForeignKey(User.email), primary_key=True)
-    CID = db.Column(db.String(15), db.ForeignKey(Course.CID), primary_key=True)
+    CID = db.Column(db.Integer, db.ForeignKey(Course.CID), primary_key=True)
 
     def __init__(self, email, CID):
         self.email = email
@@ -90,7 +92,7 @@ class Take(db.Model):
     __tablename__ = 'Take'
 
     email = db.Column(db.String(100), db.ForeignKey(User.email), primary_key=True)
-    AID = db.Column(db.String(15), db.ForeignKey(Assignment.AID), primary_key=True)
+    AID = db.Column(db.String(10), db.ForeignKey(Assignment.AID), primary_key=True)
     submitTime = db.Column(db.DateTime, nullable=False)
     grade = db.Column(db.Float, nullable=True)
 
@@ -106,7 +108,7 @@ class Create(db.Model):
     __tablename__ = 'Create'
 
     email = db.Column(db.String(100), db.ForeignKey(User.email), primary_key=True)
-    AID = db.Column(db.String(15), db.ForeignKey(Assignment.AID), primary_key=True)
+    AID = db.Column(db.String(10), db.ForeignKey(Assignment.AID), primary_key=True)
     CreateTime = db.Column(db.DateTime, nullable=False)
 
     def __init__(self, email, AID):
