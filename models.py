@@ -13,11 +13,10 @@ Author: Jiayuan Zhang, Harry Sayer
 
 class School(db.Model):
     __tablename__ = 'School'
-    ID = db.Column(db.String(15), primary_key=True)
+    ID = db.Column(db.Integer, primary_key=True)
     schoolName = db.Column(db.String(100), nullable=False)
 
-    def __init__(self, ID, schoolName):
-        self.ID = ID
+    def __init__(self, schoolName):
         self.schoolName = schoolName
 
 

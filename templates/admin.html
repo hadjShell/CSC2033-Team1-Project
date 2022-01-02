@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta author="Harry Sayer, Bootstrap contributors">
+	<title>Courses</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300&display=swap" rel="stylesheet">
+	<script src="../static/js/jquery-3.6.0.js"></script>
+	<script src="../static/js/bootstrap.min.js"></script>
+
+	<style type="text/css">
+		body {
+			font-size: 16px;
+			font-family: 'Readex Pro', sans-serif;
+			background: #f5f5f5;
+			color: black;
+		}
+
+		#page-container {
+			position: relative;
+			min-height: 85vh;
+		}
+
+		#header-nav {
+			background: white;
+			padding: 5px;
+		}
+
+		.navbar-brand span {
+			font-size: 1.3em;
+			color: #0056d2;
+		}
+
+		.nav-item a:hover{
+			background: #0056d2;
+		}
+
+		.nav-item a:hover span {
+			color: white;
+		}
+
+		button.navbar-toggler {
+			border: 1px solid black;
+		}
+
+		.album {
+			padding-bottom: 3rem;
+		}
+
+		.card-body a:hover{
+			background: #0056d2;
+		}
+
+		.card-body a:hover span {
+			color: white;
+		}
+
+		footer {
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+			height: 3rem;
+		}
+	</style>
+</head>
+    <header>
+		<nav id="header-nav" class="navbar navbar-expand-lg navbar-light">
+			<div class="container">
+				<a class="navbar-brand" href="{{ url_for('admins.admin') }}">
+					<img src="../static/image/logo.png" alt="Logo" width="40" height="37.6" class="d-inline-block align-text-center">
+					<span>Odin AMS</span>
+				</a>
+
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      				<span class="navbar-toggler-icon"></span>
+   				</button>
+
+		        <div id="navbarSupportedContent" class="collapse navbar-collapse">
+		           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                       <li class="nav-item">
+			            	<a class="nav-link" href="{{ url_for('admins.admin') }}"><span>Admin</span></a>
+			            </li>
+			            <li class="nav-item">
+			            	<a class="nav-link" href=""><span>Logout</span></a>
+			            </li>
+		          	</ul>
+		        </div>
+			</div>
+		</nav>
+	</header>
+    <div class="column is-6 is-offset-3">
+        <h1 class="title is-4" >Administrator</h1>
+        <div class="box">
+            {% if all_schools %}
+                {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="notification is-danger">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+            {% endwith %}
+            {% endif %}
+        </div>
+    </div>
+
+	  	<div class="album pb-5">
+			<div class="container">
+				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                        <div class="col">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <h4 class="card-title">Users</h4>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="btn-group" >
+                                            <form method="POST" action="/view-all-users">
+                                                <button class="btn btn-sm btn-outline-secondary">Display All Current Users</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                                <div class="card shadow-sm">
+                                    <div class="card-body">
+                                        <h4 class="card-title">Schools</h4>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="btn-group" >
+                                                <form method="POST" action="/view-all-schools">
+                                                    <button class="btn btn-sm btn-outline-secondary">Display All Current School</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+				</div>
+			</div>
+        </div>
+
+
+    <div class="container">
+        <div class="box" >
+            {% if all_users %}
+                <div class="field" >
+                    <div style="text-align: center;"><h4 class="title is-4">All Current Users</h4></div>
+                    <table class="table" >
+                        <tr>
+                            <th>Email</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Role</th>
+                            <th>School</th>
+                            <th>User ID</th>
+                        </tr>
+                        {% for user in all_users %}
+                            <tr>
+                                <td>{{ user[0] }}</td>
+                                <td>{{ user[1] }}</td>>
+                                <td>{{ user[2] }}</td>>
+                                <td>{{ user[3] }}</td>>
+                                <td>{{ user[4] }}</td>>
+                                <td>{{ user[5] }}</td>>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <form method="POST" action="/admin">
+                <div>
+                    <div style="text-align: center;"><button class="btn btn-sm btn-outline-secondary">Close</button></div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="container">
+        <hr>
+        <div class="box" >
+            {% if all_schools %}
+                <div class="field" >
+                    <div style="text-align: center;"><h4 class="title is-4">All Current Schools</h4></div>
+                    <table class="table" >
+                        <tr>
+                            <th>ID</th>
+                            <th>School Name</th>
+                        </tr>
+                        {% for school in all_schools %}
+                            <tr>
+                                <td>{{ school.ID }}</td>
+                                <td>{{ school.schoolName }}</td>>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <form method="POST" action="/admin">
+                <div>
+                    <div style="text-align: center;"><button class="btn btn-sm btn-outline-secondary">Close</button></div>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="box">
+            <div style="text-align: center;"><h4>Create School</h4>
+                <form method="POST" action="/create-school">
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <div class="notification is-danger">
+                                {{ messages[0] }}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                    <div class="form-floating">
+                        <input class="input" type="text" name="name" id="name" placeholder="School Name">
+                    </div>
+                    <div style="text-align: center;"><button class="btn btn-sm btn-outline-secondary">Create School</button></div>
+
+                </form>
+            </div>
+    </div>
+</html>

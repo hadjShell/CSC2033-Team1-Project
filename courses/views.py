@@ -20,7 +20,17 @@ def courses():
         engaged_courses.append(Course.query.filter_by(CID=e.CID).first())
 
     # render course page with engaged courses
-    return render_template('course.html', engaged_courses=engaged_courses)
+    if current_user.role == 'teacher':
+        return render_template('course.html', engaged_courses=engaged_courses)
+    else:
+        user_courses = []
+        for course in engaged_courses:
+            engaging = Engage.query.filter_by(CID=course.CID).all()
+            for engage in engaging:
+                user = User.query.filter_by(email=engage.email).first()
+                if user.role == 'teacher':
+                    user_courses.append((course, user))
+        return render_template('course-student.html', engaged_courses=user_courses)
 
 
 # View the class list of a specific course

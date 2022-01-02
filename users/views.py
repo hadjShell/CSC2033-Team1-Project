@@ -57,6 +57,8 @@ def login():
             # Go to welcome page based on role
             if current_user.role == 'teacher':
                 return redirect(url_for('users.welcome_teacher'))
+            elif current_user.role == 'admin':
+                return redirect(url_for('admins.admin'))
             else:
                 # TODO: need to fix to student welcome page
                 return redirect(url_for('users.welcome_teacher'))
