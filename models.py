@@ -30,8 +30,9 @@ class User(db.Model, UserMixin):
     firstName = db.Column(db.String(30), nullable=False)
     surname = db.Column(db.String(30), nullable=False)
     UID = db.Column(db.String(36), nullable=False)
+    approved = db.Column(db.Boolean, nullable=False)
 
-    def __init__(self, email, role, password, schoolID, firstName, surname, UID):
+    def __init__(self, email, role, password, schoolID, firstName, surname, UID, approved):
         self.email = email
         self.role = role
         self.password = password
@@ -39,6 +40,7 @@ class User(db.Model, UserMixin):
         self.firstName = firstName
         self.surname = surname
         self.UID = UID
+        self.approved = approved
 
     # override get_id
     def get_id(self):

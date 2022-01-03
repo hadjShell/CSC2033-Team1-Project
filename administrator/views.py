@@ -23,7 +23,8 @@ def view_all_users():
             continue
         else:
             user_school = School.query.filter_by(ID=cur.schoolID).first()
-            user = (cur.email, cur.firstName, cur.surname, cur.role, user_school.schoolName, cur.UID)
+            user = (cur.UID, cur.email, cur.firstName, cur.surname, cur.role, user_school.schoolName,
+                    ("Approved" if cur.approved is True else "Needs Review"))
             users.append(user)
 
     return render_template('admin.html', all_users=users)
@@ -59,3 +60,31 @@ def create_school():
     else:
         flash('Field was left blank')
         return admin()
+
+
+@administrator_blueprint.route('/approve', methods=['GET', 'POST'])
+def approve_user():
+    if request.method == 'POST':
+
+        approved = request.form.get("approve")
+        declined = request.form.get("decline")
+
+        if approved is not None:
+            user = User.query.filter_by(email=approved).first()
+            user.approved = True
+            db.session.commit()
+            flash(user.firstName + " " + user.surname + " has been approved of registration")
+
+        elif declined is not None:
+            user = User.query.filter_by(email=declined).first()
+            User.query.filter_by(UID=user.UID).delete()
+            db.session.commit()
+            flash(user.firstName + " " + user.surname + " has been declined of registration")
+
+    to_approve = []
+    all_users = User.query.filter_by(approved=False)
+    for user in all_users:
+        their_school = School.query.filter_by(ID=user.schoolID).first()
+        to_approve.append((user, their_school))
+    return render_template('approve.html', to_be_approved=to_approve)
+
