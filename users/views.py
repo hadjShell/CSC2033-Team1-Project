@@ -68,6 +68,13 @@ def login():
     return render_template('login.html', form=form)
 
 
+@users_blueprint.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return render_template('index.html')
+
+
 # Teacher welcome view
 @users_blueprint.route('/welcome_teacher')
 def welcome_teacher():
