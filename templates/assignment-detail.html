@@ -7,11 +7,15 @@
 	<title>{{ assignment.AID }}</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/dataTables.bootstrap5.min.css') }}">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300&display=swap" rel="stylesheet">
 	<script src="../static/js/jquery-3.6.0.js"></script>
 	<script src="../static/js/bootstrap.min.js"></script>
+    <script src="../static/js/dataTables.bootstrap5.min.js"></script>
+	<script src="../static/js/jquery.dataTables.min.js"></script>
+	<script src="../static/js/class-list-table.js"></script>
 </head>
 <body>
 
@@ -54,29 +58,44 @@
 		<section class="text-center container">
     		<div class="row py-4">
       			<div class="col-lg-6 col-md-8 mx-auto">
-			        <h1 class="fw-light">{{ assignment.assignmentName }}</h1>
-			        <p class="lead text-muted">{{ assignment.description }}</p>
+			        <h1 class="fw-light">{{ assignment.assignmentName }}-{{ assignment.CID }}</h1>
+			        <p class="lead text-muted">Here are all the students who engage in this assignment.<br>You can review their submission and grade them.</p>
       			</div>
     		</div>
   		</section>
 
-        <div class="container">
-            <div class="list-group">
+        <div class="container" style="padding-bottom: 3rem">
+            <table id="assignment-student-list" class="table table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Student No.</th>
+                        <th>Name</th>
+                        <th>Submit Time</th>
+                        <th>Grade</th>
+                        <th>Submission</th>
+                        <th>Review</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2005111111</td>
+                        <td>John Wick</td>
+                        <td>2021-10-01 20:58:22</td>
+                        <td>92.3</td>
+                        <td><button class="btn btn-primary">Download File</button></td>
+                        <td><button class="btn btn-primary">Grade</button></td>
+                    </tr>
+                    <tr>
+                        <td>2005111111</td>
+                        <td>John Wick</td>
+                        <td>2021-10-01 20:58:22</td>
+                        <td>92.3</td>
+                        <td><button class="btn btn-primary">Download File</button></td>
+                        <td><button class="btn btn-primary">Grade</button></td>
+                    </tr>
 
-                <a class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
-                    <div class="d-flex gap-2 w-100 justify-content-between">
-                        <div>
-                            <span class="mb-0">2005111111</span>
-                            <span class="mb-0">John</span>
-                            <span class="mb-0">Wick</span>
-                            <span class="mb-0">2021-01-01 10:50:23</span>
-                            <button class="btn btn-primary">Download file</button>
-                        </div>
-                    </div>
-                </a>
-
-
-            </div>
+                </tbody>
+            </table>
         </div>
 
 
