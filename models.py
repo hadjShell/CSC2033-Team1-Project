@@ -120,7 +120,7 @@ def init_db():
     db.drop_all()
     db.create_all()
 
-    school = School(ID="001", schoolName="NCL UNI")
+    school = School(schoolName="NCL UNI")
 
     test = User(email="test@email.com",
                 password="password",
@@ -128,21 +128,24 @@ def init_db():
                 schoolID="001",
                 firstName="John",
                 surname="Curry",
-                UID="200511111")
+                UID="200511111",
+                approved=True)
     test2 = User(email="test2@email.com",
                  password="password",
                  role="teacher",
                  schoolID="001",
                  firstName="Mark",
                  surname="Jones",
-                 UID="200511122")
+                 UID="200511122",
+                 approved=True)
     test3 = User(email="test3@email.com",
                  password="password",
                  role="teacher",
                  schoolID="001",
                  firstName="Steve",
                  surname="Jobs",
-                 UID="200511133")
+                 UID="200511133",
+                 approved=True)
 
     student1 = User(email="stu1@email.com",
                     password="password",
@@ -150,28 +153,32 @@ def init_db():
                     schoolID="001",
                     firstName="Rob",
                     surname="S",
-                    UID="000000001")
+                    UID="000000001",
+                    approved=True)
     student2 = User(email="stu2@email.com",
                     password="password",
                     role="student",
                     schoolID="001",
                     firstName="Jelly",
                     surname="S",
-                    UID="000000002")
+                    UID="000000002",
+                    approved=True)
     student3 = User(email="stu3@email.com",
                     password="password",
                     role="student",
                     schoolID="001",
                     firstName="Bob",
                     surname="S",
-                    UID="000000003")
+                    UID="000000003",
+                    approved=True)
     student4 = User(email="stu4@email.com",
                     password="password",
                     role="student",
                     schoolID="001",
                     firstName="Jack",
                     surname="S",
-                    UID="000000004")
+                    UID="000000004",
+                    approved=True)
 
     course1 = Course(CID="CSC1031", courseName="Discrete Mathematics")
     course2 = Course(CID="CSC1032", courseName="Computer System")

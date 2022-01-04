@@ -5,16 +5,20 @@ from app import db
 from assignments.forms import AssignmentForm
 from models import Assignment
 
-assignment_blueprint = Blueprint('assignments', __name__, template_folder='templates')
+# CONFIG
+assignments_blueprint = Blueprint('assignments', __name__, template_folder='templates')
 
 
-@assignment_blueprint.route('/assignment')
-def assignment():
-    assignment_list = Assignment.query.filter_by(email=current_user.email).first()
-    return render_template('assignment.html', assignment_list=assignment_list)
+# VIEW
+# Assignment page view
+# Author: Jiayuan Zhang
+@assignments_blueprint.route('/assignments')
+def assignments():
+    # render assignment page
+    return render_template('assignment.html')
 
 
-@assignment_blueprint.route('/create', methods=('GET', 'POST'))
+@assignments_blueprint.route('/create', methods=('GET', 'POST'))
 def create():
     form = AssignmentForm()
 

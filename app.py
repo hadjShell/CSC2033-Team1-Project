@@ -68,11 +68,13 @@ if __name__ == '__main__':
     # import blueprints
     from users.views import users_blueprint
     from courses.views import courses_blueprint
+    from assignments.views import assignments_blueprint
     from administrator.views import administrator_blueprint
 
     # register blueprints with app
     app.register_blueprint(users_blueprint)
     app.register_blueprint(courses_blueprint)
+    app.register_blueprint(assignments_blueprint)
     app.register_blueprint(administrator_blueprint)
 
     app.run(host=my_host, port=free_port, debug=True)

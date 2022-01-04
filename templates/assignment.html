@@ -4,17 +4,13 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta author="Jiayuan Zhang, Bootstrap contributors">
-	<title>{{ course_id }}</title>
+	<title>Assignments</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/dataTables.bootstrap5.min.css') }}">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300&display=swap" rel="stylesheet">
 	<script src="../static/js/jquery-3.6.0.js"></script>
 	<script src="../static/js/bootstrap.min.js"></script>
-	<script src="../static/js/dataTables.bootstrap5.min.js"></script>
-	<script src="../static/js/jquery.dataTables.min.js"></script>
-	<script src="../static/js/class-list-table.js"></script>
 
 	<style type="text/css">
 		body {
@@ -51,6 +47,18 @@
 			border: 1px solid black;
 		}
 
+		.album {
+			padding-bottom: 3rem;
+		}
+
+		.card-body a:hover{
+			background: #0056d2;
+		}
+
+		.card-body a:hover span {
+			color: white;
+		}
+
 		footer {
 			position: absolute;
 			bottom: 0;
@@ -82,7 +90,7 @@
 			            	<a class="nav-link active" href="{{ url_for('courses.courses') }}"><span>Courses</span></a>
 			            </li>
 			            <li class="nav-item">
-			            	<a class="nav-link" href="{{ url_for('assignments.assignments') }}"><span>Assignments</span></a>
+			            	<a class="nav-link" href=""><span>Assignments</span></a>
 			            </li>
 			            <li class="nav-item">
 			            	<a class="nav-link" href=""><span>Student Info</span></a>
@@ -100,37 +108,15 @@
 		<section class="text-center container">
     		<div class="row py-4">
       			<div class="col-lg-6 col-md-8 mx-auto">
-			        <h1 class="fw-light">{{ course_id }}</h1>
-			        <p class="lead text-muted">{{ course_name }}</p>
-                    <p>
-		          	<a href="#" class="btn btn-primary my-1">Add student</a>
+			        <h1 class="fw-light">Assignment</h1>
+			        <p class="lead text-muted">Here are all the assignments you have.</p>
+			        <p>
+		          	<a href="#" class="btn btn-primary my-1">Create assignment</a>
         			</p>
       			</div>
     		</div>
   		</section>
 
-        <div class="container">
-            <table id="class-list" class="table table-striped" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Student No.</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                    </tr>
-                </thead>
-                {% for student in class_list %}
-                <tbody>
-                    <tr>
-                        <td>{{ student.UID }}</td>
-                        <td>{{ student.firstName }}</td>
-                        <td>{{ student.surname }}</td>
-                        <td>{{ student.email }}</td>
-                    </tr>
-                </tbody>
-                {% endfor %}
-            </table>
-        </div>
 
 
 		<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
