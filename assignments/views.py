@@ -35,6 +35,8 @@ def assignments():
     return render_template('assignment.html', assignments=assignments)
 
 
+# View all students who take the assignment and relative information
+# Author: Jiayuan Zhang
 @assignments_blueprint.route('/assignments/detail', methods=('GET', 'POST'))
 def assignments_detail():
     # get assignment
@@ -48,5 +50,20 @@ def assignments_detail():
     for t in take:
         students_take_assignment.append(User.query.filter_by(email=t.email).first())
 
-    return render_template('assignment-detail.html', assignment=assignment, students=students_take_assignment)
+    # create a list that used to show relative information
+    assignment_student_list = []
+    for s in students_take_assignment:
+        # prepare the information
+        take = Take.query.filter_by(email=s.email, AID=assignment_id).first()
+        submit_time = take.submitTime
+        grade = take.grade
+        # create a dictionary that included the information
+        list_item = {"schoolID": s.schoolID,
+                     "name": s.firstName + s.surname,
+                     "submitTime": submit_time,
+                     "grade": grade}
+
+        assignment_student_list.append(list_item)
+
+    return render_template('assignment-detail.html', assignment=assignment, list=assignment_student_list)
 

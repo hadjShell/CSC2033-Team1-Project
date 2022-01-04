@@ -66,35 +66,28 @@
 
         <div class="container" style="padding-bottom: 3rem">
             <table id="assignment-student-list" class="table table-striped" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Student No.</th>
-                        <th>Name</th>
-                        <th>Submit Time</th>
-                        <th>Grade</th>
-                        <th>Submission</th>
-                        <th>Review</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>2005111111</td>
-                        <td>John Wick</td>
-                        <td>2021-10-01 20:58:22</td>
-                        <td>92.3</td>
-                        <td><button class="btn btn-primary">Download File</button></td>
-                        <td><button class="btn btn-primary">Grade</button></td>
-                    </tr>
-                    <tr>
-                        <td>2005111111</td>
-                        <td>John Wick</td>
-                        <td>2021-10-01 20:58:22</td>
-                        <td>92.3</td>
-                        <td><button class="btn btn-primary">Download File</button></td>
-                        <td><button class="btn btn-primary">Grade</button></td>
-                    </tr>
-
-                </tbody>
+                    <thead>
+                        <tr>
+                            <th>Student No.</th>
+                            <th>Name</th>
+                            <th>Submit Time</th>
+                            <th>Grade</th>
+                            <th>Submission</th>
+                            <th>Review</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in list %}
+                            <tr>
+                                <td>{{ item['schoolID'] }}</td>
+                                <td>{{ item['name'] }}</td>
+                                <td>{{ item['submitTime'] }}</td>
+                                <td>{{ item['grade'] }}</td>
+                                <td><button class="btn btn-primary">Download File</button></td>
+                                <td><button class="btn btn-primary">Grade</button></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
             </table>
         </div>
 

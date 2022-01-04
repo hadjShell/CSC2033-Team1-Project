@@ -92,14 +92,13 @@ class Take(db.Model):
 
     email = db.Column(db.String(100), db.ForeignKey(User.email), primary_key=True)
     AID = db.Column(db.String(10), db.ForeignKey(Assignment.AID), primary_key=True)
-    submitTime = db.Column(db.DateTime, nullable=False)
+    submitTime = db.Column(db.DateTime, nullable=True)
     grade = db.Column(db.Float, nullable=True)
 
-    def __init__(self, email, AID, grade):
+    def __init__(self, email, AID):
         self.email = email
         self.AID = AID
         self.submitTime = datetime.now()
-        self.grade = grade
 
 
 # Teachers create assignments
