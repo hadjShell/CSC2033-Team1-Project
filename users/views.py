@@ -43,6 +43,8 @@ def register():
     return render_template('register.html', form=form)
 
 
+# Login page view
+# Author: Jiayuan Zhang
 @users_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -69,12 +71,14 @@ def login():
 
 
 # Teacher welcome view
+# Author: Jiayuan Zhang
 @users_blueprint.route('/welcome_teacher')
 def welcome_teacher():
     return render_template('teacher-welcome.html', name=current_user.firstName)
 
 
 # Profile view
+# Author: Jiayuan Zhang
 @users_blueprint.route('/profile')
 def profile():
     return render_template('profile.html', firstName=current_user.firstName, surname=current_user.surname,
