@@ -67,8 +67,8 @@ class Assignment(db.Model):
     deadline = db.Column(db.DateTime, nullable=False)
     CID = db.Column(db.String(15), db.ForeignKey(Course.CID), nullable=False)
 
-    def __init__(self, email, assignmentName, description, deadline, CID):
-        self.email = email
+    def __init__(self, AID, assignmentName, description, deadline, CID):
+        self.AID = AID
         self.assignmentName = assignmentName
         self.description = description
         self.deadline = deadline
@@ -186,6 +186,22 @@ def init_db():
     course4 = Course(CID="CSC1034", courseName="Python")
     course5 = Course(CID="CSC1035", courseName="Java")
 
+    assignment1 = Assignment(AID="1",
+                             assignmentName="Programming",
+                             description="This is a programming assignment for CSC1031.",
+                             deadline=datetime(2022, 1, 1, 23, 59, 59),
+                             CID="CSC1031")
+    assignment2 = Assignment(AID="2",
+                             assignmentName="Report",
+                             description="This is a report assignment for CSC1031.",
+                             deadline=datetime(2021, 1, 1, 23, 59, 59),
+                             CID="CSC1031")
+    assignment3 = Assignment(AID="3",
+                             assignmentName="Essay",
+                             description="This is an essay assignment for CSC1031.",
+                             deadline=datetime(2021, 10, 1, 23, 59, 59),
+                             CID="CSC1031")
+
     engage1 = Engage(email="test@email.com", CID="CSC1031")
     engage2 = Engage(email="test@email.com", CID="CSC1032")
     engage3 = Engage(email="test@email.com", CID="CSC1033")
@@ -195,6 +211,10 @@ def init_db():
     engage7 = Engage(email="stu2@email.com", CID="CSC1031")
     engage8 = Engage(email="stu3@email.com", CID="CSC1031")
     engage9 = Engage(email="stu4@email.com", CID="CSC1032")
+
+    create1 = Create(email="test@email.com", AID="1")
+    create2 = Create(email="test@email.com", AID="2")
+    create3 = Create(email="test@email.com", AID="3")
 
     db.session.add(school)
     db.session.add(test)
@@ -209,6 +229,9 @@ def init_db():
     db.session.add(course3)
     db.session.add(course4)
     db.session.add(course5)
+    db.session.add(assignment1)
+    db.session.add(assignment2)
+    db.session.add(assignment3)
     db.session.add(engage1)
     db.session.add(engage2)
     db.session.add(engage3)
@@ -218,4 +241,7 @@ def init_db():
     db.session.add(engage7)
     db.session.add(engage8)
     db.session.add(engage9)
+    db.session.add(create1)
+    db.session.add(create2)
+    db.session.add(create3)
     db.session.commit()
