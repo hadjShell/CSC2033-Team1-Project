@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta author="Jiayuan Zhang, Bootstrap contributors">
-	<title>Assignments</title>
+	<title>{{ assignment.AID }}</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/base.css') }}">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
@@ -54,33 +54,29 @@
 		<section class="text-center container">
     		<div class="row py-4">
       			<div class="col-lg-6 col-md-8 mx-auto">
-			        <h1 class="fw-light">Assignment</h1>
-			        <p class="lead text-muted">Here are all the assignments you take charge of.</p>
-			        <p>
-		          	<a href="#" class="btn btn-primary my-1">Create assignment</a>
-        			</p>
+			        <h1 class="fw-light">{{ assignment.assignmentName }}</h1>
+			        <p class="lead text-muted">{{ assignment.description }}</p>
       			</div>
     		</div>
   		</section>
 
         <div class="container">
-            {% if assignments %}
-                {% for assignment in assignments %}
-                    <div class="list-group">
-                      <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
-                        <img src="../static/image/assignment-logo.png" alt="assignment" width="32" height="32" class="d-inline-block align-text-center">
-                        <div class="d-flex gap-2 w-100 justify-content-between">
-                          <div>
-                            <h6 class="mb-0">{{ assignment.assignmentName }}</h6>
-                            <p class="mb-0 opacity-75">Due {{ assignment.deadline }}</p>
-                          </div>
+            <div class="list-group">
+
+                <a class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+                    <div class="d-flex gap-2 w-100 justify-content-between">
+                        <div>
+                            <span class="mb-0">2005111111</span>
+                            <span class="mb-0">John</span>
+                            <span class="mb-0">Wick</span>
+                            <span class="mb-0">2021-01-01 10:50:23</span>
+                            <button class="btn btn-primary">Download file</button>
                         </div>
-                      </a>
                     </div>
-                {% endfor %}
-            {% else %}
-                <p>You don't have any assignments currently.</p>
-            {% endif %}
+                </a>
+
+
+            </div>
         </div>
 
 
