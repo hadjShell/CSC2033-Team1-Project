@@ -87,10 +87,10 @@
 			            	<a class="nav-link" href="{{ url_for('users.profile') }}"><span>Profile</span></a>
 			            </li>
 			            <li class="nav-item">
-			            	<a class="nav-link active" href="{{ url_for('courses.courses') }}"><span>Courses</span></a>
+			            	<a class="nav-link" href="{{ url_for('courses.courses') }}"><span>Courses</span></a>
 			            </li>
 			            <li class="nav-item">
-			            	<a class="nav-link" href=""><span>Assignments</span></a>
+			            	<a class="nav-link active" href=""><span>{{ url_for('assignments.assignments') }}</span></a>
 			            </li>
 			            <li class="nav-item">
 			            	<a class="nav-link" href=""><span>Student Info</span></a>
@@ -109,13 +109,34 @@
     		<div class="row py-4">
       			<div class="col-lg-6 col-md-8 mx-auto">
 			        <h1 class="fw-light">Assignment</h1>
-			        <p class="lead text-muted">Here are all the assignments you have.</p>
+			        <p class="lead text-muted">Here are all the assignments you take charge of.</p>
 			        <p>
 		          	<a href="#" class="btn btn-primary my-1">Create assignment</a>
         			</p>
       			</div>
     		</div>
   		</section>
+
+        <div class="container">
+            {% if assignments %}
+                {% for assignment in assignments %}
+                    <div class="list-group">
+                      <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+                        <img src="../static/image/assignment-logo.png" alt="assignment" width="32" height="32" class="d-inline-block align-text-center">
+                        <div class="d-flex gap-2 w-100 justify-content-between">
+                          <div>
+                            <h6 class="mb-0">{{ assignment.assignmentName }}</h6>
+                            <p class="mb-0 opacity-75">Due {{ assignment.deadline }}</p>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>You don't have any assignments currently.</p>
+            {% endif %}
+        </div>
+
 
 
 
