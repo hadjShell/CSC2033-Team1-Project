@@ -78,16 +78,18 @@
                         <th>Email</th>
                     </tr>
                 </thead>
-                {% for student in class_list %}
+
                 <tbody>
-                    <tr>
-                        <td>{{ student.UID }}</td>
-                        <td>{{ student.firstName }}</td>
-                        <td>{{ student.surname }}</td>
-                        <td>{{ student.email }}</td>
-                    </tr>
+                    {% for student in class_list %}
+                        <tr>
+                            <td>{{ student.UID }}</td>
+                            <td>{{ student.firstName }}</td>
+                            <td>{{ student.surname }}</td>
+                            <td>{{ student.email }}</td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
-                {% endfor %}
+
             </table>
         </div>
 
