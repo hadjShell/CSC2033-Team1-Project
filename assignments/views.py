@@ -1,9 +1,9 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 from sqlalchemy import desc
 from flask_login import current_user, login_required
 from app import db
 from assignments.forms import AssignmentForm
-from models import Assignment, Create
+from models import Assignment, Create, Take, User
 
 # CONFIG
 assignments_blueprint = Blueprint('assignments', __name__, template_folder='templates')
@@ -35,16 +35,18 @@ def assignments():
     return render_template('assignment.html', assignments=assignments)
 
 
-@assignments_blueprint.route('/create', methods=('GET', 'POST'))
-def create():
-    form = AssignmentForm()
+@assignments_blueprint.route('/assignments/detail', methods=('GET', 'POST'))
+def assignments_detail():
+    # get assignment
+    if request.method == 'POST':
+        assignment_id = request.form.get('assignmentID')
+        assignment = Assignment.query.filter_by(AID=assignment_id).first()
 
-    if form.validate_on_submit():
-        new_assignnment = Assignment(email=current_user.email, assignmentName=form.assignmentTitle.data,
-                                     description=form.assignmentDescription.data, deadline=form.assignmentDeadline.data,
-                                     CID=form.assignmentCID.data)
-        db.session.add(new_assignnment)
-        db.session.commit()
+    # get all students who take the assignment
+    students_take_assignment = []
+    take = Take.query.filter_by(AID=assignment_id).all()
+    for t in take:
+        students_take_assignment.append(User.query.filter_by(email=t.email).first())
 
-        return assignments()
-    return render_template('create.html', form=form)
+    return render_template('assignment-detail.html', assignment=assignment, students=students_take_assignment)
+
