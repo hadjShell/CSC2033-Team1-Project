@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import current_user, login_required
-from app import db
+from app import db, requires_roles
 from models import School, User
 
 
@@ -8,12 +8,16 @@ administrator_blueprint = Blueprint('admins', __name__, template_folder='templat
 
 
 @administrator_blueprint.route('/admin', methods=['POST', 'GET'])
+@login_required
+@requires_roles('admin')
 def admin():
     return render_template('admin.html')
 
 
 # gets all users of the database, excluding the admin
 @administrator_blueprint.route('/view-all-users', methods=['POST'])
+@login_required
+@requires_roles('admin')
 def view_all_users():
 
     users = []
@@ -32,12 +36,16 @@ def view_all_users():
 
 # gets all the schools that exist within the database
 @administrator_blueprint.route('/view-all-schools', methods=['POST'])
+@login_required
+@requires_roles('admin')
 def view_all_school():
     return render_template('admin.html', all_schools=School.query.all())
 
 
 # allows the admin to create schools
 @administrator_blueprint.route('/create-school', methods=['POST', 'GET'])
+@login_required
+@requires_roles('admin')
 def create_school():
 
     # input from the admin
@@ -63,6 +71,8 @@ def create_school():
 
 
 @administrator_blueprint.route('/approve', methods=['GET', 'POST'])
+@login_required
+@requires_roles('admin')
 def approve_user():
     if request.method == 'POST':
 
