@@ -14,6 +14,7 @@ assignments_blueprint = Blueprint('assignments', __name__, template_folder='temp
 def deadlineValue(a):
     return a.deadline
 
+
 # VIEW
 # Assignment page view
 # Author: Jiayuan Zhang
