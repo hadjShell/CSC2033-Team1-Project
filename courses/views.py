@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_required
 from app import db
 from courses.forms import CourseForm
-from models import Course, Engage, User
+from models import Course, Engage, User, Assignment
 
 # CONFIG
 courses_blueprint = Blueprint('courses', __name__, template_folder='templates')
@@ -45,6 +45,20 @@ def course_classlist():
             class_list.remove(s)
 
     return render_template('course-classlist.html', course_id=course_id, course_name=course_name, class_list=class_list)
+
+
+# View all assignments of a course
+# Author: Jiayuan Zhang
+@courses_blueprint.route('/courses/assignments', methods=['POST', 'GET'])
+def course_assignments():
+    # get course id
+    if request.method == 'POST':
+        course_id = request.form.get('assignments_list')
+
+    # get all assignments of this course
+    assignments = Assignment.query.filter_by(CID=course_id).all()
+
+    return render_template('course-assignmentlist.html', course_id=course_id, assignments=assignments)
 
 
 '''
