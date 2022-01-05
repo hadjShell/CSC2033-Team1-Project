@@ -10,6 +10,7 @@ users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
 # VIEWS
 # view registration
+# Authors: Uzair Yousaf, Harry Sayer
 @users_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
     # create signup form object
@@ -47,7 +48,7 @@ def register():
 
 
 # Login page view
-# Author: Jiayuan Zhang
+# Authors: Jiayuan Zhang, Harry Sayer
 @users_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
