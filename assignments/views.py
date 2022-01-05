@@ -67,3 +67,13 @@ def assignments_detail():
 
     return render_template('assignment-detail.html', assignment=assignment, list=assignment_student_list)
 
+
+# Function to create an assignment
+# Author: Tom Dawson
+@assignments_blueprint.route('/create-assignment', methods=['POST', 'GET'])
+def create_assignment():
+    form = AssignmentForm
+
+    if form.validate_on_submit():
+        new_assignment = Assignment(assignmentName=form.assignmentTitle.data,
+                                    description=form.assignmentDescription.data, deadline=form.assignmentDeadline.data)
