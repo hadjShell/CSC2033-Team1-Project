@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 import logging
 from app import db
-from models import User, School
+from models import User, School, Take, Assignment
 from users.forms import LoginForm, RegisterForm
 
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
@@ -122,3 +122,31 @@ def student_info():
     school = School.query.filter_by(ID=current_user.schoolID).first().schoolName
 
     return render_template('student-info.html', students=students, school=school)
+
+
+# View all grades of a specific student
+# Author: Jiayuan Zhang
+@users_blueprint.route('/student_info/results', methods=['POST', 'GET'])
+def student_results():
+    # get student
+    if request.method == 'POST':
+        email = request.form.get('student_email')
+    student = User.query.filter_by(email=email).first()
+
+    # get all results of this student
+    results = []
+    take = Take.query.filter_by(email=email).all()
+    for t in take:
+        # prepare the information
+        assignment = Assignment.query.filter_by(AID=t.AID).first()
+        assignment_name = assignment.assignmentName
+        course = assignment.CID
+        grade = t.grade
+        # create a dictionary to store the information
+        list_item = {"assignment": assignment_name,
+                     "course": course,
+                     "grade": grade}
+
+        results.append(list_item)
+
+    return render_template('', student=student, results=results)
