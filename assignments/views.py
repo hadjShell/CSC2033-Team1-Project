@@ -59,7 +59,7 @@ def assignments_detail():
         grade = take.grade
         # create a dictionary that included the information
         list_item = {"schoolID": s.schoolID,
-                     "name": s.firstName + s.surname,
+                     "name": s.firstName + ' ' + s.surname,
                      "submitTime": submit_time,
                      "grade": grade}
 
