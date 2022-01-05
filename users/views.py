@@ -149,4 +149,4 @@ def student_results():
 
         results.append(list_item)
 
-    return render_template('', student=student, results=results)
+    return render_template('student-result.html', student=student, results=results)

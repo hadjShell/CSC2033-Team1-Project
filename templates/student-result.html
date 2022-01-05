@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta author="Jiayuan Zhang, Bootstrap contributors">
-	<title>Student Info</title>
+	<title>Result of {{ student.firstName + ' ' + student.surname }}</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/dataTables.bootstrap5.min.css') }}">
@@ -13,10 +13,9 @@
 	<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300&display=swap" rel="stylesheet">
 	<script src="../static/js/jquery-3.6.0.js"></script>
 	<script src="../static/js/bootstrap.min.js"></script>
-	<script src="../static/js/dataTables.bootstrap5.min.js"></script>
+    <script src="../static/js/dataTables.bootstrap5.min.js"></script>
 	<script src="../static/js/jquery.dataTables.min.js"></script>
 	<script src="../static/js/class-list-table.js"></script>
-
 </head>
 <body>
 
@@ -59,44 +58,34 @@
 		<section class="text-center container">
     		<div class="row py-4">
       			<div class="col-lg-6 col-md-8 mx-auto">
-			        <h1 class="fw-light">Student Info</h1>
-			        <p class="lead text-muted">Here are all the students in {{ school }}. <br>You can click the students to check their grades.
-                    </p>
+			        <h1 class="fw-light">Results</h1>
+			        <p class="lead text-muted">{{ student.schoolID + ' ' + student.firstName + ' ' + student.surname }}</p>
       			</div>
     		</div>
   		</section>
 
-        <div class="container">
-            <table id="result-list" class="table table-striped table-hover" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Student No.</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for student in students %}
+        <div class="container" style="padding-bottom: 3rem">
+            <table id="assignment-student-list" class="table table-striped" style="width:100%">
+                    <thead>
                         <tr>
-                            <td>
-                                <form id="student{{ loop.index }}" method="POST" action="/student_info/results">
-                                <input type="hidden" name="student_email" value="{{ student.email }}">
-                                    <a href="#" onclick="document.getElementById('student{{ loop.index }}').submit();">
-                                    {{ student.UID }}
-                                    </a>
-                                </form>
-                            </td>
-                                <td>{{ student.firstName }}</td>
-                                <td>{{ student.surname }}</td>
-                                <td>{{ student.email }}</td>
+                            <th>Assignment</th>
+                            <th>Course</th>
+                            <th>Grade</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-
+                    </thead>
+                    <tbody>
+                        {% for item in results %}
+                            <tr>
+                                <td>{{ item['assignment'] }}</td>
+                                <td>{{ item['course'] }}</td>
+                                <td>{{ item['grade'] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
             </table>
         </div>
+
+
 
 
 		<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
