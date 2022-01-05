@@ -1,9 +1,10 @@
-from functools import wraps
-from flask import Flask, render_template, request
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, current_user
-import sshtunnel
+import logging
 import socket
+from functools import wraps
+
+from flask import Flask, render_template
+from flask_login import LoginManager, current_user
+from flask_sqlalchemy import SQLAlchemy
 
 """
 This python file handles the launching of the application as well as connecting to the database via an SSH tunnel.
@@ -31,6 +32,23 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://csc2033_team01:SonsArchVeer@127
 
 # Initial the db
 db = SQLAlchemy(app)
+
+
+# Security logging
+class SecurityFilter(logging.Filter):
+    def filter(self, record):
+        return "SECURITY" in record.getMessage()
+
+
+filehandler = logging.FileHandler('Odin.log', 'w')
+filehandler.setLevel(logging.WARNING)
+filehandler.addFilter(SecurityFilter())
+formatter = logging.Formatter('%(asctime)s|%(message)s', '%m/%d/%Y|%I:%M:%S %p')
+filehandler.setFormatter(formatter)
+
+logger = logging.getLogger('')
+logger.propagate = False
+logger.addHandler(filehandler)
 
 
 # HOME PAGE VIEW

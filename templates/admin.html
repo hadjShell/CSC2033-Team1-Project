@@ -111,52 +111,65 @@
 	  	<div class="album pb-5">
 			<div class="container">
 				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                        <div class="col">
-                            <div class="card shadow-sm">
-                                <div class="card-body">
-                                    <h4 class="card-title">Users</h4>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="btn-group" >
-                                            <form method="POST" action="/view-all-users">
-                                                <button class="btn btn-sm btn-outline-secondary">Display All Current Users</button>
-                                            </form>
-                                        </div>
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h4 class="card-title">Users</h4>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group" >
+                                        <form method="POST" action="/view-all-users">
+                                            <button class="btn btn-sm btn-outline-secondary">Display All Current Users</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col">
-                                <div class="card shadow-sm">
-                                    <div class="card-body">
-                                        <h4 class="card-title">Schools</h4>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="btn-group" >
-                                                <form method="POST" action="/view-all-schools">
-                                                    <button class="btn btn-sm btn-outline-secondary">Display All Current School</button>
-                                                </form>
-                                            </div>
-                                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h4 class="card-title">Schools</h4>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group" >
+                                        <form method="POST" action="/view-all-schools">
+                                            <button class="btn btn-sm btn-outline-secondary">Display All Current School</button>
+                                        </form>
                                     </div>
                                 </div>
-                        </div>
-                        <div class="col">
-                                    <div class="card shadow-sm">
-                                        <div class="card-body">
-                                            <h4 class="card-title">Approval</h4>
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div class="btn-group" >
-                                                    <form method="POST" action="/approve">
-                                                        <button class="btn btn-sm btn-outline-secondary">Approve User Registrations</button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h4 class="card-title">Approval</h4>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group" >
+                                        <form method="POST" action="/approve">
+                                            <button class="btn btn-sm btn-outline-secondary">Approve User Registrations</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h4 class="card-title">Security Logs</h4>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group" >
+                                        <form method="POST" action="/security-logs">
+                                            <button class="btn btn-sm btn-outline-secondary">Logs</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 				</div>
 			</div>
         </div>
-
 
     <div class="container">
         <div class="box" >
@@ -190,6 +203,7 @@
                 <div>
                     <div style="text-align: center;"><button class="btn btn-sm btn-outline-secondary">Close</button></div>
                 </div>
+                </form>
             {% endif %}
         </div>
     </div>
@@ -241,6 +255,41 @@
             {% endif %}
         </div>
     </div>
+    </div>
+
+    <div class="container">
+        <div class="box" >
+            {% if logs %}
+                <div class="field" >
+                    <div style="text-align: center;"><h4 class="title is-4">Security Logs</h4></div>
+                    <table class="table" >
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Message</th>
+                            <th>User ID</th>
+                            <th>Email</th>
+                            <th>IP Address</th>
+                        </tr>
+                        {% for log in logs %}
+                            <tr>
+                                <td>{{ log[0] }}</td>
+                                <td>{{ log[1] }}</td>>
+                                <td>{{ log[2] }}</td>>
+                                <td>{{ log[3] }}</td>>
+                                <td>{{ log[4] }}</td>>
+                                <td>{{ log[5] }}</td>>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <form method="POST" action="/admin">
+                <div>
+                    <div style="text-align: center;"><button class="btn btn-sm btn-outline-secondary">Close</button></div>
+                </div>
+                </form>
+            {% endif %}
+        </div>
     </div>
 
 

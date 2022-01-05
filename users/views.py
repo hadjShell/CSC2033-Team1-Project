@@ -37,6 +37,9 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
+        logging.warning('SECURITY - USER REGISTRATION|%s|%s|%s', new_user.UID, new_user.email,
+                        request.remote_addr)
+
         # sends user to login page
         return redirect((url_for('users.login')))
     # if request method is GET or form not valid re-render signup page
@@ -56,6 +59,9 @@ def login():
             # TODO: override get_id
             login_user(user)
 
+            logging.warning('SECURITY - USER LOG IN|%s|%s|%s', current_user.UID, current_user.email,
+                            request.remote_addr)
+
             # Go to welcome page based on role
             if current_user.role == 'teacher':
                 return redirect(url_for('users.welcome_teacher'))
@@ -64,15 +70,24 @@ def login():
             else:
                 # TODO: need to fix to student welcome page
                 return redirect(url_for('users.welcome_teacher'))
+
+        elif user and not (form.password.data == user.password):
+            flash("Please check your login detail and try again!")
+            logging.warning('SECURITY - USER FAILED LOGIN ATTEMPT|%s|%s|%s', user.UID, user.email,
+                            request.remote_addr)
         else:
             flash("Please check your login detail and try again!")
 
     return render_template('login.html', form=form)
 
 
+# Logs the user out of the system
+# Author: Harry Sayer
 @users_blueprint.route('/logout')
 @login_required
 def logout():
+    logging.warning('SECURITY - USER LOG OUT|%s|%s|%s', current_user.UID, current_user.email,
+                    request.remote_addr)
     logout_user()
     return render_template('index.html')
 
