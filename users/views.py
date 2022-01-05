@@ -56,8 +56,6 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user and (form.password.data == user.password):
-
-            # TODO: override get_id
             login_user(user)
 
             logging.warning('SECURITY - USER LOG IN|%s|%s|%s', current_user.UID, current_user.email,
@@ -107,3 +105,20 @@ def profile():
     return render_template('profile.html', firstName=current_user.firstName, surname=current_user.surname,
                            email=current_user.email, id=current_user.UID,
                            school=School.query.filter_by(ID=current_user.schoolID).first().schoolName)
+
+
+# Student Info view, display all students
+# Author: Jiayuan Zhang
+@users_blueprint.route('/student_info')
+def student_info():
+    # get all students in the same school of current teacher
+    users = User.query.filter_by(schoolID=current_user.schoolID).all()
+    students = []
+    for s in users:
+        if s.role == "student":
+            students.append(s)
+
+    # get current teacher school
+    school = School.query.filter_by(ID=current_user.schoolID).first().schoolName
+
+    return render_template('student-info.html', students=students, school=school)

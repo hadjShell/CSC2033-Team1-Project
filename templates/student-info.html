@@ -4,14 +4,18 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta author="Jiayuan Zhang, Bootstrap contributors">
-	<title>Courses</title>
+	<title>Student Info</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/dataTables.bootstrap5.min.css') }}">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300&display=swap" rel="stylesheet">
 	<script src="../static/js/jquery-3.6.0.js"></script>
 	<script src="../static/js/bootstrap.min.js"></script>
+	<script src="../static/js/dataTables.bootstrap5.min.js"></script>
+	<script src="../static/js/jquery.dataTables.min.js"></script>
+	<script src="../static/js/class-list-table.js"></script>
 
 </head>
 <body>
@@ -34,13 +38,13 @@
 			            	<a class="nav-link" href="{{ url_for('users.profile') }}"><span>Profile</span></a>
 			            </li>
 			            <li class="nav-item">
-			            	<a class="nav-link active" href="{{ url_for('courses.courses') }}"><span>Courses</span></a>
+			            	<a class="nav-link" href="{{ url_for('courses.courses') }}"><span>Courses</span></a>
 			            </li>
 			            <li class="nav-item">
 			            	<a class="nav-link" href="{{ url_for('assignments.assignments') }}"><span>Assignments</span></a>
 			            </li>
 			            <li class="nav-item">
-			            	<a class="nav-link" href="{{ url_for('users.student_info') }}"><span>Student Info</span></a>
+			            	<a class="nav-link active" href="{{ url_for('users.student_info') }}"><span>Student Info</span></a>
 			            </li>
 			            <li class="nav-item">
 			            	<a class="nav-link" href=""><span>Logout</span></a>
@@ -48,53 +52,44 @@
 		          	</ul>
 		        </div>
 			</div>
-		</nav>	
+		</nav>
 	</header>
 
 	<div id="page-container">
 		<section class="text-center container">
     		<div class="row py-4">
       			<div class="col-lg-6 col-md-8 mx-auto">
-			        <h1 class="fw-light">Courses</h1>
-			        <p class="lead text-muted">Here are all the courses you teach.</p>
-			        <p>
-		          	<a href="#" class="btn btn-primary my-1">Create course</a>
-        			</p>
+			        <h1 class="fw-light">Student Info</h1>
+			        <p class="lead text-muted">Here are all the students in {{ school }}. <br>You can click the students to check their grades.
+                    </p>
       			</div>
     		</div>
   		</section>
 
-	  	<div class="album pb-5">
-			<div class="container">
-				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-					{% if engaged_courses %}
-                        {% for course in engaged_courses %}
-                            <div class="col">
-                                <div class="card shadow-sm">
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ course.CID }}</h5>
-                                        <p class="card-text">{{ course.courseName }}</p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="btn-group">
-                                                <form method="POST" action="/courses/assignments">
-                                                    <button class="btn btn-sm btn-outline-secondary" name="assignments_list" value="{{ course.CID }}">Assignments</button>
-                                                </form>
-                                                <form method="POST" action="/courses/classlist">
-                                                    <button class="btn btn-sm btn-outline-secondary" name="class_list" value="{{ course.CID }}">Class list</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
+        <div class="container">
+            <table id="class-list" class="table table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Student No.</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
 
-                    {% else %}
-                        <p>You don't have any courses currently.</p>
-                    {% endif %}
-				</div>
-			</div>
-		</div>
+                <tbody>
+                    {% for student in students %}
+                        <tr>
+                            <td>{{ student.UID }}</td>
+                            <td>{{ student.firstName }}</td>
+                            <td>{{ student.surname }}</td>
+                            <td>{{ student.email }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
 
 
 		<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
