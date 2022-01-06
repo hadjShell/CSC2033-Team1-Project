@@ -1,10 +1,12 @@
+# IMPORTS
 from flask import Blueprint, render_template, flash, redirect, url_for, request
-from flask_login import current_user, login_user, logout_user, login_required
+from flask_login import current_user, login_user, logout_user
 import logging
-from app import db
+from app import db, login_required, requires_roles
 from models import User, School, Take, Assignment
 from users.forms import LoginForm, RegisterForm
 
+# CONFIG
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
 
@@ -12,6 +14,7 @@ users_blueprint = Blueprint('users', __name__, template_folder='templates')
 # view registration
 # Authors: Uzair Yousaf, Harry Sayer
 @users_blueprint.route('/register', methods=['GET', 'POST'])
+@requires_roles()
 def register():
     # create signup form object
     form = RegisterForm()
@@ -50,6 +53,7 @@ def register():
 # Login page view
 # Authors: Jiayuan Zhang, Harry Sayer
 @users_blueprint.route('/login', methods=['GET', 'POST'])
+@requires_roles()
 def login():
     form = LoginForm()
 
@@ -94,6 +98,8 @@ def logout():
 # Teacher welcome view
 # Author: Jiayuan Zhang
 @users_blueprint.route('/welcome_teacher')
+@login_required
+@requires_roles('teacher')
 def welcome_teacher():
     return render_template('teacher-welcome.html', name=current_user.firstName)
 
@@ -101,6 +107,8 @@ def welcome_teacher():
 # Profile view
 # Author: Jiayuan Zhang
 @users_blueprint.route('/profile')
+@login_required
+@requires_roles('teacher', 'student')
 def profile():
     return render_template('profile.html', firstName=current_user.firstName, surname=current_user.surname,
                            email=current_user.email, id=current_user.UID,
@@ -110,6 +118,8 @@ def profile():
 # Student Info view, display all students
 # Author: Jiayuan Zhang
 @users_blueprint.route('/student_info')
+@login_required
+@requires_roles('teacher')
 def student_info():
     # get all students in the same school of current teacher
     users = User.query.filter_by(schoolID=current_user.schoolID).all()
@@ -127,6 +137,8 @@ def student_info():
 # View all grades of a specific student
 # Author: Jiayuan Zhang
 @users_blueprint.route('/student_info/results', methods=['POST', 'GET'])
+@login_required
+@requires_roles('teacher')
 def student_results():
     # get student
     if request.method == 'POST':

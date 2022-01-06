@@ -124,7 +124,7 @@ def requires_roles(*roles):
                                 current_user.email,
                                 request.remote_addr)
                 # Redirect user to error page
-                return render_template('403.html')
+                return render_template('errors/403.html')
             return f(*args, **kwargs)
         return wrapped
     return wrapper
