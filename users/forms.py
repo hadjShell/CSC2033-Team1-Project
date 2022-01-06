@@ -16,6 +16,14 @@ def character_check(form, field):
                 f"Character {char} is not allowed.")
 
 
+# check if password contains at least 1 digit, 1 lowercase, 1 uppercase and 1 special character, return error if not
+def validate_password(form, field):
+    p = re.compile(r'(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^A-Za-z0-9])')
+    if not p.match(field.data):
+        raise ValidationError(
+            "Password must contain at least 1 digit, 1 lowercase, 1 uppercase and 1 special character.")
+
+
 class LoginForm(FlaskForm):
     email = StringField(validators=[DataRequired(), Email()])
     password = PasswordField(validators=[DataRequired()])
@@ -27,7 +35,8 @@ class RegisterForm(FlaskForm):
     firstName = StringField(validators=[DataRequired(), character_check])
     lastName = StringField(validators=[DataRequired(), character_check])
     password = PasswordField(validators=[DataRequired(), Length(min=6, max=12, message='Password must be between 6 '
-                                                                                       'and 12 characters in length.')])
+                                                                                       'and 12 characters in length.'),
+                                         validate_password])
     confirm_password = PasswordField(validators=[DataRequired(), EqualTo('password', message='Both password fields '
                                                                                              'must be equal!')])
     # School name/id to do
@@ -35,27 +44,13 @@ class RegisterForm(FlaskForm):
     #                                                                                 'characters in length')])
     submit = SubmitField()
 
-    # check if password contains at least 1 digit, 1 lowercase, 1 uppercase and 1 special character, return error if not
-    def validate_password(self, password):
-        p = re.compile(r'(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^A-Za-z0-9])')
-        if not p.match(self.password.data):
-            raise ValidationError(
-                "Password must contain at least 1 digit, 1 lowercase, 1 uppercase and 1 special character.")
-
 
 class ChangePasswordForm(FlaskForm):
     old_password = PasswordField(validators=[DataRequired()])
     new_password = PasswordField(validators=[DataRequired(), Length(min=6, max=12,
                                                                     message='Password must be between 6 '
-                                                                            'and 12 characters in length.')])
+                                                                            'and 12 characters in length.'),
+                                             validate_password])
     confirm_password = PasswordField(validators=[DataRequired(), EqualTo('new_password', message='Both password fields '
                                                                                              'must be equal!')])
     submit = SubmitField()
-
-    # check if new password contains at least 1 digit, 1 lowercase, 1 uppercase and 1 special character,
-    # return error if not
-    def validate_password(self, new_password):
-        p = re.compile(r'(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^A-Za-z0-9])')
-        if not p.match(self.new_password.data):
-            raise ValidationError(
-                "Password must contain at least 1 digit, 1 lowercase, 1 uppercase and 1 special character.")
