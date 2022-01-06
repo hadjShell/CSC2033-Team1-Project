@@ -1,9 +1,9 @@
 import logging
 import socket
 from functools import wraps
-
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, current_app
 from flask_login import LoginManager, current_user
+from flask_login.config import EXEMPT_METHODS
 from flask_sqlalchemy import SQLAlchemy
 
 """
@@ -63,13 +63,34 @@ def register():
     return render_template('register.html')
 
 
+# DECORATORS
+# custom login _required decorator
+# Author: Jiayuan Zhang
+def login_required(func):
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        if request.method in EXEMPT_METHODS:
+            return func(*args, **kwargs)
+        elif not current_user.is_authenticated:
+            # log anonymous users invalid attempts
+            logging.warning('SECURITY - Anonymous invalid access [%s]', request.remote_addr)
+            # Redirect the user to an unauthorised notice!
+            return current_app.login_manager.unauthorized() and render_template('errors/403.html')
+        return func(*args, **kwargs)
+
+    return decorated_view
+
+
 # Role access control
-# Author: Harry Sayer
+# Author: Harry Sayer, Jiayuan Zhang
 def requires_roles(*roles):
     def wrapper(f):
         @wraps(f)
         def wrapped(*args, **kwargs):
-            if current_user.role not in roles:
+            # anonymous user has no role, nothing done
+            if not current_user.is_authenticated:
+                return f(*args, **kwargs)
+            elif current_user.role not in roles:
                 # security log when a user attempts to access a page they don't have the required permissions to
                 logging.warning('SECURITY - UNAUTHORISED ACCESS ATTEMPT|%s|%s|%s',
                                 current_user.UID,
