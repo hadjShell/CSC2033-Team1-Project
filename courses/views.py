@@ -1,7 +1,7 @@
-# IMPORT
+# IMPORTS
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_required
-from app import db
+from app import db, requires_roles
 from courses.forms import CourseForm
 from models import Course, Engage, User, Assignment
 
@@ -13,6 +13,8 @@ courses_blueprint = Blueprint('courses', __name__, template_folder='templates')
 # Courses page view
 # Author: Jiayuan Zhang
 @courses_blueprint.route('/courses')
+@login_required
+@requires_roles('teacher', 'student')
 def courses():
     # get all courses belonging to current user
     engaged = Engage.query.filter_by(email=current_user.email).all()
@@ -27,6 +29,8 @@ def courses():
 # View the class list of a specific course
 # Author: Jiayuan Zhang
 @courses_blueprint.route('/courses/classlist', methods=['GET', 'POST'])
+@login_required
+@requires_roles('teacher')
 def course_classlist():
     # get course id
     if request.method == 'POST':
@@ -50,6 +54,8 @@ def course_classlist():
 # View all assignments of a course
 # Author: Jiayuan Zhang
 @courses_blueprint.route('/courses/assignments', methods=['POST', 'GET'])
+@login_required
+@requires_roles('teacher', 'student')
 def course_assignments():
     # get course id
     if request.method == 'POST':
