@@ -1,6 +1,6 @@
 # IMPORTS
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import current_user, login_required
+from flask_login import current_user
 from app import db, login_required, requires_roles
 from courses.forms import CourseForm
 from models import Course, Engage, User, Assignment
@@ -67,41 +67,31 @@ def course_assignments():
     return render_template('course-assignmentlist.html', course_id=course_id, assignments=assignments)
 
 
-'''
-@courses_blueprint.route('/create-courses', methods=['POST', 'GET'])
-def create_courses():
+# Current teacher creates a course under his or her govern
+# Author: Jiayuan Zhang
+@courses_blueprint.route('/courses/create-course', methods=['POST', 'GET'])
+@login_required
+@requires_roles('teacher')
+def create_course():
+    # create course form object
     form = CourseForm()
-    form.added_students.choices = get_students()
 
+    # if request method is POST or form is valid
     if form.validate_on_submit():
-        new_course = Course(coursename=form.course_name.data)
-        db.session.add(new_course)
-        db.session.commit()
+        # if already have this course
+        if Course.query.filter_by(CID=form.course_id.data).first():
+            flash('This course is already existed!')
+            return render_template('create-course.html', form=form)
+        else:
+            # create a new course object and a engage object
+            new_course = Course(CID=form.course_id.data, courseName=form.course_name.data)
+            new_engage = Engage(email=current_user.email, CID=form.course_id.data)
+            # add to database
+            db.session.add(new_course)
+            db.session.add(new_engage)
+            db.session.commit()
+            # send user to course page
+            return redirect(url_for('courses.courses'))
 
-        add_teacher = Engage(email=current_user.email, CID=new_course.CID)
-        db.session.add(add_teacher)
-        db.session.commit()
-
-        for student in form.added_students.data:
-            add_student = Engage(email=student, CID=new_course.CID)
-            db.session.add(add_student)
-
-        db.session.commit()
-
-        # commented out since there is no hot-bar
-        # return courses()
-        flash('Your course %s has been created.' % new_course.courseName)
-
-    return render_template('create-courses.html', form=form)
-
-
-def get_students():
-    students_of_school = User.query.filter_by(role="student", schoolID=current_user.schoolID).all()
-
-    choices = []
-    for student in students_of_school:
-        tup = (student.email, str(student.email + ": " + student.firstName + " " + student.surname))
-        choices.append(tup)
-
-    return choices
-'''
+    # if request method is GET or form not valid re-render create course page
+    return render_template('create-course.html', form=form)

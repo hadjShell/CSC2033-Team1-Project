@@ -140,7 +140,7 @@ def change_password():
             flash('Your password is not correct.')
             render_template('change-password.html', form=form)
 
-    # if request method is GET or form not valid re-render signup page
+    # if request method is GET or form not valid re-render change password page
     return render_template('change-password.html', form=form)
 
 
