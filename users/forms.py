@@ -1,12 +1,17 @@
+# IMPORTS
 import re
 from wtforms import StringField, SubmitField, PasswordField
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
 
+"""
+This python file contains all WTForms and restrictions related to user activities.
+-------------------------------------------------------------------------------------------------------------------
+Created by Jiayuan Zhang
+"""
 
-# All registration forms must be filled (via Required import) & email must be a valid email layout
 
-
+# HELP FUNCTIONS
 # check if a field contains specific characters and digits, return error if yes
 def character_check(form, field):
     excluded_chars = "*?!'^+%&/()=}][{$#@<>0123456789"
@@ -24,6 +29,7 @@ def validate_password(form, field):
             "Password must contain at least 1 digit, 1 lowercase, 1 uppercase and 1 special character.")
 
 
+# FORMS
 class LoginForm(FlaskForm):
     email = StringField(validators=[DataRequired(), Email()])
     password = PasswordField(validators=[DataRequired()])
