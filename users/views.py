@@ -4,7 +4,7 @@ from flask_login import current_user, login_user, logout_user
 import logging
 from app import db, login_required, requires_roles
 from models import User, School, Take, Assignment
-from users.forms import LoginForm, RegisterForm
+from users.forms import LoginForm, RegisterForm, ChangePasswordForm
 
 # CONFIG
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
@@ -113,6 +113,35 @@ def profile():
     return render_template('profile.html', firstName=current_user.firstName, surname=current_user.surname,
                            email=current_user.email, id=current_user.UID,
                            school=School.query.filter_by(ID=current_user.schoolID).first().schoolName)
+
+
+# Change password
+# Author: Jiayuan Zhang
+@users_blueprint.route('/change-password', methods=['POST', 'GET'])
+@login_required
+@requires_roles('teacher', 'student')
+def change_password():
+    # create change password form object
+    form = ChangePasswordForm()
+
+    # if request method is POST or form is valid
+    if form.validate_on_submit():
+        # get current user
+        user = User.query.filter_by(email=current_user.email).first()
+        if form.old_password.data == user.password:
+            # update new password to database
+            user.password = form.new_password.data
+            db.session.commit()
+            # successfully updated, log out
+            logout_user()
+            # send user to login page
+            return redirect(url_for('users.login'))
+        else:
+            flash('Your password is not correct.')
+            render_template('change-password.html', form=form)
+
+    # if request method is GET or form not valid re-render signup page
+    return render_template('change-password.html', form=form)
 
 
 # Student Info view, display all students
