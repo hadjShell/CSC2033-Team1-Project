@@ -109,7 +109,7 @@ def login_required(func):
 
 
 # Role access control
-# Author: Harry Sayer, Jiayuan Zhang
+# Author: Harry Sayer
 def requires_roles(*roles):
     def wrapper(f):
         @wraps(f)

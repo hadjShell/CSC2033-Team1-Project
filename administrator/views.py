@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, flash, request
-from flask_login import login_required
-from app import db, requires_roles
+from app import db, login_required, requires_roles
 from models import School, User
 
 administrator_blueprint = Blueprint('admins', __name__, template_folder='templates')
