@@ -80,4 +80,8 @@ def create_assignment():
 
     if form.validate_on_submit():
         new_assignment = Assignment(assignmentName=form.assignmentTitle.data,
-                                    description=form.assignmentDescription.data, deadline=form.assignmentDeadline.data)
+                                    description=form.assignmentDescription.data, deadline=form.assignmentDeadline.data, CID=form.assignmentCID.data)
+        db.session.add(new_assignment)
+        db.session.commit()
+
+    return render_template('assignment.html', form=form)

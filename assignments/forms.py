@@ -1,20 +1,26 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField, DateField, SelectMultipleField, widgets
+from wtforms import StringField, SubmitField, TextAreaField, DateField, SelectMultipleField, widgets, SelectField
 from wtforms.validators import DataRequired
+from models import User, Engage
+from flask_login import current_user
 
 
-class SelectStudents(SelectMultipleField):
-    widget = widgets.ListWidget(prefix_label=False)
-    option_widget = widgets.CheckboxInput()
+def get_teacher_course():
+    teacher_course_list = []
+    course = Engage.query.filter_by(email=current_user.email).all()
+    for c in course:
+        teacher_course_list.append(Engage.query.filter_by(AID=c.AID).first())
+    return teacher_course_list
 
 
 # Form for creating an assignment
 # Author: Tom Dawson
 class AssignmentForm(FlaskForm):
-    assignmentTitle = StringField(validators=[DataRequired(message="Assignment must have title")])
-    assignmentDescription = StringField(validators=[DataRequired("Assignment must have description")])
-    assignmentDeadline = DateField(validators=[DataRequired(message="Assignment must have a deadline")],
+    assignmentTitle = StringField('Assignment Title', validators=[DataRequired(message="Assignment must have title")])
+    assignmentDescription = StringField('Assignment Description', validators=[DataRequired("Assignment must have "
+                                                                                           "description")])
+    assignmentDeadline = DateField('Assignment Deadline', validators=[DataRequired(message="Assignment must have a "
+                                                                                           "deadline")],
                                    format='%d/%m/%Y')
-    assignmentCID = StringField(validators=[DataRequired(message="Assignment must correspond to a course")])
-    added_students = SelectStudents(u'Add students who will see the assignment')
+    assignmentCID = SelectField('Course ID', choices=[get_teacher_course()], validators=DataRequired(message="Assignment must correspond to a course"))
     submit = SubmitField()
