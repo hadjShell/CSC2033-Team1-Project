@@ -63,6 +63,33 @@ def register():
     return render_template('register.html')
 
 
+# ERROR PAGE VIEWS
+# Author: Jiayuan Zhang
+@app.errorhandler(400)
+def bad_request(error):
+    return render_template('errors/400.html'), 400
+
+
+@app.errorhandler(403)
+def page_forbidden(error):
+    return render_template('errors/403.html'), 403
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('errors/404.html'), 404
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('errors/500.html'), 500
+
+
+@app.errorhandler(503)
+def service_unavailable(error):
+    return render_template('errors/503.html'), 503
+
+
 # DECORATORS
 # custom login _required decorator
 # Author: Jiayuan Zhang
