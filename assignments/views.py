@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request
 from sqlalchemy import desc
-from flask_login import current_user, login_required
-from app import db
+from flask_login import current_user
+from app import db, login_required, requires_roles
 from assignments.forms import AssignmentForm
 from models import Assignment, Create, Take, User
 
@@ -19,6 +19,8 @@ def deadlineValue(a):
 # Assignment page view
 # Author: Jiayuan Zhang
 @assignments_blueprint.route('/assignments')
+@login_required
+@requires_roles('teacher', 'student')
 def assignments():
     # get all assignments belonging to current user
     if current_user.role == "teacher":
@@ -38,6 +40,8 @@ def assignments():
 # View all students who take the assignment and relative information
 # Author: Jiayuan Zhang
 @assignments_blueprint.route('/assignments/detail', methods=('GET', 'POST'))
+@login_required
+@requires_roles('teacher')
 def assignments_detail():
     # get assignment
     if request.method == 'POST':

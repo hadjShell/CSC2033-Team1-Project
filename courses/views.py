@@ -1,7 +1,7 @@
 # IMPORTS
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_required
-from app import db, requires_roles
+from app import db, login_required, requires_roles
 from courses.forms import CourseForm
 from models import Course, Engage, User, Assignment
 
