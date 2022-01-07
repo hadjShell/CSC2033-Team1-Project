@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for
 from sqlalchemy import desc
 from flask_login import current_user
 from app import db, login_required, requires_roles
@@ -74,22 +74,27 @@ def assignments_detail():
 
 # Function to create an assignment
 # Author: Tom Dawson
-@assignments_blueprint.route('/create-assignment', methods=['POST', 'GET'])
+@assignments_blueprint.route('/assignments/create-assignment', methods=['POST', 'GET'])
+@login_required
+@requires_roles('teacher')
 def create_assignment():
     form = AssignmentForm()
     form.assignmentCID = get_teacher_course()
     if form.validate_on_submit():
         new_assignment = Assignment(assignmentName=form.assignmentTitle.data,
-                                    description=form.assignmentDescription.data, deadline=form.assignmentDeadline.data, CID=form.assignmentCID.data)
+                                    description=form.assignmentDescription.data, deadline=form.assignmentDeadline.data,
+                                    CID=form.assignmentCID.data)
         db.session.add(new_assignment)
         db.session.commit()
 
-    return render_template('assignment.html', form=form)
+        return assignments()
+
+    return render_template('create-assignment.html', form=form)
 
 
 def get_teacher_course():
     teacher_course_list = []
     course = Engage.query.filter_by(email=current_user.email).all()
     for c in course:
-        teacher_course_list.append(Engage.query.filter_by(AID=c.AID).first())
+        teacher_course_list.append(Engage.query.filter_by(CID=c.CID).first())
     return teacher_course_list
