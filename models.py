@@ -218,6 +218,9 @@ def init_db():
     create2 = Create(email="test@email.com", AID="2")
     create3 = Create(email="test@email.com", AID="3")
 
+    # be careful to the take object creation for test
+    # students taking an assignment should be engaged in the related course first!!!
+    # --- Jiayuan Zhang
     take1 = Take(email="stu1@email.com",
                  AID="2",
                  submitTime=datetime(2021, 1, 1, 22, 10, 10),
@@ -231,7 +234,7 @@ def init_db():
                  submitTime=None,
                  grade=None
                  )
-    take4 = Take(email="stu4@email.com",
+    take4 = Take(email="stu1@email.com",
                  AID="1",
                  submitTime=None,
                  grade=None)
