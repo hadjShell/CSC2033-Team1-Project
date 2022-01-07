@@ -95,10 +95,11 @@ class Take(db.Model):
     submitTime = db.Column(db.DateTime, nullable=True)
     grade = db.Column(db.Float, nullable=True)
 
-    def __init__(self, email, AID):
+    def __init__(self, email, AID, submitTime, grade):
         self.email = email
         self.AID = AID
-        self.submitTime = datetime.now()
+        self.submitTime = submitTime
+        self.grade = grade
 
 
 # Teachers create assignments
@@ -184,6 +185,7 @@ def init_db():
     course3 = Course(CID="CSC1033", courseName="Database Management System")
     course4 = Course(CID="CSC1034", courseName="Python")
     course5 = Course(CID="CSC1035", courseName="Java")
+    course6 = Course(CID="CSC2032", courseName="Algorithm Design and Analysis")
 
     assignment1 = Assignment(AID="1",
                              assignmentName="Programming",
@@ -210,10 +212,29 @@ def init_db():
     engage7 = Engage(email="stu2@email.com", CID="CSC1031")
     engage8 = Engage(email="stu3@email.com", CID="CSC1031")
     engage9 = Engage(email="stu4@email.com", CID="CSC1032")
+    engage10 = Engage(email="test@email.com", CID="CSC2032")
 
     create1 = Create(email="test@email.com", AID="1")
     create2 = Create(email="test@email.com", AID="2")
     create3 = Create(email="test@email.com", AID="3")
+
+    take1 = Take(email="stu1@email.com",
+                 AID="2",
+                 submitTime=datetime(2021, 1, 1, 22, 10, 10),
+                 grade=92.3)
+    take2 = Take(email="stu2@email.com",
+                 AID="2",
+                 submitTime=datetime(2021, 1, 1, 22, 48, 10),
+                 grade=87.6)
+    take3 = Take(email="stu3@email.com",
+                 AID="2",
+                 submitTime=None,
+                 grade=None
+                 )
+    take4 = Take(email="stu4@email.com",
+                 AID="1",
+                 submitTime=None,
+                 grade=None)
 
     db.session.add(school)
     db.session.add(test)
@@ -228,6 +249,7 @@ def init_db():
     db.session.add(course3)
     db.session.add(course4)
     db.session.add(course5)
+    db.session.add(course6)
     db.session.add(assignment1)
     db.session.add(assignment2)
     db.session.add(assignment3)
@@ -240,7 +262,12 @@ def init_db():
     db.session.add(engage7)
     db.session.add(engage8)
     db.session.add(engage9)
+    db.session.add(engage10)
     db.session.add(create1)
     db.session.add(create2)
     db.session.add(create3)
+    db.session.add(take1)
+    db.session.add(take2)
+    db.session.add(take3)
+    db.session.add(take4)
     db.session.commit()
