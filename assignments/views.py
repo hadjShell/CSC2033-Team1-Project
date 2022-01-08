@@ -97,9 +97,10 @@ def create_assignment():
 
 def get_courses():
     engaged = Engage.query.filter_by(email=current_user.email).all()
+    print(engaged)
     engaged_courses = []
     for e in engaged:
-        engaged_courses.append(Course.query.filter_by(CID=e.CID).first())
+        engaged_courses.append(e.CID)
     return engaged_courses
 
 
