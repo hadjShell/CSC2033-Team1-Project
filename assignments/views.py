@@ -6,6 +6,7 @@ from flask_login import current_user
 from app import db, login_required, requires_roles
 from assignments.forms import AssignmentForm
 from models import Assignment, Create, Take, User, Engage
+import datetime
 
 
 # CONFIG
@@ -84,8 +85,11 @@ def create_assignment():
     form = AssignmentForm()
     form.assignmentCID.choices = get_courses()
     if form.validate_on_submit():
+        combined_date = datetime.datetime(form.assignmentDeadlineDay.data.year, form.assignmentDeadlineDay.data.month,
+                                          form.assignmentDeadlineDay.data.day, form.assignmentDeadlineTime.data.hour,
+                                          form.assignmentDeadlineTime.data.minute)
         new_assignment = Assignment(assignmentName=form.assignmentTitle.data,
-                                    description=form.assignmentDescription.data, deadline=form.assignmentDeadline.data,
+                                    description=form.assignmentDescription.data, deadline=combined_date,
                                     CID=form.assignmentCID.data)
         db.session.add(new_assignment)
         db.session.commit()
@@ -111,7 +115,6 @@ def create_assignment():
 
 def get_courses():
     engaged = Engage.query.filter_by(email=current_user.email).all()
-    print(engaged)
     engaged_courses = []
     for e in engaged:
         engaged_courses.append(e.CID)
