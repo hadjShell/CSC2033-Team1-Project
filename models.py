@@ -61,14 +61,13 @@ class Course(db.Model):
 class Assignment(db.Model):
     __tablename__ = 'Assignment'
 
-    AID = db.Column(db.String(15), primary_key=True)
+    AID = db.Column(db.Integer, primary_key=True)
     assignmentName = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(100), nullable=False)
     deadline = db.Column(db.DateTime, nullable=False)
     CID = db.Column(db.String(15), db.ForeignKey(Course.CID), nullable=False)
 
-    def __init__(self, AID, assignmentName, description, deadline, CID):
-        self.AID = AID
+    def __init__(self, assignmentName, description, deadline, CID):
         self.assignmentName = assignmentName
         self.description = description
         self.deadline = deadline
@@ -91,7 +90,7 @@ class Take(db.Model):
     __tablename__ = 'Take'
 
     email = db.Column(db.String(100), db.ForeignKey(User.email), primary_key=True)
-    AID = db.Column(db.String(10), db.ForeignKey(Assignment.AID), primary_key=True)
+    AID = db.Column(db.Integer, db.ForeignKey(Assignment.AID), primary_key=True)
     submitTime = db.Column(db.DateTime, nullable=True)
     grade = db.Column(db.Float, nullable=True)
 
@@ -107,7 +106,7 @@ class Create(db.Model):
     __tablename__ = 'Create'
 
     email = db.Column(db.String(100), db.ForeignKey(User.email), primary_key=True)
-    AID = db.Column(db.String(10), db.ForeignKey(Assignment.AID), primary_key=True)
+    AID = db.Column(db.Integer, db.ForeignKey(Assignment.AID), primary_key=True)
     createTime = db.Column(db.DateTime, nullable=False)
 
     def __init__(self, email, AID):
@@ -187,18 +186,15 @@ def init_db():
     course5 = Course(CID="CSC1035", courseName="Java")
     course6 = Course(CID="CSC2032", courseName="Algorithm Design and Analysis")
 
-    assignment1 = Assignment(AID="1",
-                             assignmentName="Programming",
+    assignment1 = Assignment(assignmentName="Programming",
                              description="This is a programming assignment for CSC1031.",
                              deadline=datetime(2022, 1, 1, 23, 59, 59),
                              CID="CSC1031")
-    assignment2 = Assignment(AID="2",
-                             assignmentName="Report",
+    assignment2 = Assignment(assignmentName="Report",
                              description="This is a report assignment for CSC1031.",
                              deadline=datetime(2021, 1, 1, 23, 59, 59),
                              CID="CSC1031")
-    assignment3 = Assignment(AID="3",
-                             assignmentName="Essay",
+    assignment3 = Assignment(assignmentName="Essay",
                              description="This is an essay assignment for CSC1031.",
                              deadline=datetime(2021, 10, 1, 23, 59, 59),
                              CID="CSC1031")
@@ -214,28 +210,28 @@ def init_db():
     engage9 = Engage(email="stu4@email.com", CID="CSC1032")
     engage10 = Engage(email="test@email.com", CID="CSC2032")
 
-    create1 = Create(email="test@email.com", AID="1")
-    create2 = Create(email="test@email.com", AID="2")
-    create3 = Create(email="test@email.com", AID="3")
+    create1 = Create(email="test@email.com", AID=1)
+    create2 = Create(email="test@email.com", AID=2)
+    create3 = Create(email="test@email.com", AID=3)
 
     # be careful to the take object creation for test
     # students taking an assignment should be engaged in the related course first!!!
     # --- Jiayuan Zhang
     take1 = Take(email="stu1@email.com",
-                 AID="2",
+                 AID=2,
                  submitTime=datetime(2021, 1, 1, 22, 10, 10),
                  grade=92.3)
     take2 = Take(email="stu2@email.com",
-                 AID="2",
+                 AID=2,
                  submitTime=datetime(2021, 1, 1, 22, 48, 10),
                  grade=87.6)
     take3 = Take(email="stu3@email.com",
-                 AID="2",
+                 AID=2,
                  submitTime=None,
                  grade=None
                  )
     take4 = Take(email="stu1@email.com",
-                 AID="1",
+                 AID=1,
                  submitTime=None,
                  grade=None)
 

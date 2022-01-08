@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, DateField, SelectField
 from wtforms.validators import DataRequired
-from wtforms_sqlalchemy.fields import QuerySelectField
 from app import db
 from models import Course
 
