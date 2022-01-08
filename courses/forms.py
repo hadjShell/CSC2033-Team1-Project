@@ -25,3 +25,8 @@ class CourseForm(FlaskForm):
     course_id = StringField(validators=[DataRequired(), validate_course_id])
     course_name = StringField(validators=[DataRequired()])
     submit = SubmitField()
+
+
+class JoinForm(FlaskForm):
+    course_id = StringField(validators=[DataRequired(), validate_course_id])
+    submit = SubmitField()
