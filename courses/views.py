@@ -2,8 +2,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import current_user
 from app import db, login_required, requires_roles
-from courses.forms import CourseForm
-from models import Course, Engage, User, Assignment
+from courses.forms import CourseForm, JoinForm
+from models import Course, Engage, User, Assignment, Create
 
 # CONFIG
 courses_blueprint = Blueprint('courses', __name__, template_folder='templates')
@@ -95,3 +95,41 @@ def create_course():
 
     # if request method is GET or form not valid re-render create course page
     return render_template('create-course.html', form=form)
+
+
+# Current teacher joins a course
+# Author: Jiayuan Zhang
+@courses_blueprint.route('/courses/join-course', methods=['POST', 'GET'])
+@login_required
+@requires_roles('teacher')
+def join_course():
+    # create course form object
+    form = JoinForm()
+
+    # if request method is POST or form is valid
+    if form.validate_on_submit():
+        course_id = form.course_id.data
+        # if course doesn't exist
+        if not Course.query.filter_by(CID=course_id).first():
+            flash('There is no such course in the system!')
+            return render_template('join-course.html', form=form)
+        else:
+            # create a new engage object
+            new_engage = Engage(email=current_user.email, CID=course_id)
+            db.session.add(new_engage)
+
+            # create new create objects
+            assignments = Assignment.query.filter_by(CID=course_id).all()
+            for a in assignments:
+                new_create = Create(email=current_user.email, AID=a.AID)
+                db.session.add(new_create)
+
+            # commit db change
+            db.session.commit()
+
+            # successful message
+            flash('You have joined the course successfully!')
+            return render_template('join-course.html', form=form)
+
+    # if request method is GET or form not valid re-render join course page
+    return render_template('join-course.html', form=form)
