@@ -1,6 +1,6 @@
 # IMPORTS
 import re
-from wtforms import StringField, SubmitField, PasswordField
+from wtforms import StringField, SubmitField, PasswordField, EmailField
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
 
@@ -59,4 +59,10 @@ class ChangePasswordForm(FlaskForm):
                                              validate_password])
     confirm_password = PasswordField(validators=[DataRequired(), EqualTo('new_password', message='Both password fields '
                                                                                              'must be equal!')])
+    submit = SubmitField()
+
+
+class AddStudentForm(FlaskForm):
+    student_email = EmailField(validators=[DataRequired()])
+    course_id = StringField(validators=[DataRequired()])
     submit = SubmitField()
