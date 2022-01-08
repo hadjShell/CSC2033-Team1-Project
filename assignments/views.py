@@ -1,13 +1,12 @@
 import random
 import string
 
-from flask import Blueprint, render_template, request, redirect, url_for
-from sqlalchemy import desc
+from flask import Blueprint, render_template, request
 from flask_login import current_user
 from app import db, login_required, requires_roles
 from assignments.forms import AssignmentForm
-from models import Assignment, Create, Take, User, Engage, Course
-from random import randint
+from models import Assignment, Create, Take, User, Engage
+
 
 # CONFIG
 assignments_blueprint = Blueprint('assignments', __name__, template_folder='templates')
@@ -21,7 +20,7 @@ def deadlineValue(a):
 
 # VIEW
 # Assignment page view
-# Author: Jiayuan Zhang
+# Author: Jiayuan Zhang and Tom Dawson
 @assignments_blueprint.route('/assignments')
 @login_required
 @requires_roles('teacher', 'student')
@@ -42,7 +41,7 @@ def assignments():
 
 
 # View all students who take the assignment and relative information
-# Author: Jiayuan Zhang
+# Author: Jiayuan Zhang and Tom Dawson
 @assignments_blueprint.route('/assignments/detail', methods=('GET', 'POST'))
 @login_required
 @requires_roles('teacher')
@@ -89,6 +88,20 @@ def create_assignment():
                                     description=form.assignmentDescription.data, deadline=form.assignmentDeadline.data,
                                     CID=form.assignmentCID.data)
         db.session.add(new_assignment)
+        db.session.commit()
+
+        users_in_course = Engage.query.filter_by(CID=form.assignmentCID.data).all()
+
+        teacher_assignment = Create(email=current_user.email, AID=new_assignment.AID)
+        db.session.add(teacher_assignment)
+
+        for u in users_in_course:
+            user = User.query.filter_by(email=u.email).first()
+
+            user_create = Take(email=user.email, AID=new_assignment.AID, submitTime=None, grade=None)
+
+            db.session.add(user_create)
+
         db.session.commit()
 
         return assignments()
