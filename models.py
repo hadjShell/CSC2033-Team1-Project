@@ -61,14 +61,13 @@ class Course(db.Model):
 class Assignment(db.Model):
     __tablename__ = 'Assignment'
 
-    AID = db.Column(db.String(15), primary_key=True)
+    AID = db.Column(db.Integer, primary_key=True)
     assignmentName = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(100), nullable=False)
     deadline = db.Column(db.DateTime, nullable=False)
     CID = db.Column(db.String(15), db.ForeignKey(Course.CID), nullable=False)
 
-    def __init__(self, AID, assignmentName, description, deadline, CID):
-        self.AID = AID
+    def __init__(self, assignmentName, description, deadline, CID):
         self.assignmentName = assignmentName
         self.description = description
         self.deadline = deadline
@@ -91,7 +90,7 @@ class Take(db.Model):
     __tablename__ = 'Take'
 
     email = db.Column(db.String(100), db.ForeignKey(User.email), primary_key=True)
-    AID = db.Column(db.String(10), db.ForeignKey(Assignment.AID), primary_key=True)
+    AID = db.Column(db.Integer, db.ForeignKey(Assignment.AID), primary_key=True)
     submitTime = db.Column(db.DateTime, nullable=True)
     grade = db.Column(db.Float, nullable=True)
 
@@ -107,7 +106,7 @@ class Create(db.Model):
     __tablename__ = 'Create'
 
     email = db.Column(db.String(100), db.ForeignKey(User.email), primary_key=True)
-    AID = db.Column(db.String(10), db.ForeignKey(Assignment.AID), primary_key=True)
+    AID = db.Column(db.Integer, db.ForeignKey(Assignment.AID), primary_key=True)
     createTime = db.Column(db.DateTime, nullable=False)
 
     def __init__(self, email, AID):

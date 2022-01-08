@@ -7,6 +7,7 @@ from flask_login import current_user
 from app import db, login_required, requires_roles
 from assignments.forms import AssignmentForm
 from models import Assignment, Create, Take, User, Engage, Course
+from random import randint
 
 # CONFIG
 assignments_blueprint = Blueprint('assignments', __name__, template_folder='templates')
@@ -84,7 +85,7 @@ def create_assignment():
     form = AssignmentForm()
     form.assignmentCID.choices = get_courses()
     if form.validate_on_submit():
-        new_assignment = Assignment(AID=id_generator(), assignmentName=form.assignmentTitle.data,
+        new_assignment = Assignment(assignmentName=form.assignmentTitle.data,
                                     description=form.assignmentDescription.data, deadline=form.assignmentDeadline.data,
                                     CID=form.assignmentCID.data)
         db.session.add(new_assignment)
@@ -104,5 +105,3 @@ def get_courses():
     return engaged_courses
 
 
-def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
-    return ''.join(random.choice(chars) for _ in range(size))
