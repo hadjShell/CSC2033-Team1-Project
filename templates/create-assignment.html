@@ -96,7 +96,13 @@
                     {% endfor %}
                     <label for="floatingDeadline">Assignment Deadline</label>
                 </div>
-
+                <div class="form-floating">
+                    {{ form.assignmentCID(class="input form-control", id="floatingCID", placeholder="Course ID") }}
+                    {% for error in form.assignmentCID.errors %}
+                        {{ error }}
+                    {% endfor %}
+                    <label for="floatingDeadline">Course ID</label>
+                </div>
 
                 {{ form.submit(class="w-100 btn btn-lg btn-primary") }}
             </form>

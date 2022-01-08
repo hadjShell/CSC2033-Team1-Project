@@ -4,18 +4,15 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta author="Jiayuan Zhang, Bootstrap contributors">
-	<title>{{ course_id }}</title>
+	<title>Add Student</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/base.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/dataTables.bootstrap5.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/add-student.css') }}" >
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300&display=swap" rel="stylesheet">
 	<script src="../static/js/jquery-3.6.0.js"></script>
 	<script src="../static/js/bootstrap.min.js"></script>
-	<script src="../static/js/dataTables.bootstrap5.min.js"></script>
-	<script src="../static/js/jquery.dataTables.min.js"></script>
-	<script src="../static/js/class-list-table.js"></script>
 
 </head>
 <body>
@@ -59,35 +56,41 @@
 		<section class="text-center container">
     		<div class="row py-4">
       			<div class="col-lg-6 col-md-8 mx-auto">
-			        <h1 class="fw-light">{{ course_id }}</h1>
-			        <p class="lead text-muted">{{ course_name }}</p>
+			        <h1 class="fw-light">Add Student</h1>
       			</div>
     		</div>
   		</section>
 
-        <div class="container">
-            <table id="class-list" class="table table-striped" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Student No.</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                    </tr>
-                </thead>
+	  	<div class="form-signin container">
+            <form method="POST">
+                {{ form.csrf_token() }}
 
-                <tbody>
-                    {% for student in class_list %}
-                        <tr>
-                            <td>{{ student.UID }}</td>
-                            <td>{{ student.firstName }}</td>
-                            <td>{{ student.surname }}</td>
-                            <td>{{ student.email }}</td>
-                        </tr>
+                <!-- Flash error message if there is one -->
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                <div class="bg-danger text-white rounded">
+                                    {{ messages[0] }}
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+
+                <div class="form-floating">
+                    {{ form.student_email(class="input form-control", id="floatingEmail", placeholder="Student Email") }}
+                    {% for error in form.student_email.errors %}
+                        {{ error }}
                     {% endfor %}
-                </tbody>
+                    <label for="floatingEmail">Student Email</label>
+                </div>
+                <div class="form-floating">
+                    {{ form.course_id(class="input form-control", id="floatingID", placeholder="Course ID") }}
+                    {% for error in form.course_id.errors %}
+                        {{ error }}
+                    {% endfor %}
+                    <label for="floatingID">Course ID</label>
+                </div>
 
-            </table>
+                {{ form.submit(class="w-100 btn btn-lg btn-primary") }}
+            </form>
         </div>
 
 
