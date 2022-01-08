@@ -1,9 +1,12 @@
+import random
+import string
+
 from flask import Blueprint, render_template, request, redirect, url_for
 from sqlalchemy import desc
 from flask_login import current_user
 from app import db, login_required, requires_roles
 from assignments.forms import AssignmentForm
-from models import Assignment, Create, Take, User, Engage
+from models import Assignment, Create, Take, User, Engage, Course
 
 # CONFIG
 assignments_blueprint = Blueprint('assignments', __name__, template_folder='templates')
@@ -79,9 +82,9 @@ def assignments_detail():
 @requires_roles('teacher')
 def create_assignment():
     form = AssignmentForm()
-    form.assignmentCID = get_teacher_course()
+    form.assignmentCID.choices = get_courses()
     if form.validate_on_submit():
-        new_assignment = Assignment(assignmentName=form.assignmentTitle.data,
+        new_assignment = Assignment(AID=id_generator(), assignmentName=form.assignmentTitle.data,
                                     description=form.assignmentDescription.data, deadline=form.assignmentDeadline.data,
                                     CID=form.assignmentCID.data)
         db.session.add(new_assignment)
@@ -92,9 +95,13 @@ def create_assignment():
     return render_template('create-assignment.html', form=form)
 
 
-def get_teacher_course():
-    teacher_course_list = []
-    course = Engage.query.filter_by(email=current_user.email).all()
-    for c in course:
-        teacher_course_list.append(Engage.query.filter_by(CID=c.CID).first())
-    return teacher_course_list
+def get_courses():
+    engaged = Engage.query.filter_by(email=current_user.email).all()
+    engaged_courses = []
+    for e in engaged:
+        engaged_courses.append(Course.query.filter_by(CID=e.CID).first())
+    return engaged_courses
+
+
+def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))

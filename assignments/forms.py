@@ -1,8 +1,13 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField, DateField, SelectMultipleField, widgets, SelectField
+from wtforms import StringField, SubmitField, DateField, SelectField
 from wtforms.validators import DataRequired
-from models import User, Engage
-from flask_login import current_user
+from wtforms_sqlalchemy.fields import QuerySelectField
+from app import db
+from models import Course
+
+
+def get_courses():
+    return db.session.query(Course.CID).all()
 
 
 # Form for creating an assignment
@@ -12,7 +17,6 @@ class AssignmentForm(FlaskForm):
     assignmentDescription = StringField('Assignment Description', validators=[DataRequired("Assignment must have "
                                                                                            "description")])
     assignmentDeadline = DateField('Assignment Deadline', validators=[DataRequired(message="Assignment must have a "
-                                                                                           "deadline")],
-                                   format='%d/%m/%Y')
-    assignmentCID = SelectField('Course ID', validators=[DataRequired(message="Assignment must correspond to a course")])
+                                                                                           "deadline")])
+    assignmentCID = SelectField('Course ID', choices=[])
     submit = SubmitField()
