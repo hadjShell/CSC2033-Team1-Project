@@ -1,10 +1,12 @@
 # IMPORTS
+import copy
+
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user
 import logging
 from app import db, login_required, requires_roles
-from models import User, School, Take, Assignment
-from users.forms import LoginForm, RegisterForm, ChangePasswordForm
+from models import User, School, Take, Assignment, Engage, Course
+from users.forms import LoginForm, RegisterForm, ChangePasswordForm, AddStudentForm
 
 # CONFIG
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
@@ -191,3 +193,52 @@ def student_results():
         results.append(list_item)
 
     return render_template('student-result.html', student=student, results=results)
+
+
+# add student to a course
+# Author: Jiayuan Zhang
+@users_blueprint.route('/courses/add-student', methods=['POST', 'GET'])
+@login_required
+@requires_roles('teacher')
+def add_student():
+    # create a AddStudentForm object
+    form = AddStudentForm()
+
+    # if request method is POST or form is valid
+    if form.validate_on_submit():
+        # get student email and course id
+        student_email = form.student_email.data
+        course_ID = form.course_id.data
+        # if student doesn't exist
+        if not User.query.filter_by(email=student_email).first():
+            flash('Student doesn\'t exist!')
+            return render_template('add-student.html', form=form)
+        # if course doesn't exist
+        if not Course.query.filter_by(CID=course_ID).first():
+            flash('Course doesn\'t exist!')
+            return render_template('add-student.html', form=form)
+        # if student is already in the course
+        if Engage.query.filter_by(email=student_email, CID=course_ID).first():
+            flash('Student is already in the course!')
+            return render_template('add-student.html', form=form)
+        else:
+            # create a new engage object
+            new_engage = Engage(email=student_email, CID=course_ID)
+            db.session.add(new_engage)
+
+            # get all assignments of that course
+            assignments = Assignment.query.filter_by(CID=course_ID).all()
+            # create new take objects
+            for a in assignments:
+                new_take = Take(email=student_email, AID=a.AID, submitTime=None, grade=None)
+                db.session.add(new_take)
+
+            # commit db change
+            db.session.commit()
+
+            # successful message
+            flash('You have added the student successfully!')
+            return render_template('add-student.html', form=form)
+
+    # if request method is GET or form not valid re-render add student page
+    return render_template('add-student.html', form=form)
