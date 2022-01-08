@@ -100,7 +100,7 @@ def login_required(func):
             return func(*args, **kwargs)
         elif not current_user.is_authenticated:
             # log anonymous users invalid attempts
-            logging.warning('SECURITY - Anonymous invalid access [%s]', request.remote_addr)
+            logging.warning('SECURITY - Anonymous invalid access| | |%s', request.remote_addr)
             # Redirect the user to an unauthorised notice!
             return current_app.login_manager.unauthorized() and render_template('errors/403.html')
         return func(*args, **kwargs)
