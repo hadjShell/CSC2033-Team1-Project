@@ -83,18 +83,18 @@
                     <label for="floatingTitle">Assignment Title</label>
                 </div>
                 <div class="form-floating">
-                    {{ form.assignmentDescription(class="input form-control", id="floatingDescription", placeholder="Assignment Description") }}
-                    {% for error in form.assignmentDescription.errors %}
+                    {{ form.assignmentDeadlineDay(class="input form-control", id="floatingDealineDay", placeholder="Assignment Deadline Day") }}
+                    {% for error in form.assignmentDeadlineDay.errors %}
                         {{ error }}
                     {% endfor %}
-                    <label for="floatingDescription">Assignment Description</label>
+                    <label for="floatingDeadline">Assignment Deadline Day</label>
                 </div>
                 <div class="form-floating">
-                    {{ form.assignmentDeadline(class="input form-control", id="floatingDealine", placeholder="Assignment Deadline") }}
-                    {% for error in form.assignmentDeadline.errors %}
+                    {{ form.assignmentDeadlineTime(class="input form-control", id="floatingDealineTime", placeholder="Assignment Deadline Time") }}
+                    {% for error in form.assignmentDeadlineTime.errors %}
                         {{ error }}
                     {% endfor %}
-                    <label for="floatingDeadline">Assignment Deadline</label>
+                    <label for="floatingDeadline">Assignment Deadline Time</label>
                 </div>
                 <div class="form-floating">
                     {{ form.assignmentCID(class="input form-control", id="floatingCID", placeholder="Course ID") }}
@@ -102,6 +102,13 @@
                         {{ error }}
                     {% endfor %}
                     <label for="floatingDeadline">Course ID</label>
+                </div>
+                <div class="form-floating">
+                    {{ form.assignmentDescription(class="input form-control", id="floatingDescription", placeholder="Assignment Description") }}
+                    {% for error in form.assignmentDescription.errors %}
+                        {{ error }}
+                    {% endfor %}
+                    <label for="floatingDescription">Assignment Description</label>
                 </div>
 
                 {{ form.submit(class="w-100 btn btn-lg btn-primary") }}
