@@ -1,13 +1,14 @@
 # IMPORTS
 import datetime
 import os
+from pathlib import Path
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from flask_login import current_user
 from app import db, login_required, requires_roles
 from assignments.forms import AssignmentForm
 from models import Assignment, Create, Take, User, Engage
 from courses.views import get_courses
-from app import ALLOWED_EXTENSIONS
+from app import ALLOWED_EXTENSIONS, ROOT_DIR
 from werkzeug.utils import secure_filename
 
 
@@ -105,8 +106,8 @@ def create_assignment():
             # If file is allowed
             if allowed_file(file.filename):
                 # get secured file name and save file
-                # TODO: cannot save the file
-                file.save('static/uploads/' + str(form.assignmentCID.data) + '/' + filename)
+                data_folder = Path("static/uploads/" + str(form.assignmentCID.data) + '/' + filename)
+                file.save(ROOT_DIR / data_folder)
                 # composite date and time
                 combined_date = datetime.datetime(form.assignmentDeadlineDay.data.year,
                                                   form.assignmentDeadlineDay.data.month,
@@ -114,7 +115,9 @@ def create_assignment():
                                                   form.assignmentDeadlineTime.data.hour,
                                                   form.assignmentDeadlineTime.data.minute)
                 # create new assignment object
-                new_assignment = Assignment(assignmentName=form.assignmentTitle.data,
+                assignment_number = len(Assignment.query.all())
+                new_assignment = Assignment(AID=assignment_number + 1,
+                                            assignmentName=form.assignmentTitle.data,
                                             description=form.assignmentDescription.data,
                                             deadline=combined_date,
                                             CID=form.assignmentCID.data,
@@ -125,10 +128,10 @@ def create_assignment():
                 new_create = Create(email=current_user.email, AID=new_assignment.AID)
                 db.session.add(new_create)
                 # get all students engaged in the course
-                user_in_course_emails = Engage.query.filter_by(CID=form.assignmentCID.data).all().email
+                user_in_course = Engage.query.filter_by(CID=form.assignmentCID.data).all()
                 students_in_course = []
-                for u in user_in_course_emails:
-                    user = User.query.filter_by(email=u).first()
+                for u in user_in_course:
+                    user = User.query.filter_by(email=u.email).first()
                     if user.role == 'student':
                         students_in_course.append(user)
                 # create new take objects

@@ -1,5 +1,6 @@
 import logging
 import socket
+import os
 from functools import wraps
 from flask import Flask, render_template, request, current_app
 from flask_login import LoginManager, current_user
@@ -15,6 +16,7 @@ Created by Harry Sayer, Jiayuan Zhang
 # CONFIG
 UPLOAD_FOLDER = '/static/uploads'
 ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx'}
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'LongAndRandomSecretKey'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
