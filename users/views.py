@@ -114,7 +114,8 @@ def welcome():
 def profile():
     return render_template('profile.html', firstName=current_user.firstName, surname=current_user.surname,
                            email=current_user.email, id=current_user.UID,
-                           school=School.query.filter_by(ID=current_user.schoolID).first().schoolName)
+                           school=School.query.filter_by(ID=current_user.schoolID).first().schoolName,
+                           role=current_user.role)
 
 
 # Change password
