@@ -68,13 +68,10 @@ def login():
                             request.remote_addr)
 
             # Go to welcome page based on role
-            if current_user.role == 'teacher':
-                return redirect(url_for('users.welcome_teacher'))
-            elif current_user.role == 'admin':
+            if current_user.role == 'admin':
                 return redirect(url_for('admins.admin'))
             else:
-                # TODO: need to fix to student welcome page
-                return redirect(url_for('users.welcome_teacher'))
+                return redirect(url_for('users.welcome'))
 
         elif user and not (form.password.data == user.password):
             flash("Please check your login detail and try again!")
@@ -97,13 +94,16 @@ def logout():
     return render_template('index.html')
 
 
-# Teacher welcome view
+# Welcome view
 # Author: Jiayuan Zhang
-@users_blueprint.route('/welcome_teacher')
+@users_blueprint.route('/welcome')
 @login_required
-@requires_roles('teacher')
-def welcome_teacher():
-    return render_template('teacher-welcome.html', name=current_user.firstName)
+@requires_roles('teacher', 'student')
+def welcome():
+    if current_user.role == 'teacher':
+        return render_template('teacher-welcome.html', name=current_user.firstName)
+    else:
+        return render_template('student-welcome.html', name=current_user.firstName)
 
 
 # Profile view
