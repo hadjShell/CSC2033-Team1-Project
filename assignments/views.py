@@ -1,6 +1,5 @@
 # IMPORTS
 import datetime
-import os
 from pathlib import Path
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from flask_login import current_user
@@ -28,28 +27,33 @@ def allowed_file(filename):
 
 # VIEW
 # Assignment page view
-# Author: Jiayuan Zhang and Tom Dawson
+# Author: Jiayuan Zhang
 @assignments_blueprint.route('/assignments')
 @login_required
 @requires_roles('teacher', 'student')
 def assignments():
+    # get user role
+    role = current_user.role
     # get all assignments belonging to current user
-    if current_user.role == "teacher":
-        assignments = []
+    assignments = []
+    if role == "teacher":
         create = Create.query.filter_by(email=current_user.email).all()
         for c in create:
             assignments.append(Assignment.query.filter_by(AID=c.AID).first())
-    # TODO: student part
+    else:
+        take = Take.query.filter_by(email=current_user.email).all()
+        for t in take:
+            assignments.append(Assignment.query.filter_by(AID=t.AID).first())
 
     # sort assignments by deadline
     assignments.sort(key=deadlineValue)
 
     # render assignment page
-    return render_template('assignment.html', assignments=assignments)
+    return render_template('assignment.html', assignments=assignments, role=role)
 
 
 # View all students who take the assignment and relative information
-# Author: Jiayuan Zhang and Tom Dawson
+# Author: Jiayuan Zhang
 @assignments_blueprint.route('/assignments/detail', methods=('GET', 'POST'))
 @login_required
 @requires_roles('teacher')
