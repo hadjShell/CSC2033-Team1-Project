@@ -7,6 +7,7 @@ from app import db, login_required, requires_roles
 from models import User, School, Take, Assignment, Engage, Course
 from users.forms import LoginForm, RegisterForm, ChangePasswordForm, AddStudentForm
 from courses.views import get_courses
+from werkzeug.security import check_password_hash
 
 # CONFIG
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
@@ -61,7 +62,7 @@ def login():
 
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user and (form.password.data == user.password):
+        if user and check_password_hash(user.password, form.password.data):
             login_user(user)
 
             logging.warning('SECURITY - USER LOG IN|%s|%s|%s', current_user.UID, current_user.email,

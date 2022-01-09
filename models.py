@@ -1,6 +1,7 @@
 from app import db
 from datetime import datetime
 from flask_login import UserMixin
+from werkzeug.security import generate_password_hash
 
 """
 These classes link the python application to the tables within the database, providing easier reading, writing and 
@@ -35,7 +36,7 @@ class User(db.Model, UserMixin):
     def __init__(self, email, role, password, schoolID, firstName, surname, UID, approved):
         self.email = email
         self.role = role
-        self.password = password
+        self.password = generate_password_hash(password)
         self.schoolID = schoolID
         self.firstName = firstName
         self.surname = surname
