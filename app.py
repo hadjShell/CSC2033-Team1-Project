@@ -13,8 +13,11 @@ Created by Harry Sayer, Jiayuan Zhang
 """
 
 # CONFIG
+UPLOAD_FOLDER = '/static/uploads'
+ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx'}
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'LongAndRandomSecretKey'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # LOCAL DATABASE CONFIG
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///odin.db'
