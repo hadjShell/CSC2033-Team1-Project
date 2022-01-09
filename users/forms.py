@@ -1,6 +1,6 @@
 # IMPORTS
 import re
-from wtforms import StringField, SubmitField, PasswordField, EmailField
+from wtforms import StringField, SubmitField, PasswordField, EmailField, SelectField
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
 
@@ -64,5 +64,5 @@ class ChangePasswordForm(FlaskForm):
 
 class AddStudentForm(FlaskForm):
     student_email = EmailField(validators=[DataRequired()])
-    course_id = StringField(validators=[DataRequired()])
+    course_id = SelectField('Course ID', choices=[])
     submit = SubmitField()
