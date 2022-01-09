@@ -142,6 +142,10 @@ def create_assignment():
                 db.session.commit()
                 # send user to assignment page
                 return redirect(url_for('assignments.assignments'))
+            # if file is not allowed
+            else:
+                flash('File extension is not allowed!')
+                return render_template('create-assignment.html', form=form)
 
     # if request method is GET or form not valid re-render create assignment page
     return render_template('create-assignment.html', form=form)
