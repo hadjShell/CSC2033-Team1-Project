@@ -3,11 +3,11 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta author="Tom Dawson, Bootstrap contributors">
+	<meta author="Tom Dawson, Jiayuan Zhang, Bootstrap contributors">
 	<title>Create Assignment</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/base.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/create-course.css') }}" >
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/create-assignment.css') }}" >
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300&display=swap" rel="stylesheet">
@@ -35,10 +35,10 @@
 			            	<a class="nav-link" href="{{ url_for('users.profile') }}"><span>Profile</span></a>
 			            </li>
 			            <li class="nav-item">
-			            	<a class="nav-link active" href="{{ url_for('courses.courses') }}"><span>Courses</span></a>
+			            	<a class="nav-link" href="{{ url_for('courses.courses') }}"><span>Courses</span></a>
 			            </li>
 			            <li class="nav-item">
-			            	<a class="nav-link" href="{{ url_for('assignments.assignments') }}"><span>Assignments</span></a>
+			            	<a class="nav-link active" href="{{ url_for('assignments.assignments') }}"><span>Assignments</span></a>
 			            </li>
 			            <li class="nav-item">
 			            	<a class="nav-link" href="{{ url_for('users.student_info') }}"><span>Student Info</span></a>
@@ -63,7 +63,7 @@
   		</section>
 
 	  	<div class="form-signin container">
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
                 {{ form.csrf_token() }}
 
                 <!-- Flash error message if there is one -->
@@ -109,6 +109,13 @@
                         {{ error }}
                     {% endfor %}
                     <label for="floatingDescription">Assignment Description</label>
+                </div>
+                <div class="form-floating">
+                    {{ form.assignmentFile(class="input form-control", id="floatingFile", placeholder="Upload File", enctype="multipart/form-data") }}
+                    {% for error in form.assignmentFile.errors %}
+                        {{ error }}
+                    {% endfor %}
+                    <label for="floatingFile">Upload File</label>
                 </div>
 
                 {{ form.submit(class="w-100 btn btn-lg btn-primary") }}
