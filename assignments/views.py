@@ -1,11 +1,14 @@
 # IMPORTS
 import datetime
-from flask import Blueprint, render_template, request
+import os
+from flask import Blueprint, render_template, request, redirect, flash, url_for
 from flask_login import current_user
 from app import db, login_required, requires_roles
 from assignments.forms import AssignmentForm
 from models import Assignment, Create, Take, User, Engage, Course
 from courses.views import get_courses
+from app import ALLOWED_EXTENSIONS
+from werkzeug.utils import secure_filename
 
 
 # CONFIG
@@ -16,6 +19,11 @@ assignments_blueprint = Blueprint('assignments', __name__, template_folder='temp
 # A function that returns the 'deadline' value
 def deadlineValue(a):
     return a.deadline
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 # VIEW
@@ -76,41 +84,61 @@ def assignments_detail():
 
 
 # Function to create an assignment
-# Author: Tom Dawson
+# Author: Jiayuan Zhang, Tom Dawson
 @assignments_blueprint.route('/assignments/create-assignment', methods=['POST', 'GET'])
 @login_required
 @requires_roles('teacher')
 def create_assignment():
+    # create an assignment form
     form = AssignmentForm()
     form.assignmentCID.choices = get_courses()
+
+    # if request method is POST or form is valid
     if form.validate_on_submit():
-        combined_date = datetime.datetime(form.assignmentDeadlineDay.data.year, form.assignmentDeadlineDay.data.month,
-                                          form.assignmentDeadlineDay.data.day, form.assignmentDeadlineTime.data.hour,
-                                          form.assignmentDeadlineTime.data.minute)
-        new_assignment = Assignment(assignmentName=form.assignmentTitle.data,
-                                    description=form.assignmentDescription.data, deadline=combined_date,
-                                    CID=form.assignmentCID.data)
-        db.session.add(new_assignment)
-        db.session.commit()
+        # if already have this assignment
+        if Assignment.query.filter_by(assignmentName=form.assignmentTitle.data, CID=form.assignmentCID.data).first():
+            flash('This assignment is already existed!')
+            return render_template('create-assignment.html', form=form)
+        else:
+            # get uploaded file
+            file = form.assignmentFile.data
+            filename = secure_filename(file.filename)
+            # If file is allowed
+            if allowed_file(file.filename):
+                # get secured file name and save file
+                file.save(os.path.join('/static/uploads', form.assignmentCID.data, filename))
+                # composite date and time
+                combined_date = datetime.datetime(form.assignmentDeadlineDay.data.year,
+                                                  form.assignmentDeadlineDay.data.month,
+                                                  form.assignmentDeadlineDay.data.day,
+                                                  form.assignmentDeadlineTime.data.hour,
+                                                  form.assignmentDeadlineTime.data.minute)
+                # create new assignment object
+                new_assignment = Assignment(assignmentName=form.assignmentTitle.data,
+                                            description=form.assignmentDescription.data,
+                                            deadline=combined_date,
+                                            CID=form.assignmentCID.data,
+                                            doc_name=filename,
+                                            doc_path='/static/uploads/' + form.assignmentCID.data + '/' + filename)
+                db.session.add(new_assignment)
+                # create new create object
+                new_create = Create(email=current_user.email, AID=new_assignment.AID)
+                db.session.add(new_create)
+                # get all students engaged in the course
+                user_in_course_emails = Engage.query.filter_by(CID=form.assignmentCID.data).all().email
+                students_in_course = []
+                for u in user_in_course_emails:
+                    user = User.query.filter_by(email=u).first()
+                    if user.role == 'student':
+                        students_in_course.append(user)
+                # create new take objects
+                for s in students_in_course:
+                    new_take = Take(email=s.email, AID=new_assignment.AID, submitTime=None, grade=None)
+                    db.session.add(new_take)
+                # commit db change
+                db.session.commit()
+                # send user to assignment page
+                return redirect(url_for('assignments.assignments'))
 
-        users_in_course = Engage.query.filter_by(CID=form.assignmentCID.data).all()
-
-        teacher_assignment = Create(email=current_user.email, AID=new_assignment.AID)
-        db.session.add(teacher_assignment)
-
-        for u in users_in_course:
-            user = User.query.filter_by(email=u.email).first()
-
-            user_create = Take(email=user.email, AID=new_assignment.AID, submitTime=None, grade=None)
-
-            db.session.add(user_create)
-
-        db.session.commit()
-
-        return assignments()
-
+    # if request method is GET or form not valid re-render create assignment page
     return render_template('create-assignment.html', form=form)
-
-
-
-
