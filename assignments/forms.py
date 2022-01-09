@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, DateField, SelectField, TimeField
+from wtforms import StringField, SubmitField, DateField, SelectField, TimeField, TextAreaField, FileField
 from wtforms.validators import DataRequired
 from app import db
 from models import Course
@@ -10,10 +10,10 @@ def get_courses():
 
 
 # Form for creating an assignment
-# Author: Tom Dawson
+# Authors: Tom Dawson, Jiayuan Zhang
 class AssignmentForm(FlaskForm):
     assignmentTitle = StringField('Assignment Title', validators=[DataRequired(message="Assignment must have title")])
-    assignmentDescription = StringField('Assignment Description', validators=[DataRequired("Assignment must have "
+    assignmentDescription = TextAreaField('Assignment Description', validators=[DataRequired("Assignment must have "
                                                                                            "description")])
     assignmentDeadlineDay = DateField('Assignment Deadline Day', validators=[DataRequired(message="Assignment must have a "
                                                                                            "deadline")])
@@ -21,4 +21,5 @@ class AssignmentForm(FlaskForm):
                                                                                                     "have a "
                                                                                                     "deadline")])
     assignmentCID = SelectField('Course ID', choices=[])
+    assignmentFile = FileField(validators=[DataRequired()])
     submit = SubmitField()
