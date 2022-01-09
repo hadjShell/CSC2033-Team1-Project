@@ -69,7 +69,8 @@ class Assignment(db.Model):
     doc_path = db.Column(db.String(200), nullable=False)
     CID = db.Column(db.String(15), db.ForeignKey(Course.CID), nullable=False)
 
-    def __init__(self, assignmentName, description, deadline, doc_name, doc_path, CID):
+    def __init__(self, AID, assignmentName, description, deadline, doc_name, doc_path, CID):
+        self.AID = AID
         self.assignmentName = assignmentName
         self.description = description
         self.deadline = deadline
@@ -190,19 +191,22 @@ def init_db():
     course5 = Course(CID="CSC1035", courseName="Java")
     course6 = Course(CID="CSC2032", courseName="Algorithm Design and Analysis")
 
-    assignment1 = Assignment(assignmentName="Programming",
+    assignment1 = Assignment(AID=1,
+                             assignmentName="Programming",
                              description="This is a programming assignment for CSC1031.",
                              deadline=datetime(2022, 1, 1, 23, 59, 59),
                              CID="CSC1031",
                              doc_name='Programming.docx',
                              doc_path='/static/uploads/CSC1031/Programming.docx')
-    assignment2 = Assignment(assignmentName="Report",
+    assignment2 = Assignment(AID=2,
+                             assignmentName="Report",
                              description="This is a report assignment for CSC1031.",
                              deadline=datetime(2021, 1, 1, 23, 59, 59),
                              CID="CSC1031",
                              doc_name='Report.docx',
                              doc_path='/static/uploads/CSC1031/Report.docx')
-    assignment3 = Assignment(assignmentName="Essay",
+    assignment3 = Assignment(AID=3,
+                             assignmentName="Essay",
                              description="This is an essay assignment for CSC1031.",
                              deadline=datetime(2021, 10, 1, 23, 59, 59),
                              CID="CSC1031",
