@@ -74,7 +74,7 @@ class Assignment(db.Model):
         self.CID = CID
 
 
-# Teachers engage in courses
+# Teachers and students engage in courses
 class Engage(db.Model):
     __tablename__ = 'Engage'
     email = db.Column(db.String(100), db.ForeignKey(User.email), primary_key=True)

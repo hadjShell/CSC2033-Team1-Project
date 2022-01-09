@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, request
 from flask_login import current_user
 from app import db, login_required, requires_roles
 from assignments.forms import AssignmentForm
-from models import Assignment, Create, Take, User, Engage
+from models import Assignment, Create, Take, User, Engage, Course
 import datetime
 
 
@@ -17,6 +17,15 @@ assignments_blueprint = Blueprint('assignments', __name__, template_folder='temp
 # A function that returns the 'deadline' value
 def deadlineValue(a):
     return a.deadline
+
+
+# get all course ID
+def get_courses():
+    courses = Course.query.all()
+    courses_ids = []
+    for c in courses:
+        courses_ids.append(c.CID)
+    return courses_ids
 
 
 # VIEW
@@ -113,11 +122,5 @@ def create_assignment():
     return render_template('create-assignment.html', form=form)
 
 
-def get_courses():
-    engaged = Engage.query.filter_by(email=current_user.email).all()
-    engaged_courses = []
-    for e in engaged:
-        engaged_courses.append(e.CID)
-    return engaged_courses
 
 
