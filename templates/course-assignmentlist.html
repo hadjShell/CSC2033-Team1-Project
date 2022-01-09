@@ -38,9 +38,11 @@
 			            <li class="nav-item">
 			            	<a class="nav-link" href="{{ url_for('assignments.assignments') }}"><span>Assignments</span></a>
 			            </li>
+                       {% if role == 'teacher' %}
 			            <li class="nav-item">
 			            	<a class="nav-link" href="{{ url_for('users.student_info') }}"><span>Student Info</span></a>
 			            </li>
+                       {% endif %}
 			            <li class="nav-item">
 			            	<a class="nav-link" href="{{ url_for('users.logout') }}"><span>Logout</span></a>
 			            </li>

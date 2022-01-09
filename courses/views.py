@@ -78,7 +78,8 @@ def course_assignments():
     # get all assignments of this course
     assignments = Assignment.query.filter_by(CID=course_id).all()
 
-    return render_template('course-assignmentlist.html', course_id=course_id, assignments=assignments)
+    return render_template('course-assignmentlist.html', course_id=course_id, assignments=assignments,
+                           role=current_user.role)
 
 
 # Current teacher creates a course under his or her govern
