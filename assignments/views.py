@@ -153,3 +153,28 @@ def create_assignment():
 
     # if request method is GET or form not valid re-render create assignment page
     return render_template('create-assignment.html', form=form)
+
+
+# Student view of assignment
+# Author: Jiayuan Zhang
+@assignments_blueprint.route('/assignments/content', methods=('GET', 'POST'))
+@login_required
+@requires_roles('student')
+def assignments_content():
+    # get assignment
+    if request.method == 'POST':
+        assignment_id = request.form.get('assignmentID')
+        assignment = Assignment.query.filter_by(AID=assignment_id).first()
+    # get take
+    take = Take.query.filter_by(email=current_user.email, AID=assignment_id).first()
+
+    return render_template('assignment-content.html', assignment=assignment, take=take)
+
+
+# Download assignment file
+# Author: Jiayuan Zhang
+@assignments_blueprint.route('/assignment/download')
+@login_required
+@requires_roles('student')
+def download():
+    return 0

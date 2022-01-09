@@ -73,7 +73,11 @@
             {% if assignments %}
                 <div class="list-group">
                     {% for assignment in assignments %}
+                        {% if role == 'teacher' %}
                         <form id="assignment-detail{{ loop.index }}" method="POST" action="/assignments/detail">
+                        {% else %}
+                        <form id="assignment-detail{{ loop.index }}" method="POST" action="/assignments/content">
+                        {% endif %}
                             <input type="hidden" name="assignmentID" value="{{ assignment.AID }}">
                           <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" onclick="document.getElementById('assignment-detail{{ loop.index }}').submit();">
                             <img src="../static/image/assignment-logo.png" alt="assignment" width="32" height="32" class="d-inline-block align-text-center">

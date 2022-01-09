@@ -4,14 +4,16 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta author="Jiayuan Zhang, Bootstrap contributors">
-	<title>{{ course_id }} Assignments</title>
+	<title>{{ assignment.assignmentName }}</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/profile.css') }}" >
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300&display=swap" rel="stylesheet">
 	<script src="../static/js/jquery-3.6.0.js"></script>
 	<script src="../static/js/bootstrap.min.js"></script>
+    <script src="../static/js/dataTables.bootstrap5.min.js"></script>
 </head>
 <body>
 
@@ -33,16 +35,11 @@
 			            	<a class="nav-link" href="{{ url_for('users.profile') }}"><span>Profile</span></a>
 			            </li>
 			            <li class="nav-item">
-			            	<a class="nav-link active" href="{{ url_for('courses.courses') }}"><span>Courses</span></a>
+			            	<a class="nav-link" href="{{ url_for('courses.courses') }}"><span>Courses</span></a>
 			            </li>
 			            <li class="nav-item">
-			            	<a class="nav-link" href="{{ url_for('assignments.assignments') }}"><span>Assignments</span></a>
+			            	<a class="nav-link active" href="{{ url_for('assignments.assignments') }}"><span>Assignments</span></a>
 			            </li>
-                       {% if role == 'teacher' %}
-			            <li class="nav-item">
-			            	<a class="nav-link" href="{{ url_for('users.student_info') }}"><span>Student Info</span></a>
-			            </li>
-                       {% endif %}
 			            <li class="nav-item">
 			            	<a class="nav-link" href="{{ url_for('users.logout') }}"><span>Logout</span></a>
 			            </li>
@@ -56,37 +53,46 @@
 		<section class="text-center container">
     		<div class="row py-4">
       			<div class="col-lg-6 col-md-8 mx-auto">
-			        <h1 class="fw-light">Assignment</h1>
-			        <p class="lead text-muted">Here are all the assignments of {{ course_id }}.</p>
+			        <h1 class="fw-light">Assignment Content</h1>
+                    <p style="margin-top: 20px">
+		          	<a href="{{ url_for('assignments.download') }}" class="btn btn-primary my-1">Download Assignment File Here</a>
+        			</p>
       			</div>
     		</div>
   		</section>
 
-        <div class="container">
-            {% if assignments %}
-                <div class="list-group">
-                    {% for assignment in assignments %}
-                        {% if role == 'teacher' %}
-                        <form id="assignment-detail{{ loop.index }}" method="POST" action="/assignments/detail">
-                        {% else %}
-                        <form id="assignment-detail{{ loop.index }}" method="POST" action="/assignments/content">
-                        {% endif %}
-                            <input type="hidden" name="assignmentID" value="{{ assignment.AID }}">
-                          <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" onclick="document.getElementById('assignment-detail{{ loop.index }}').submit();">
-                            <img src="../static/image/assignment-logo.png" alt="assignment" width="32" height="32" class="d-inline-block align-text-center">
-                            <div class="d-flex gap-2 w-100 justify-content-between">
-                              <div>
-                                <h6 class="mb-0">{{ assignment.assignmentName }}</h6>
-                                <p class="mb-0 opacity-75">Due {{ assignment.deadline }}</p>
-                              </div>
-                            </div>
-                          </a>
-                        </form>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <p>There is no assignment currently.</p>
-            {% endif %}
+        <div class="container" style="margin-top: -60px; padding-bottom: 3rem">
+            <div class="list-group">
+              <label class="list-group-item py-3">
+                Assignment Name
+                <span class="d-block small opacity-50">{{ assignment.assignmentName }}</span>
+              </label>
+
+              <label class="list-group-item py-3">
+                Course ID
+                <span class="d-block small opacity-50">{{ assignment.CID }}</span>
+              </label>
+
+              <label class="list-group-item py-3">
+                Description
+                <span class="d-block small opacity-50">{{ assignment.description }}</span>
+              </label>
+
+              <label class="list-group-item py-3">
+                Deadline
+                <span class="d-block small opacity-50">{{ assignment.deadline }}</span>
+              </label>
+
+              <label class="list-group-item py-3">
+                Submit Time
+                <span class="d-block small opacity-50">{{ take.submitTime }}</span>
+              </label>
+
+                <label class="list-group-item py-3">
+                Grade
+                <span class="d-block small opacity-50">{{ take.grade }}</span>
+              </label>
+		    </div>
         </div>
 
 
