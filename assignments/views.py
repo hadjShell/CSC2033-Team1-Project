@@ -1,12 +1,11 @@
-import random
-import string
-
+# IMPORTS
+import datetime
 from flask import Blueprint, render_template, request
 from flask_login import current_user
 from app import db, login_required, requires_roles
 from assignments.forms import AssignmentForm
 from models import Assignment, Create, Take, User, Engage, Course
-import datetime
+from courses.views import get_courses
 
 
 # CONFIG
@@ -17,15 +16,6 @@ assignments_blueprint = Blueprint('assignments', __name__, template_folder='temp
 # A function that returns the 'deadline' value
 def deadlineValue(a):
     return a.deadline
-
-
-# get all course ID
-def get_courses():
-    courses = Course.query.all()
-    courses_ids = []
-    for c in courses:
-        courses_ids.append(c.CID)
-    return courses_ids
 
 
 # VIEW

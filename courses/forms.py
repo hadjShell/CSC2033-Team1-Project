@@ -1,7 +1,7 @@
 # IMPORTS
 import re
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired, ValidationError
 
 """
@@ -28,5 +28,5 @@ class CourseForm(FlaskForm):
 
 
 class JoinForm(FlaskForm):
-    course_id = StringField(validators=[DataRequired(), validate_course_id])
+    course_id = SelectField('Course ID', choices=[])
     submit = SubmitField()

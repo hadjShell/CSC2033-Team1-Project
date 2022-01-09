@@ -9,6 +9,16 @@ from models import Course, Engage, User, Assignment, Create
 courses_blueprint = Blueprint('courses', __name__, template_folder='templates')
 
 
+# HELP METHOD
+# get all course ID
+def get_courses():
+    courses = Course.query.all()
+    courses_ids = []
+    for c in courses:
+        courses_ids.append(c.CID)
+    return courses_ids
+
+
 # VIEWS
 # Courses page view
 # Author: Jiayuan Zhang
@@ -105,6 +115,7 @@ def create_course():
 def join_course():
     # create course form object
     form = JoinForm()
+    form.course_id.choices = get_courses()
 
     # if request method is POST or form is valid
     if form.validate_on_submit():

@@ -6,7 +6,7 @@ import logging
 from app import db, login_required, requires_roles
 from models import User, School, Take, Assignment, Engage, Course
 from users.forms import LoginForm, RegisterForm, ChangePasswordForm, AddStudentForm
-from assignments.views import get_courses
+from courses.views import get_courses
 
 # CONFIG
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
