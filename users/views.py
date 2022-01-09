@@ -62,7 +62,7 @@ def login():
 
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user and check_password_hash(user.password, form.password.data):
+        if user and check_password_hash(user.password, form.password.data) and user.approved is True:
             login_user(user)
 
             logging.warning('SECURITY - USER LOG IN|%s|%s|%s', current_user.UID, current_user.email,
@@ -74,10 +74,13 @@ def login():
             else:
                 return redirect(url_for('users.welcome'))
 
-        elif user and not (form.password.data == user.password):
+        elif user and not (form.password.data == user.password) and user.approved is True:
             flash("Please check your login detail and try again!")
             logging.warning('SECURITY - USER FAILED LOGIN ATTEMPT|%s|%s|%s', user.UID, user.email,
                             request.remote_addr)
+        elif user and check_password_hash(user.password, form.password.data) and user.approved is False:
+            return render_template('errors/waiting-approval.html')
+
         else:
             flash("Please check your login detail and try again!")
 
