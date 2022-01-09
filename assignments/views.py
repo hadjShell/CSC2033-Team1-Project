@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, request, redirect, flash, url_for
 from flask_login import current_user
 from app import db, login_required, requires_roles
 from assignments.forms import AssignmentForm
-from models import Assignment, Create, Take, User, Engage, Course
+from models import Assignment, Create, Take, User, Engage
 from courses.views import get_courses
 from app import ALLOWED_EXTENSIONS
 from werkzeug.utils import secure_filename
@@ -22,8 +22,7 @@ def deadlineValue(a):
 
 
 def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 # VIEW
@@ -106,7 +105,8 @@ def create_assignment():
             # If file is allowed
             if allowed_file(file.filename):
                 # get secured file name and save file
-                file.save(os.path.join('/static/uploads', form.assignmentCID.data, filename))
+                # TODO: cannot save the file
+                file.save('static/uploads/' + str(form.assignmentCID.data) + '/' + filename)
                 # composite date and time
                 combined_date = datetime.datetime(form.assignmentDeadlineDay.data.year,
                                                   form.assignmentDeadlineDay.data.month,
