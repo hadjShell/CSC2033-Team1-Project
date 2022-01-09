@@ -65,12 +65,16 @@ class Assignment(db.Model):
     assignmentName = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(100), nullable=False)
     deadline = db.Column(db.DateTime, nullable=False)
+    doc_name = db.Column(db.String(50), nullable=False)
+    doc_path = db.Column(db.String(200), nullable=False)
     CID = db.Column(db.String(15), db.ForeignKey(Course.CID), nullable=False)
 
-    def __init__(self, assignmentName, description, deadline, CID):
+    def __init__(self, assignmentName, description, deadline, doc_name, doc_path, CID):
         self.assignmentName = assignmentName
         self.description = description
         self.deadline = deadline
+        self.doc_name = doc_name
+        self.doc_path = doc_path
         self.CID = CID
 
 
@@ -189,15 +193,21 @@ def init_db():
     assignment1 = Assignment(assignmentName="Programming",
                              description="This is a programming assignment for CSC1031.",
                              deadline=datetime(2022, 1, 1, 23, 59, 59),
-                             CID="CSC1031")
+                             CID="CSC1031",
+                             doc_name='Programming.docx',
+                             doc_path='/static/uploads/CSC1031/Programming.docx')
     assignment2 = Assignment(assignmentName="Report",
                              description="This is a report assignment for CSC1031.",
                              deadline=datetime(2021, 1, 1, 23, 59, 59),
-                             CID="CSC1031")
+                             CID="CSC1031",
+                             doc_name='Report.docx',
+                             doc_path='/static/uploads/CSC1031/Report.docx')
     assignment3 = Assignment(assignmentName="Essay",
                              description="This is an essay assignment for CSC1031.",
                              deadline=datetime(2021, 10, 1, 23, 59, 59),
-                             CID="CSC1031")
+                             CID="CSC1031",
+                             doc_name='Essay.docx',
+                             doc_path='/static/uploads/CSC1031/Essay.docx')
 
     engage1 = Engage(email="test@email.com", CID="CSC1031")
     engage2 = Engage(email="test@email.com", CID="CSC1032")
