@@ -39,9 +39,11 @@
 			            <li class="nav-item">
 			            	<a class="nav-link" href="{{ url_for('assignments.assignments') }}"><span>Assignments</span></a>
 			            </li>
+                       {% if role == 'teacher' %}
 			            <li class="nav-item">
 			            	<a class="nav-link" href="{{ url_for('users.student_info') }}"><span>Student Info</span></a>
 			            </li>
+                       {% endif %}
 			            <li class="nav-item">
 			            	<a class="nav-link" href="{{ url_for('users.logout') }}"><span>Logout</span></a>
 			            </li>
@@ -56,12 +58,16 @@
     		<div class="row py-4">
       			<div class="col-lg-6 col-md-8 mx-auto">
 			        <h1 class="fw-light">Courses</h1>
+                    {% if role == 'teacher' %}
 			        <p class="lead text-muted">Here are all the courses you teach.</p>
 			        <p>
 		          	    <a href="{{ url_for('courses.create_course') }}" class="btn btn-primary my-2">Create course</a>
                         <a href="{{ url_for('courses.join_course') }}" class="btn btn-primary my-2">Join course</a>
                         <a href="{{ url_for('users.add_student') }}" class="btn btn-primary my-2">Add student</a>
         			</p>
+                    {% else %}
+                    <p class="lead text-muted">Here are all the courses you take.</p>
+                    {% endif %}
       			</div>
     		</div>
   		</section>
@@ -81,9 +87,11 @@
                                                 <form method="POST" action="/courses/assignments">
                                                     <button class="btn btn-sm btn-outline-secondary" name="assignments_list" value="{{ course.CID }}">Assignments</button>
                                                 </form>
+                                                {% if role == 'teacher' %}
                                                 <form method="POST" action="/courses/classlist">
                                                     <button class="btn btn-sm btn-outline-secondary" name="class_list" value="{{ course.CID }}">Class list</button>
                                                 </form>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>

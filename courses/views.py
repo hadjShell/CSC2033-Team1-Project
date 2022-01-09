@@ -33,8 +33,11 @@ def courses():
     for e in engaged:
         engaged_courses.append(Course.query.filter_by(CID=e.CID).first())
 
+    # get user role
+    role = current_user.role
+
     # render course page with engaged courses
-    return render_template('course.html', engaged_courses=engaged_courses)
+    return render_template('course.html', engaged_courses=engaged_courses, role=role)
 
 
 # View the class list of a specific course
