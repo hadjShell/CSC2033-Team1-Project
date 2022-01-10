@@ -121,10 +121,10 @@
                                     <p class="card-text"><b>Registering to:</b> {{ user[1].schoolName }}</p>
                                     <p class="card-text"><b>As a:</b> {{ user[0].role }}</p>
                                     <form method="POST" action="/approve">
-                                        <button style="color:#58AB2F; text-align: center" class="btn btn-sm btn-outline-secondary" name="approve" type="submit" value="{{ user[0].email }}">Approve</button>
+                                        <button style="color:#58AB2F; text-align: center" id="approve" class="btn btn-sm btn-outline-secondary" name="approve" type="submit" value="{{ user[0].email }}">Approve</button>
                                     </form>
-                                    <form method="POST" action="/approve">
-                                        <button style="color:#E52613; text-align: center" class="btn btn-sm btn-outline-secondary"  name="decline" type="submit" value="{{ user[0].email }}">Decline</button>
+                                    <form method="POST" action="/decline">
+                                        <button style="color:#E52613; text-align: center" id="decline" class="btn btn-sm btn-outline-secondary"  name="decline" type="submit" value="{{ user[0].email }}">Decline</button>
                                     </form>
                                 </div>
                             </div>

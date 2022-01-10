@@ -167,6 +167,20 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h4 class="card-title">Assignment</h4>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group" >
+                                        <form method="POST" action="/delete-assignment">
+                                            <button class="btn btn-sm btn-outline-secondary">Delete an Assignment</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 				</div>
 			</div>
         </div>
@@ -291,6 +305,56 @@
             {% endif %}
         </div>
     </div>
+
+    <div class="container" style="padding-bottom: 3rem">
+            <div class="box" >
+                        {% if all_assignments %}
+                <div class="field" >
+                <div class="box">
+            {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <div class="bg-danger text-white rounded">
+                                {{ messages[0] }}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+        </div>
+            <table id="assignment-student-list" class="table table-striped table-hover" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Assignment ID</th>
+                            <th>Assignment Title</th>
+                            <th>Course ID</th>
+                            <th>deadline</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for assignment in all_assignments %}
+                            <tr>
+                                <td>{{ assignment.AID }}</td>
+                                <td>{{ assignment.assignmentName }}</td>
+                                <td>{{ assignment.CID }}</td>
+                                <td>{{ assignment.deadline }}</td>
+                                <td>{{ assignment.description }}</td>
+                                <td><form method="POST" action="/delete-assignment">
+                                        <button style="text-align: center" id="delete" class="btn btn-sm btn-outline-secondary"  name="delete" type="submit" value="{{assignment.AID}}">Delete</button>
+                                    </form></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+            </table>
+                <form method="POST" action="/admin">
+                <div>
+                    <div style="text-align: center;"><button class="btn btn-sm btn-outline-secondary">Close</button></div>
+                </div>
+                </form>
+                </div>
+                        {% else %}
+                            <p>There are no assignments</p>
+                        {% endif %}
+            </div>
+        </div>
 
 
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, flash, request
 from app import db, login_required, requires_roles
-from models import School, User
+from models import School, User, Assignment
 
 administrator_blueprint = Blueprint('admins', __name__, template_folder='templates')
 
@@ -83,7 +83,6 @@ def approve_user():
 
         # whether the approve or decline button has been pressed
         approved = request.form.get("approve")
-        declined = request.form.get("decline")
 
         if approved is not None:
             user = User.query.filter_by(email=approved).first()
@@ -92,21 +91,38 @@ def approve_user():
             db.session.commit()
             flash(user.firstName + " " + user.surname + " has been approved of registration")
 
-        elif declined is not None:
+    return render_template('approve.html', to_be_approved=get_unapproved_members())
+
+
+@administrator_blueprint.route('/decline', methods=['GET', 'POST'])
+@login_required
+@requires_roles('admin')
+def decline_user():
+
+    if request.method == 'POST':
+
+        # whether the approve or decline button has been pressed
+        declined = request.form.get("decline")
+
+        if declined is not None:
             user = User.query.filter_by(email=declined).first()
             # when user is declined they are deleted from the database
             User.query.filter_by(UID=user.UID).delete()
             db.session.commit()
             flash(user.firstName + " " + user.surname + " has been declined of registration")
 
-    # gets all the current unapproved users
+    return render_template('approve.html', to_be_approved=get_unapproved_members())
+
+
+# gets all the current unapproved users
+def get_unapproved_members():
     to_approve = []
     all_users = User.query.filter_by(approved=False)
     for user in all_users:
         # gets the name of the school the user attends
         their_school = School.query.filter_by(ID=user.schoolID).first()
         to_approve.append((user, their_school))
-    return render_template('approve.html', to_be_approved=to_approve)
+    return to_approve
 
 
 # Displays all the security logs to the admin
@@ -126,3 +142,19 @@ def security_log():
         all_logs.append(chop)
 
     return render_template('admin.html', logs=all_logs)
+
+
+@administrator_blueprint.route('/delete-assignment', methods=['GET', 'POST'])
+@requires_roles('admin')
+@login_required
+def delete_assignment():
+
+    selected_assignment = request.form.get('delete')
+
+    if selected_assignment is not None:
+        assignment_to_delete = Assignment.query.filter_by(AID=int(selected_assignment)).first()
+        Assignment.query.filter_by(AID=assignment_to_delete.AID).delete()
+        db.session.commit()
+        flash("Assignment with ID: " + selected_assignment + " has been deleted.")
+
+    return render_template('admin.html', all_assignments=Assignment.query.all())
