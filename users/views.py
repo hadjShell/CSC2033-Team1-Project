@@ -34,12 +34,14 @@ def register():
 
         # create a new user with the form data
         new_user = User(email=form.email.data,
+                        role=form.role.data,
+                        password=form.password.data,
+                        schoolID=form.schoolID.data,
                         firstName=form.firstName.data,
                         surname=form.lastName.data,
-                        password=form.password.data,
-                        #                        pin_key=form.pin_key.data,
-                        role='user')
-
+                        UID=form.UID.data,
+                        approved=False)
+#
         # add the new user to the database
         db.session.add(new_user)
         db.session.commit()
@@ -48,7 +50,7 @@ def register():
                         request.remote_addr)
 
         # sends user to login page
-        return redirect((url_for('users.login')))
+        return redirect((url_for('users.profile')))
     # if request method is GET or form not valid re-render signup page
     return render_template('register.html', form=form)
 

@@ -45,10 +45,10 @@ class RegisterForm(FlaskForm):
                                          validate_password])
     confirm_password = PasswordField(validators=[DataRequired(), EqualTo('password', message='Both password fields '
                                                                                              'must be equal!')])
-    # School name/id to do
-    #    pin_key = StringField(validators=[DataRequired(), Length(min=32, max=32, message='Pin key must be exactly 32 '
-    #                                                                                 'characters in length')])
-    submit = SubmitField()
+    role = StringField(validators=[DataRequired()])
+    schoolID = StringField(validators=[DataRequired()])
+    UID = StringField(validators=[DataRequired(), Length(min=9, max=9)])
+    register = SubmitField()
 
 
 class ChangePasswordForm(FlaskForm):
