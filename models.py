@@ -1,4 +1,5 @@
-from app import db
+from app import db, ROOT_DIR
+from pathlib import Path
 from datetime import datetime
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash
@@ -164,6 +165,9 @@ def init_db():
                     surname="S",
                     UID="000000001",
                     approved=True)
+    # create submission folder
+    path = ROOT_DIR / Path("static/students_submission/stu1@email.com")
+    path.mkdir(parents=True, exist_ok=True)
     student2 = User(email="stu2@email.com",
                     password="password",
                     role="student",
@@ -172,6 +176,9 @@ def init_db():
                     surname="S",
                     UID="000000002",
                     approved=True)
+    # create submission folder
+    path = ROOT_DIR / Path("static/students_submission/stu2@email.com")
+    path.mkdir(parents=True, exist_ok=True)
     student3 = User(email="stu3@email.com",
                     password="password",
                     role="student",
@@ -180,6 +187,9 @@ def init_db():
                     surname="S",
                     UID="000000003",
                     approved=True)
+    # create submission folder
+    path = ROOT_DIR / Path("static/students_submission/stu3@email.com")
+    path.mkdir(parents=True, exist_ok=True)
     student4 = User(email="stu4@email.com",
                     password="password",
                     role="student",
@@ -188,13 +198,34 @@ def init_db():
                     surname="S",
                     UID="000000004",
                     approved=True)
+    # create submission folder
+    path = ROOT_DIR / Path("static/students_submission/stu4@email.com")
+    path.mkdir(parents=True, exist_ok=True)
 
     course1 = Course(CID="CSC1031", courseName="Discrete Mathematics")
+    # create folder
+    path = ROOT_DIR / Path("static/teachers_submission/CSC1031")
+    path.mkdir(parents=True, exist_ok=True)
     course2 = Course(CID="CSC1032", courseName="Computer System")
+    # create folder
+    path = ROOT_DIR / Path("static/teachers_submission/CSC1032")
+    path.mkdir(parents=True, exist_ok=True)
     course3 = Course(CID="CSC1033", courseName="Database Management System")
+    # create folder
+    path = ROOT_DIR / Path("static/teachers_submission/CSC1033")
+    path.mkdir(parents=True, exist_ok=True)
     course4 = Course(CID="CSC1034", courseName="Python")
+    # create folder
+    path = ROOT_DIR / Path("static/teachers_submission/CSC1034")
+    path.mkdir(parents=True, exist_ok=True)
     course5 = Course(CID="CSC1035", courseName="Java")
+    # create folder
+    path = ROOT_DIR / Path("static/teachers_submission/CSC1035")
+    path.mkdir(parents=True, exist_ok=True)
     course6 = Course(CID="CSC2032", courseName="Algorithm Design and Analysis")
+    # create folder
+    path = ROOT_DIR / Path("static/teachers_submission/CSC2032")
+    path.mkdir(parents=True, exist_ok=True)
 
     assignment1 = Assignment(AID=1,
                              assignmentName="Programming",
@@ -224,9 +255,21 @@ def init_db():
     engage4 = Engage(email="test@email.com", CID="CSC1034")
     engage5 = Engage(email="test2@email.com", CID="CSC1035")
     engage6 = Engage(email="stu1@email.com", CID="CSC1031")
+    # create folder
+    path = ROOT_DIR / Path("static/students_submission/stu1@email.com/CSC1031")
+    path.mkdir(parents=True, exist_ok=True)
     engage7 = Engage(email="stu2@email.com", CID="CSC1031")
+    # create folder
+    path = ROOT_DIR / Path("static/students_submission/stu2@email.com/CSC1031")
+    path.mkdir(parents=True, exist_ok=True)
     engage8 = Engage(email="stu3@email.com", CID="CSC1031")
+    # create folder
+    path = ROOT_DIR / Path("static/students_submission/stu3@email.com/CSC1031")
+    path.mkdir(parents=True, exist_ok=True)
     engage9 = Engage(email="stu4@email.com", CID="CSC1032")
+    # create folder
+    path = ROOT_DIR / Path("static/students_submission/stu4@email.com/CSC1032")
+    path.mkdir(parents=True, exist_ok=True)
     engage10 = Engage(email="test@email.com", CID="CSC2032")
 
     create1 = Create(email="test@email.com", AID=1)
