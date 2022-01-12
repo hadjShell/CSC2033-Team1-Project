@@ -1,5 +1,5 @@
-## Welcome to Odin Assignment Management System(AMS)
-
+# Welcome to Odin Assignment Management System(AMS)
+Odin AMS was created using Flask
 ## What is Odin AMS?
 
 Odin AMS will leave behind the old paper homework
