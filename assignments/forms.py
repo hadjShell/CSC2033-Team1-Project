@@ -23,3 +23,11 @@ class AssignmentForm(FlaskForm):
     assignmentCID = SelectField('Course ID', choices=[])
     assignmentFile = FileField(validators=[DataRequired()])
     submit = SubmitField()
+
+
+# Form for submitting answer
+# Author: Jiayuan Zhang
+class AnswerSubmissionForm(FlaskForm):
+    assignment = SelectField('Assignment', choices=[])
+    answerFile = FileField(validators=[DataRequired()])
+    submit = SubmitField()
