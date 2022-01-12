@@ -14,7 +14,7 @@ Created by Harry Sayer, Jiayuan Zhang
 """
 
 # CONFIG
-UPLOAD_FOLDER = '/static/uploads'
+UPLOAD_FOLDER = '/static/teachers_submission'
 ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx'}
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__)

@@ -1,7 +1,7 @@
 # IMPORTS
 import datetime
 from pathlib import Path
-from flask import Blueprint, render_template, request, redirect, flash, url_for
+from flask import Blueprint, render_template, request, redirect, flash, url_for, send_from_directory
 from flask_login import current_user
 from app import db, login_required, requires_roles
 from assignments.forms import AssignmentForm
@@ -15,6 +15,7 @@ assignments_blueprint = Blueprint('assignments', __name__, template_folder='temp
 
 
 # HELP FUNCTIONS
+# Author: Jiayuan Zhang
 # A function that returns the 'deadline' value
 def deadlineValue(a):
     return a.deadline
@@ -109,7 +110,7 @@ def create_assignment():
             # If file is allowed
             if allowed_file(file.filename):
                 # get secured file name and save file
-                data_folder = Path("static/uploads/" + str(form.assignmentCID.data) + '/' + filename)
+                data_folder = Path("static/teachers_submission/" + str(form.assignmentCID.data) + '/' + filename)
                 file.save(ROOT_DIR / data_folder)
                 # composite date and time
                 combined_date = datetime.datetime(form.assignmentDeadlineDay.data.year,
@@ -125,7 +126,7 @@ def create_assignment():
                                             deadline=combined_date,
                                             CID=form.assignmentCID.data,
                                             doc_name=filename,
-                                            doc_path='/static/uploads/' + form.assignmentCID.data + '/' + filename)
+                                            doc_path='/static/teachers_submission/' + form.assignmentCID.data + '/' + filename)
                 db.session.add(new_assignment)
                 # create new create object
                 new_create = Create(email=current_user.email, AID=new_assignment.AID)
@@ -154,7 +155,7 @@ def create_assignment():
     return render_template('create-assignment.html', form=form)
 
 
-# function to update an assignment which is in the database
+'''# function to update an assignment which is in the database
 @assignments_blueprint.route('/assignments/assignment-update/<int:id>', methods=['GET', 'POST'])
 @login_required
 @requires_roles('teacher')
@@ -185,7 +186,7 @@ def assignment_update(id):
 
 
     else:
-        return render_template("assignment-update.html", form=form, assignment_to_update=assignment_to_update)
+        return render_template("assignment-update.html", form=form, assignment_to_update=assignment_to_update)'''
 
 
 # Student view of assignment
@@ -206,8 +207,20 @@ def assignments_content():
 
 # Download assignment file
 # Author: Jiayuan Zhang
-@assignments_blueprint.route('/assignment/download')
+@assignments_blueprint.route('/assignments/download', methods=('POST', 'GET'))
 @login_required
 @requires_roles('student')
 def download():
-    return 0
+    # get assignment
+    if request.method == 'POST':
+        assignment_id = request.form.get('assignment_AID')
+        assignment = Assignment.query.filter_by(AID=assignment_id).first()
+
+    # get directory
+    directory = ROOT_DIR / Path("static/teachers_submission/" + assignment.CID)
+
+    # get filename
+    filename = assignment.doc_name
+
+    return send_from_directory(directory, filename)
+

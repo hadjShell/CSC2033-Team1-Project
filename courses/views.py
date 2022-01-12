@@ -106,7 +106,7 @@ def create_course():
             db.session.add(new_engage)
             db.session.commit()
             # create course folder
-            path = ROOT_DIR / Path("static/uploads/" + str(form.course_id.data))
+            path = ROOT_DIR / Path("static/teachers_submission/" + str(form.course_id.data))
             path.mkdir(parents=True, exist_ok=True)
             # send user to course page
             return redirect(url_for('courses.courses'))
