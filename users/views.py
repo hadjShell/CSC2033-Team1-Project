@@ -237,6 +237,9 @@ def add_student():
             # create a new engage object
             new_engage = Engage(email=student_email, CID=course_id)
             db.session.add(new_engage)
+            # create submission folder
+            path = ROOT_DIR / Path("static/students_submission/" + student_email + "/" + course_id)
+            path.mkdir(parents=True, exist_ok=True)
 
             # get all assignments of that course
             assignments = Assignment.query.filter_by(CID=course_id).all()
