@@ -1,13 +1,13 @@
 # IMPORTS
-import copy
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user
 import logging
-from app import db, login_required, requires_roles
+from app import db, login_required, requires_roles, ROOT_DIR
 from models import User, School, Take, Assignment, Engage, Course
 from users.forms import LoginForm, RegisterForm, ChangePasswordForm, AddStudentForm
 from courses.views import get_courses
 from werkzeug.security import check_password_hash
+from pathlib import Path
 
 # CONFIG
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
@@ -15,9 +15,9 @@ users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
 # VIEWS
 # view registration
-# Authors: Uzair Yousaf, Harry Sayer
+# Authors: Uzair Yousaf, Harry Sayer, Jiayuan Zhang
 @users_blueprint.route('/register', methods=['GET', 'POST'])
-@requires_roles()
+@requires_roles('student')
 def register():
     # create signup form object
     form = RegisterForm()
@@ -45,6 +45,10 @@ def register():
         # add the new user to the database
         db.session.add(new_user)
         db.session.commit()
+
+        # create submission folder
+        path = ROOT_DIR / Path("static/students_submission/" + str(form.email.data))
+        path.mkdir(parents=True, exist_ok=True)
 
         logging.warning('SECURITY - USER REGISTRATION|%s|%s|%s', new_user.UID, new_user.email,
                         request.remote_addr)
