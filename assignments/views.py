@@ -1,10 +1,10 @@
 # IMPORTS
-import datetime
+from datetime import datetime
 from pathlib import Path
 from flask import Blueprint, render_template, request, redirect, flash, url_for, send_from_directory
 from flask_login import current_user
 from app import db, login_required, requires_roles
-from assignments.forms import AssignmentForm
+from assignments.forms import AssignmentForm, AnswerSubmissionForm
 from models import Assignment, Create, Take, User, Engage
 from courses.views import get_courses
 from app import ALLOWED_EXTENSIONS, ROOT_DIR
@@ -16,6 +16,7 @@ assignments_blueprint = Blueprint('assignments', __name__, template_folder='temp
 
 # HELP FUNCTIONS
 # Author: Jiayuan Zhang
+
 # A function that returns the 'deadline' value
 def deadlineValue(a):
     return a.deadline
@@ -23,6 +24,15 @@ def deadlineValue(a):
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+# get all assignment
+def get_assignments():
+    assignments = Assignment.query.all()
+    assignment_content = []
+    for a in assignments:
+        assignment_content.append(str(a.AID) + ' ' + a.CID + ' ' + a.assignmentName)
+    return assignment_content
 
 
 # VIEW
@@ -224,3 +234,53 @@ def download():
 
     return send_from_directory(directory, filename)
 
+
+# Upload answer file
+# Author: Jiayuan Zhang
+@assignments_blueprint.route('/assignments/upload', methods=('POST', 'GET'))
+@login_required
+@requires_roles('student')
+def upload_answer():
+    # create a submit form
+    form = AnswerSubmissionForm()
+    form.assignment.choices = get_assignments()
+
+    # if request method is POST or form is valid
+    if form.validate_on_submit():
+        # get assignment
+        assignment_id = int(form.assignment.data.split(' ')[0])
+        assignment = Assignment.query.filter_by(AID=assignment_id).first()
+        # get take
+        take = Take.query.filter_by(email=current_user.email, AID=assignment_id).first()
+
+        # if student already submitted
+        if take.submitTime:
+            flash('You have already submitted the answer!')
+            return render_template('answer-submit.html', form=form)
+        else:
+            # get uploaded file
+            file = form.answerFile.data
+            filename = secure_filename(file.filename)
+            # If file is allowed
+            if allowed_file(file.filename):
+                # get secured file name and save file
+                data_folder = Path("static/students_submission/" + current_user.email + "/" +
+                                   assignment.CID + '/' + filename)
+                file.save(ROOT_DIR / data_folder)
+
+                # change take info
+                take.submitTime = datetime.now()
+                take.doc_name = filename
+                take.doc_path = "static/students_submission/" + current_user.email + "/" + \
+                                assignment.CID + '/' + filename
+                db.session.commit()
+
+                # send user to assignment page
+                return redirect(url_for('assignments.assignments'))
+            # if file is not allowed
+            else:
+                flash('File extension is not allowed!')
+                return render_template('answer-submit.html', form=form)
+
+    # if request method is GET or form not valid re-render submit page
+    return render_template('answer-submit.html', form=form)
