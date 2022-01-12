@@ -4,16 +4,16 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta author="Jiayuan Zhang, Bootstrap contributors">
-	<title>{{ assignment.assignmentName }}</title>
+	<title>Submit Answer</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/base.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/profile.css') }}" >
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/create-assignment.css') }}" >
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300&display=swap" rel="stylesheet">
 	<script src="../static/js/jquery-3.6.0.js"></script>
 	<script src="../static/js/bootstrap.min.js"></script>
-    <script src="../static/js/dataTables.bootstrap5.min.js"></script>
+
 </head>
 <body>
 
@@ -53,52 +53,44 @@
 		<section class="text-center container">
     		<div class="row py-4">
       			<div class="col-lg-6 col-md-8 mx-auto">
-			        <h1 class="fw-light">Assignment Content</h1>
-                    <p style="margin-top: 5px">
-                    <form id="assignment-course" method="POST" action="/assignments/download">
-                        <input type="hidden" name="assignment_AID" value="{{ assignment.AID }}">
-		          	    <a href="#" class="btn btn-primary my-1" onclick="document.getElementById('assignment-course').submit();">Download Assignment File</a>
-                    </form>
-        			</p>
+			        <h1 class="fw-light">Submit Answer</h1>
+			        <p class="lead text-muted">You can only submit once for an assignment. Allowed file type: doc, docx,pdf.</p>
       			</div>
     		</div>
   		</section>
 
-        <div class="container" style="margin-top: -80px; padding-bottom: 3rem">
-            <div class="list-group">
-              <label class="list-group-item py-3">
-                Assignment Name
-                <span class="d-block small opacity-50">{{ assignment.assignmentName }}</span>
-              </label>
+	  	<div class="form-signin container">
+            <form method="POST" enctype="multipart/form-data">
+                {{ form.csrf_token() }}
 
-              <label class="list-group-item py-3">
-                Course ID
-                <span class="d-block small opacity-50">{{ assignment.CID }}</span>
-              </label>
+                <!-- Flash error message if there is one -->
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                <div class="bg-danger text-white rounded">
+                                    {{ messages[0] }}
+                                </div>
+                            {% endif %}
+                        {% endwith %}
 
-              <label class="list-group-item py-3">
-                Description
-                <span class="d-block small opacity-50">{{ assignment.description }}</span>
-              </label>
+                <div class="form-floating">
+                    {{ form.assignment(class="input form-control", id="floatingTitle", placeholder="Assignment") }}
+                    {% for error in form.assignment.errors %}
+                        {{ error }}
+                    {% endfor %}
+                    <label for="floatingTitle">Assignment</label>
+                </div>
 
-              <label class="list-group-item py-3">
-                Deadline
-                <span class="d-block small opacity-50">{{ assignment.deadline }}</span>
-              </label>
+                <div class="form-floating">
+                    {{ form.answerFile(class="input form-control", id="floatingFile", placeholder="Upload File", enctype="multipart/form-data") }}
+                    {% for error in form.answerFile.errors %}
+                        {{ error }}
+                    {% endfor %}
+                    <label for="floatingFile">Upload File</label>
+                </div>
 
-              <label class="list-group-item py-3">
-                Submit Time
-                <span class="d-block small opacity-50">{{ take.submitTime }}</span>
-              </label>
-
-                <label class="list-group-item py-3">
-                Grade
-                <span class="d-block small opacity-50">{{ take.grade }}</span>
-              </label>
-		    </div>
+                {{ form.submit(class="w-100 btn btn-lg btn-primary") }}
+            </form>
         </div>
-
-
 
 
 		<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">

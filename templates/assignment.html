@@ -64,6 +64,7 @@
         			</p>
                     {% else %}
                     <p class="lead text-muted">Here are all the assignments you take.</p>
+                        <a href="{{ url_for('assignments.upload_answer') }}" class="btn btn-primary my-1">Submit Answer</a>
                     {% endif %}
       			</div>
     		</div>
@@ -75,7 +76,6 @@
                     {% for assignment in assignments %}
                         {% if role == 'teacher' %}
                         <form id="assignment-detail{{ loop.index }}" method="POST" action="/assignments/detail">
-                            <a href="{{ url_for('assignments.assignment_update', id=assignment.AID) }}" class="btn btn-primary my-2">Update Assignment</a>
                         {% else %}
                         <form id="assignment-detail{{ loop.index }}" method="POST" action="/assignments/content">
                         {% endif %}
