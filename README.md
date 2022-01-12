@@ -5,7 +5,7 @@ paper homework diaries and instead use a more intuitive online
 homework and assignment system which will make it easier for students
 to keep track of what they have been set
 
-###➔ Technical Details
+### ➔ Technical Details
 **Languages:**
 ```Python3, HTML5, CSS3, JavaScript```
 
@@ -15,7 +15,7 @@ to keep track of what they have been set
 **Database:**
 ```MySQL```
 
-###➔ Project Setup
+### ➔ Project Setup
 Install all requirements by running command below -
 ```
 pip install -r requirements.txt
@@ -26,7 +26,7 @@ python app.py
 ```
 Once link has been clicked you should be taken to our login page
 
-###➔ Functionality
+### ➔ Functionality
 - **Students** - Students are able to view their profile,
 view the courses which they are enrolled in and view
 assignments that they have been set.
