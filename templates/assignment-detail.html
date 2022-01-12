@@ -68,7 +68,7 @@
             <table id="assignment-student-list" class="table table-striped" style="width:100%">
                     <thead>
                         <tr>
-                            <th>Student No.</th>
+                            <th>Student Email</th>
                             <th>Name</th>
                             <th>Submit Time</th>
                             <th>Grade</th>
@@ -79,11 +79,20 @@
                     <tbody>
                         {% for item in list %}
                             <tr>
-                                <td>{{ item['schoolID'] }}</td>
+                                <td>{{ item['email'] }}</td>
                                 <td>{{ item['name'] }}</td>
                                 <td>{{ item['submitTime'] }}</td>
                                 <td>{{ item['grade'] }}</td>
-                                <td><button class="btn btn-primary">Download File</button></td>
+                                <td>
+                                    {% if item['submitTime'] %}
+                                    <form id="answer" method="POST" action="/download-answer">
+                                        <input type="hidden" name="student_email" value="{{ item['email'] }}">
+                                        <input type="hidden" name="assignment_id" value="{{ assignment.AID }}">
+                                        <input type="hidden" name="assignment_cid" value="{{ assignment.CID }}">
+		          	                    <a href="#" class="btn btn-primary my-1" onclick="document.getElementById('answer').submit();">Download File</a>
+                                    </form>
+                                    {% endif %}
+                                </td>
                                 <td><button class="btn btn-primary">Grade</button></td>
                             </tr>
                         {% endfor %}

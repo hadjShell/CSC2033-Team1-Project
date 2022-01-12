@@ -281,12 +281,12 @@ def init_db():
     # --- Jiayuan Zhang
     take1 = Take(email="stu1@email.com",
                  AID=2,
-                 submitTime=datetime(2021, 1, 1, 22, 10, 10),
-                 grade=92.3)
+                 submitTime=None,
+                 grade=None)
     take2 = Take(email="stu2@email.com",
                  AID=2,
-                 submitTime=datetime(2021, 1, 1, 22, 48, 10),
-                 grade=87.6)
+                 submitTime=None,
+                 grade=None)
     take3 = Take(email="stu3@email.com",
                  AID=2,
                  submitTime=None,

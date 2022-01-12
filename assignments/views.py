@@ -87,7 +87,7 @@ def assignments_detail():
         submit_time = take.submitTime
         grade = take.grade
         # create a dictionary that included the information
-        list_item = {"schoolID": s.schoolID,
+        list_item = {"email": s.email,
                      "name": s.firstName + ' ' + s.surname,
                      "submitTime": submit_time,
                      "grade": grade}
@@ -215,7 +215,7 @@ def assignments_content():
     return render_template('assignment-content.html', assignment=assignment, take=take)
 
 
-# Download assignment file
+# Download assignment file, assume assignment file must exist before downloading
 # Author: Jiayuan Zhang
 @assignments_blueprint.route('/assignments/download', methods=('POST', 'GET'))
 @login_required

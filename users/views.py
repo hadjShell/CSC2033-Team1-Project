@@ -1,5 +1,5 @@
 # IMPORTS
-from flask import Blueprint, render_template, flash, redirect, url_for, request
+from flask import Blueprint, render_template, flash, redirect, url_for, request, send_from_directory
 from flask_login import current_user, login_user, logout_user
 import logging
 from app import db, login_required, requires_roles, ROOT_DIR
@@ -257,3 +257,24 @@ def add_student():
 
     # if request method is GET or form not valid re-render add student page
     return render_template('add-student.html', form=form)
+
+
+# teacher download student submit file,
+# assume file exists, unless unseen
+# Author: Jiayuan Zhang
+@users_blueprint.route('/download-answer', methods=['POST', 'GET'])
+@login_required
+@requires_roles('teacher')
+def download_answer():
+    # get assignment id and student email
+    if request.method == 'POST':
+        student_email = request.form.get('student_email')
+        assignment_id = request.form.get('assignment_id')
+        assignment_cid = request.form.get('assignment_cid')
+
+    # get directory
+    directory = ROOT_DIR / Path("static/students_submission/" + student_email + "/" + assignment_cid)
+    # get filename
+    filename = Take.query.filter_by(email=student_email, AID=assignment_id).first().doc_name
+
+    return send_from_directory(directory, filename)

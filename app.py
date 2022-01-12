@@ -14,12 +14,10 @@ Created by Harry Sayer, Jiayuan Zhang
 """
 
 # CONFIG
-UPLOAD_FOLDER = '/static/teachers_submission'
 ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx'}
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'LongAndRandomSecretKey'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # LOCAL DATABASE CONFIG
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///odin.db'
