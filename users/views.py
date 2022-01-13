@@ -75,17 +75,15 @@ def login():
                             request.remote_addr)
 
             # Go to welcome page based on role
-            if current_user.role == 'admin':
-                return redirect(url_for('admins.admin'))
-            else:
-                return redirect(url_for('users.welcome'))
+            return redirect(url_for('users.welcome'))
 
         elif user and not check_password_hash(user.password, form.password.data) and user.approved is True:
             flash("Please check your login detail and try again!")
             logging.warning('SECURITY - USER FAILED LOGIN ATTEMPT|%s|%s|%s', user.UID, user.email,
                             request.remote_addr)
         elif user and check_password_hash(user.password, form.password.data) and user.approved is False:
-            return render_template('errors/waiting-approval.html')
+            flash('You account is not approved!')
+            return render_template('login.html', form=form)
 
         else:
             flash("Please check your login detail and try again!")
