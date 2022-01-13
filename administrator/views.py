@@ -1,13 +1,18 @@
-from flask import Blueprint, render_template, flash, request
+# IMPORTS
+from flask import Blueprint, render_template, flash, request, redirect, url_for
+from flask_login import current_user
+from werkzeug.security import check_password_hash
 from app import db, login_required, requires_roles
 from models import School, User, Assignment
 
+# CONFIG
 administrator_blueprint = Blueprint('admins', __name__, template_folder='templates')
 
 
 # VIEW
+# Home page view
 # Author: Harry Sayer
-@administrator_blueprint.route('/admin', methods=['POST', 'GET'])
+@administrator_blueprint.route('/admin')
 @login_required
 @requires_roles('admin')
 def admin():
