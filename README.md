@@ -10,7 +10,7 @@ to keep track of what they have been set
 ```Python3, HTML5, CSS3, JavaScript```
 
 **Frameworks:**
-```Flask```
+```Flask, Bootstrap, DataTable.net```
 
 **Database:**
 ```MySQL```
@@ -20,7 +20,31 @@ Install all requirements by running command below -
 ```
 pip install -r requirements.txt
 ```
-Run app.py using below command to start Flask API
+
+#### ➔ Database Setup
+1. By default, a local database is configured. We recommend using it since 
+it's more agile and stable.
+   
+    Initialise the database using below command in python console
+    ```
+    from models import init_db
+    init_db()
+    ```
+2. An external database is also provided. 
+
+    If you want to use it, comment out the local database configuration and 
+    using the external database config we provided in the `app.py`
+
+    **NOTE**: We assume that you can provide 
+   related `UniUsername` and `UniPassword` credentials to establish
+   ssh tunnel.
+
+    Install `mysqlclient` for external database connection
+    ```
+    pip install mysqlclient
+    ```
+
+Run app.py using below command to start Flask 
 ```
 python app.py
 ```

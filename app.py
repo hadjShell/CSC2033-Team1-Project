@@ -1,6 +1,7 @@
 import logging
 import socket
 import os
+import sshtunnel
 from functools import wraps
 from flask import Flask, render_template, request, current_app
 from flask_login import LoginManager, current_user
@@ -24,7 +25,12 @@ app.config['SECRET_KEY'] = 'LongAndRandomSecretKey'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False'''
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://csc2033_team01:SonsArchVeer@127.0.0.1:{}/csc2033_team01'
+tunnel = sshtunnel.SSHTunnelForwarder('linux.cs.ncl.ac.uk', ssh_username='UniUsername (cXXXXXXX)', ssh_password='UniPassword',
+                                      remote_bind_address=('cs-db.ncl.ac.uk', 3306))
+tunnel.start()
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://csc2033_team01:SonsArchVeer@127.0.0.1:{}/csc2033_team01'.format(
+    tunnel.local_bind_port)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
