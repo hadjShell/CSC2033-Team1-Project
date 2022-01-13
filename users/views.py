@@ -4,7 +4,7 @@ from flask_login import current_user, login_user, logout_user
 import logging
 from app import db, login_required, requires_roles, ROOT_DIR
 from models import User, School, Take, Assignment, Engage, Course
-from users.forms import LoginForm, RegisterForm, ChangePasswordForm, AddStudentForm
+from users.forms import LoginForm, RegisterForm, ChangePasswordForm, AddStudentForm, GradeForm
 from courses.views import get_courses
 from werkzeug.security import check_password_hash
 from pathlib import Path
@@ -260,7 +260,7 @@ def add_student():
 
 
 # teacher download student submit file,
-# assume file exists, unless unseen
+# assume file exists, otherwise unseen
 # Author: Jiayuan Zhang
 @users_blueprint.route('/download-answer', methods=['POST', 'GET'])
 @login_required
@@ -278,3 +278,39 @@ def download_answer():
     filename = Take.query.filter_by(email=student_email, AID=assignment_id).first().doc_name
 
     return send_from_directory(directory, filename)
+
+
+# teacher grade student
+# Author: Jiayuan Zhang
+@users_blueprint.route('/grade', methods=['POST', 'GET'])
+@login_required
+@requires_roles('teacher')
+def grade():
+    # create grade form
+    form = GradeForm()
+
+    # if request method is POST or form is valid
+    if form.validate_on_submit():
+        # get student email and assignment id
+        student_email = form.student_email.data
+        assignment_id = form.assignment_id.data
+
+        # get take
+        take = Take.query.filter_by(email=student_email, AID=assignment_id).first()
+
+        if take:
+            # if already grade
+            if take.grade:
+                flash('Student has already been graded!')
+                return render_template('grade.html', form=form)
+            else:
+                take.grade = form.grade.data
+                db.session.commit()
+                flash('Success!')
+                return render_template('grade.html', form=form)
+        else:
+            flash("Student doesn't take the assignment!")
+            return render_template('grade.html', form=form)
+
+    # if request method is GET or form not valid re-render grade page
+    return render_template('grade.html', form=form)

@@ -1,8 +1,8 @@
 # IMPORTS
 import re
-from wtforms import StringField, SubmitField, PasswordField, EmailField, SelectField, FloatField
+from wtforms import StringField, SubmitField, PasswordField, EmailField, SelectField, FloatField, IntegerField
 from flask_wtf import FlaskForm
-from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
+from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError, InputRequired, NumberRange
 
 """
 This python file contains all WTForms and restrictions related to user activities.
@@ -69,5 +69,7 @@ class AddStudentForm(FlaskForm):
 
 
 class GradeForm(FlaskForm):
-    grade = FloatField(validators=[DataRequired()])
+    student_email = EmailField(validators=[DataRequired()])
+    assignment_id = IntegerField(validators=[DataRequired()])
+    grade = FloatField(validators=[InputRequired(), NumberRange(0, 100)])
     submit = SubmitField()
