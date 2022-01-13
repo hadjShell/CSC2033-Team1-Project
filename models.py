@@ -30,7 +30,7 @@ class User(db.Model, UserMixin):
 
     email = db.Column(db.String(100), primary_key=True)
     role = db.Column(db.String(10), nullable=False)
-    password = db.Column(db.String(30), nullable=False)
+    password = db.Column(db.String(300), nullable=False)
     schoolID = db.Column(db.Integer, db.ForeignKey(School.ID), nullable=False)
     firstName = db.Column(db.String(30), nullable=False)
     surname = db.Column(db.String(30), nullable=False)
@@ -211,8 +211,8 @@ def init_db():
                     password="Student5!",
                     role="student",
                     schoolID=2,
-                    firstName="Jack",
-                    surname="Scott",
+                    firstName="Emma",
+                    surname="Quinn",
                     UID="20000001",
                     approved=True)
     # create submission folder

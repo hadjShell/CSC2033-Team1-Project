@@ -20,18 +20,13 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'LongAndRandomSecretKey'
 
 # LOCAL DATABASE CONFIG
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///odin.db'
+'''app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///odin.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False'''
+
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://csc2033_team01:SonsArchVeer@127.0.0.1:{}/csc2033_team01'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-"""
-tunnel = sshtunnel.SSHTunnelForwarder('linux.cs.ncl.ac.uk', ssh_username='',
-                                      ssh_password='',
-                                      remote_bind_address=('cs-db.ncl.ac.uk', 3306))
-tunnel.start()
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://csc2033_team01:SonsArchVeer@127.0.0.1:{}/csc2033_team01'.format(
-    tunnel.local_bind_port)
-"""
 
 # Initial the db
 db = SQLAlchemy(app)

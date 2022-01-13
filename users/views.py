@@ -80,7 +80,7 @@ def login():
             else:
                 return redirect(url_for('users.welcome'))
 
-        elif user and not (form.password.data == user.password) and user.approved is True:
+        elif user and not check_password_hash(user.password, form.password.data) and user.approved is True:
             flash("Please check your login detail and try again!")
             logging.warning('SECURITY - USER FAILED LOGIN ATTEMPT|%s|%s|%s', user.UID, user.email,
                             request.remote_addr)
