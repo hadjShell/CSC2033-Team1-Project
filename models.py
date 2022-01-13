@@ -1,3 +1,4 @@
+# IMPORTS
 from app import db, ROOT_DIR
 from pathlib import Path
 from datetime import datetime
@@ -13,6 +14,7 @@ Author: Jiayuan Zhang, Harry Sayer
 """
 
 
+# School table
 class School(db.Model):
     __tablename__ = 'School'
     ID = db.Column(db.Integer, primary_key=True)
@@ -22,13 +24,14 @@ class School(db.Model):
         self.schoolName = schoolName
 
 
+# User table, contains teachers and students
 class User(db.Model, UserMixin):
     __tablename__ = 'User'
 
     email = db.Column(db.String(100), primary_key=True)
     role = db.Column(db.String(10), nullable=False)
     password = db.Column(db.String(30), nullable=False)
-    schoolID = db.Column(db.String(15), db.ForeignKey(School.ID), nullable=False)
+    schoolID = db.Column(db.Integer, db.ForeignKey(School.ID), nullable=False)
     firstName = db.Column(db.String(30), nullable=False)
     surname = db.Column(db.String(30), nullable=False)
     UID = db.Column(db.String(36), nullable=False)
@@ -49,6 +52,7 @@ class User(db.Model, UserMixin):
         return self.email
 
 
+# Course table
 class Course(db.Model):
     __tablename__ = 'Course'
 
@@ -60,6 +64,7 @@ class Course(db.Model):
         self.courseName = courseName
 
 
+# Assignment table
 class Assignment(db.Model):
     __tablename__ = 'Assignment'
 
@@ -130,76 +135,88 @@ def init_db():
     db.drop_all()
     db.create_all()
 
-    school = School(schoolName="NCL UNI")
+    school1 = School(schoolName="Newcastle University")
+    school2 = School(schoolName="University of Cambridge")
 
     test = User(email="test@email.com",
-                password="password",
+                password="Teacher1!",
                 role="teacher",
-                schoolID="001",
+                schoolID=1,
                 firstName="John",
                 surname="Curry",
-                UID="200511111",
+                UID="20051111",
                 approved=True)
     test2 = User(email="test2@email.com",
-                 password="password",
+                 password="Teacher2!",
                  role="teacher",
-                 schoolID="001",
+                 schoolID=1,
                  firstName="Mark",
                  surname="Jones",
-                 UID="200511122",
+                 UID="20051112",
                  approved=True)
     test3 = User(email="test3@email.com",
-                 password="password",
+                 password="Teacher3!",
                  role="teacher",
-                 schoolID="001",
+                 schoolID=2,
                  firstName="Steve",
                  surname="Jobs",
-                 UID="200511133",
+                 UID="20061111",
                  approved=True)
 
     student1 = User(email="stu1@email.com",
-                    password="password",
+                    password="Student1!",
                     role="student",
-                    schoolID="001",
+                    schoolID=1,
                     firstName="Rob",
-                    surname="S",
-                    UID="000000001",
+                    surname="Baker",
+                    UID="10000001",
                     approved=True)
     # create submission folder
     path = ROOT_DIR / Path("static/students_submission/stu1@email.com")
     path.mkdir(parents=True, exist_ok=True)
     student2 = User(email="stu2@email.com",
-                    password="password",
+                    password="Student2!",
                     role="student",
-                    schoolID="001",
+                    schoolID=1,
                     firstName="Jelly",
-                    surname="S",
-                    UID="000000002",
+                    surname="Fisher",
+                    UID="10000002",
                     approved=True)
     # create submission folder
     path = ROOT_DIR / Path("static/students_submission/stu2@email.com")
     path.mkdir(parents=True, exist_ok=True)
     student3 = User(email="stu3@email.com",
-                    password="password",
+                    password="Student3!",
                     role="student",
-                    schoolID="001",
+                    schoolID=1,
                     firstName="Bob",
-                    surname="S",
-                    UID="000000003",
+                    surname="Duncan",
+                    UID="10000003",
                     approved=True)
     # create submission folder
     path = ROOT_DIR / Path("static/students_submission/stu3@email.com")
     path.mkdir(parents=True, exist_ok=True)
     student4 = User(email="stu4@email.com",
-                    password="password",
+                    password="Student4!",
                     role="student",
-                    schoolID="001",
+                    schoolID=1,
                     firstName="Jack",
-                    surname="S",
-                    UID="000000004",
+                    surname="Scott",
+                    UID="10000004",
                     approved=True)
     # create submission folder
     path = ROOT_DIR / Path("static/students_submission/stu4@email.com")
+    path.mkdir(parents=True, exist_ok=True)
+    student5 = User(email="stu5@email.com",
+                    password="Student5!",
+                    role="student",
+                    schoolID=2,
+                    firstName="Jack",
+                    surname="Scott",
+                    UID="20000001",
+                    approved=True)
+    # create submission folder
+    path = ROOT_DIR / Path("static/students_submission/stu5@email.com")
     path.mkdir(parents=True, exist_ok=True)
 
     course1 = Course(CID="CSC1031", courseName="Discrete Mathematics")
@@ -248,56 +265,146 @@ def init_db():
                              CID="CSC1031",
                              doc_name='Essay.docx',
                              doc_path='static/teachers_submission/CSC1031/Essay.docx')
+    assignment4 = Assignment(AID=4,
+                             assignmentName="Coding",
+                             description="This is a coding assignment for CSC1032.",
+                             deadline=datetime(2021, 1, 1, 23, 59, 59),
+                             CID="CSC1032",
+                             doc_name='Coding.docx',
+                             doc_path='static/teachers_submission/CSC1032/Coding.docx')
+    assignment5 = Assignment(AID=5,
+                             assignmentName="Report",
+                             description="This is a report assignment for CSC1033.",
+                             deadline=datetime(2021, 1, 1, 23, 59, 59),
+                             CID="CSC1033",
+                             doc_name='Report.docx',
+                             doc_path='static/teachers_submission/CSC1033/Report.docx')
+    assignment6 = Assignment(AID=6,
+                             assignmentName="Report",
+                             description="This is a report assignment for CSC1034.",
+                             deadline=datetime(2021, 1, 1, 23, 59, 59),
+                             CID="CSC1034",
+                             doc_name='Report.docx',
+                             doc_path='static/teachers_submission/CSC1034/Report.docx')
+    assignment7 = Assignment(AID=7,
+                             assignmentName="Report",
+                             description="This is a report assignment for CSC1035.",
+                             deadline=datetime(2021, 1, 1, 23, 59, 59),
+                             CID="CSC1035",
+                             doc_name='Report.docx',
+                             doc_path='static/teachers_submission/CSC1035/Report.docx')
+    assignment8 = Assignment(AID=8,
+                             assignmentName="Report",
+                             description="This is a report assignment for CSC2032.",
+                             deadline=datetime(2021, 1, 1, 23, 59, 59),
+                             CID="CSC2032",
+                             doc_name='Report.docx',
+                             doc_path='static/teachers_submission/CSC2032/Report.docx')
 
     engage1 = Engage(email="test@email.com", CID="CSC1031")
     engage2 = Engage(email="test@email.com", CID="CSC1032")
     engage3 = Engage(email="test@email.com", CID="CSC1033")
     engage4 = Engage(email="test@email.com", CID="CSC1034")
-    engage5 = Engage(email="test2@email.com", CID="CSC1035")
-    engage6 = Engage(email="stu1@email.com", CID="CSC1031")
+    engage5 = Engage(email="test@email.com", CID="CSC1035")
+    engage6 = Engage(email="test2@email.com", CID="CSC1035")
+    engage7 = Engage(email="test3@email.com", CID="CSC2032")
+    engage8 = Engage(email="stu1@email.com", CID="CSC1031")
     # create folder
     path = ROOT_DIR / Path("static/students_submission/stu1@email.com/CSC1031")
     path.mkdir(parents=True, exist_ok=True)
-    engage7 = Engage(email="stu2@email.com", CID="CSC1031")
+
+    engage9 = Engage(email="stu1@email.com", CID="CSC1032")
     # create folder
-    path = ROOT_DIR / Path("static/students_submission/stu2@email.com/CSC1031")
+    path = ROOT_DIR / Path("static/students_submission/stu1@email.com/CSC1032")
     path.mkdir(parents=True, exist_ok=True)
-    engage8 = Engage(email="stu3@email.com", CID="CSC1031")
+
+    engage10 = Engage(email="stu1@email.com", CID="CSC1033")
     # create folder
-    path = ROOT_DIR / Path("static/students_submission/stu3@email.com/CSC1031")
+    path = ROOT_DIR / Path("static/students_submission/stu1@email.com/CSC1033")
     path.mkdir(parents=True, exist_ok=True)
-    engage9 = Engage(email="stu4@email.com", CID="CSC1032")
+
+    engage11 = Engage(email="stu1@email.com", CID="CSC1034")
+    # create folder
+    path = ROOT_DIR / Path("static/students_submission/stu1@email.com/CSC1034")
+    path.mkdir(parents=True, exist_ok=True)
+
+    engage12 = Engage(email="stu2@email.com", CID="CSC1033")
+    # create folder
+    path = ROOT_DIR / Path("static/students_submission/stu2@email.com/CSC1033")
+    path.mkdir(parents=True, exist_ok=True)
+
+    engage13 = Engage(email="stu3@email.com", CID="CSC1033")
+    # create folder
+    path = ROOT_DIR / Path("static/students_submission/stu3@email.com/CSC1033")
+    path.mkdir(parents=True, exist_ok=True)
+
+    engage14 = Engage(email="stu4@email.com", CID="CSC1032")
     # create folder
     path = ROOT_DIR / Path("static/students_submission/stu4@email.com/CSC1032")
     path.mkdir(parents=True, exist_ok=True)
-    engage10 = Engage(email="test@email.com", CID="CSC2032")
+
+    engage15 = Engage(email="stu5@email.com", CID="CSC2032")
+    # create folder
+    path = ROOT_DIR / Path("static/students_submission/stu5@email.com/CSC2032")
+    path.mkdir(parents=True, exist_ok=True)
 
     create1 = Create(email="test@email.com", AID=1)
     create2 = Create(email="test@email.com", AID=2)
     create3 = Create(email="test@email.com", AID=3)
+    create4 = Create(email="test@email.com", AID=4)
+    create5 = Create(email="test@email.com", AID=5)
+    create6 = Create(email="test@email.com", AID=6)
+    create7 = Create(email="test@email.com", AID=7)
+    create8 = Create(email="test2@email.com", AID=7)
+    create9 = Create(email="test3@email.com", AID=8)
 
     # be careful to the take object creation for test
     # students taking an assignment should be engaged in the related course first!!!
     # --- Jiayuan Zhang
     take1 = Take(email="stu1@email.com",
+                 AID=1,
+                 submitTime=None,
+                 grade=None)
+    take2 = Take(email="stu1@email.com",
                  AID=2,
                  submitTime=None,
                  grade=None)
-    take2 = Take(email="stu2@email.com",
-                 AID=2,
-                 submitTime=None,
-                 grade=None)
-    take3 = Take(email="stu3@email.com",
-                 AID=2,
+    take3 = Take(email="stu1@email.com",
+                 AID=3,
                  submitTime=None,
                  grade=None
                  )
     take4 = Take(email="stu1@email.com",
-                 AID=1,
+                 AID=4,
                  submitTime=None,
                  grade=None)
+    take5 = Take(email="stu1@email.com",
+                 AID=5,
+                 submitTime=None,
+                 grade=None)
+    take6 = Take(email="stu1@email.com",
+                 AID=6,
+                 submitTime=None,
+                 grade=None)
+    take7 = Take(email="stu2@email.com",
+                 AID=5,
+                 submitTime=None,
+                 grade=None)
+    take8 = Take(email="stu3@email.com",
+                 AID=5,
+                 submitTime=None,
+                 grade=None)
+    take9 = Take(email="stu4@email.com",
+                  AID=4,
+                  submitTime=None,
+                  grade=None)
+    take10 = Take(email="stu5@email.com",
+                  AID=8,
+                  submitTime=None,
+                  grade=None)
 
-    db.session.add(school)
+    db.session.add(school1)
+    db.session.add(school2)
     db.session.add(test)
     db.session.add(test2)
     db.session.add(test3)
@@ -305,6 +412,7 @@ def init_db():
     db.session.add(student2)
     db.session.add(student3)
     db.session.add(student4)
+    db.session.add(student5)
     db.session.add(course1)
     db.session.add(course2)
     db.session.add(course3)
@@ -314,6 +422,11 @@ def init_db():
     db.session.add(assignment1)
     db.session.add(assignment2)
     db.session.add(assignment3)
+    db.session.add(assignment4)
+    db.session.add(assignment5)
+    db.session.add(assignment6)
+    db.session.add(assignment7)
+    db.session.add(assignment8)
     db.session.add(engage1)
     db.session.add(engage2)
     db.session.add(engage3)
@@ -324,11 +437,28 @@ def init_db():
     db.session.add(engage8)
     db.session.add(engage9)
     db.session.add(engage10)
+    db.session.add(engage11)
+    db.session.add(engage12)
+    db.session.add(engage13)
+    db.session.add(engage14)
+    db.session.add(engage15)
     db.session.add(create1)
     db.session.add(create2)
     db.session.add(create3)
+    db.session.add(create4)
+    db.session.add(create5)
+    db.session.add(create6)
+    db.session.add(create7)
+    db.session.add(create8)
+    db.session.add(create9)
     db.session.add(take1)
     db.session.add(take2)
     db.session.add(take3)
     db.session.add(take4)
+    db.session.add(take5)
+    db.session.add(take6)
+    db.session.add(take7)
+    db.session.add(take8)
+    db.session.add(take9)
+    db.session.add(take10)
     db.session.commit()
