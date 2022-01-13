@@ -24,6 +24,22 @@ class School(db.Model):
         self.schoolName = schoolName
 
 
+# Admin table
+class Admin(db.Model, UserMixin):
+    __tablename__ = 'Admin'
+
+    email = db.Column(db.String(100), primary_key=True)
+    role = db.Column(db.String(10), nullable=False)
+    password = db.Column(db.String(300), nullable=False)
+    name = db.Column(db.String(30), nullable=False)
+
+    def __init__(self, email, password, name):
+        self.email = email
+        self.role = 'admin'
+        self.password = generate_password_hash(password)
+        self.name = name
+
+
 # User table, contains teachers and students
 class User(db.Model, UserMixin):
     __tablename__ = 'User'
@@ -137,6 +153,10 @@ def init_db():
 
     school1 = School(schoolName="Newcastle University")
     school2 = School(schoolName="University of Cambridge")
+
+    admin = Admin(email="admin@email.com",
+                  password="Admin1!",
+                  name="Admin")
 
     test = User(email="test@email.com",
                 password="Teacher1!",
@@ -405,6 +425,7 @@ def init_db():
 
     db.session.add(school1)
     db.session.add(school2)
+    db.session.add(admin)
     db.session.add(test)
     db.session.add(test2)
     db.session.add(test3)
