@@ -229,6 +229,10 @@ def add_student():
         if not Course.query.filter_by(CID=course_id).first():
             flash('Course doesn\'t exist!')
             return render_template('add-student.html', form=form)
+        # if student is not in the same school of the teacher
+        if User.query.filter_by(email=student_email).first().schoolID != current_user.schoolID:
+            flash('The student is not in your university!')
+            return render_template('add-student.html', form=form)
         # if student is already in the course
         if Engage.query.filter_by(email=student_email, CID=course_id).first():
             flash('Student is already in the course!')
