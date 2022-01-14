@@ -3,9 +3,10 @@ from pathlib import Path
 from flask import Blueprint, render_template, flash, request, redirect, url_for
 from flask_login import current_user
 from app import db, login_required, requires_roles, ROOT_DIR
-from models import School, User, Assignment, Course, Engage
-from administrator.forms import CreateSchoolForm
+from models import School, User, Assignment, Course, Engage, Create, Take
+from administrator.forms import CreateSchoolForm, AddPeopleForm
 from courses.forms import CourseForm
+from courses.views import get_courses
 
 # CONFIG
 administrator_blueprint = Blueprint('admins', __name__, template_folder='templates')
@@ -134,6 +135,66 @@ def create_course():
 
     # if request method is GET or form not valid re-render create course page
     return render_template('admin-create-course.html', form=form)
+
+
+# Add teacher or student to a course
+# Author: Jiayuan Zhang
+@administrator_blueprint.route('/admin/add-people', methods=['GET', 'POST'])
+@login_required
+@requires_roles('admin')
+def add_people():
+    form = AddPeopleForm()
+    form.course_id.choices = get_courses()
+
+    # if request method is POST or form is valid
+    if form.validate_on_submit():
+        course_id = form.course_id.data
+        user_email = form.email.data
+        # if course doesn't exist
+        if not Course.query.filter_by(CID=course_id).first():
+            flash('There is no such course in the system!')
+            return render_template('admin-add-people.html', form=form)
+        # if user not exist
+        if not User.query.filter_by(email=user_email).first():
+            flash('There is no such user in the system!')
+            return render_template('admin-add-people.html', form=form)
+        # if already joined
+        if Engage.query.filter_by(CID=course_id, email=user_email).first():
+            flash('You have already joined the course')
+            return render_template('admin-add-people.html', form=form)
+        else:
+            role = User.query.filter_by(email=user_email).first().role
+            # create a new engage object
+            new_engage = Engage(email=user_email, CID=course_id)
+            db.session.add(new_engage)
+            db.session.commit()
+
+            assignments = Assignment.query.filter_by(CID=course_id).all()
+            # if user is a teacher
+            if role == 'teacher':
+                # create new create objects
+                for a in assignments:
+                    new_create = Create(email=user_email, AID=a.AID)
+                    db.session.add(new_create)
+                # commit db change
+                db.session.commit()
+            # if user is a student
+            else:
+                # create new take objects
+                for a in assignments:
+                    new_take = Take(email=user_email, AID=a.AID, submitTime=None, grade=None)
+                    db.session.add(new_take)
+                db.session.commit()
+                # create folder
+                path = ROOT_DIR / Path("static/students_submission/" + user_email + "/" + course_id)
+                path.mkdir(parents=True, exist_ok=True)
+
+            # successful message
+            flash('Success!')
+            return render_template('admin-add-people.html', form=form)
+
+    # if request method is GET or form not valid re-render join course page
+    return render_template('admin-add-people.html', form=form)
 
 
 # Function that allows the admin to approve of user registration, either approving or declining it

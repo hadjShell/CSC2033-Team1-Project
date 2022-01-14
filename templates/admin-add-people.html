@@ -4,10 +4,10 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta author="Jiayuan Zhang, Bootstrap contributors">
-	<title>Create Course</title>
+	<title>Add People</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/base.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/create-course.css') }}" >
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/admin-add-people.css') }}" >
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300&display=swap" rel="stylesheet">
@@ -64,7 +64,7 @@
        <section class="text-center container">
     		<div class="row py-4">
       			<div class="col-lg-6 col-md-8 mx-auto">
-			        <h1 class="fw-light">Create Course</h1>
+			        <h1 class="fw-light">Add People</h1>
       			</div>
     		</div>
   		</section>
@@ -90,11 +90,18 @@
                     <label for="floatingID">Course ID</label>
                 </div>
                 <div class="form-floating">
-                    {{ form.course_name(class="input form-control", id="floatingName", placeholder="Course Name") }}
-                    {% for error in form.course_name.errors %}
+                    {{ form.email(class="input form-control", id="floatingEmail", placeholder="User Email") }}
+                    {% for error in form.email.errors %}
                         {{ error }}
                     {% endfor %}
-                    <label for="floatingName">Course Name</label>
+                    <label for="floatingEmail">User Email</label>
+                </div>
+                <div class="form-floating">
+                    {{ form.role(class="input form-control", id="floatingRole", placeholder="Role") }}
+                    {% for error in form.role.errors %}
+                        {{ error }}
+                    {% endfor %}
+                    <label for="floatingRole">Role</label>
                 </div>
 
                 {{ form.submit(class="w-100 btn btn-lg btn-primary") }}

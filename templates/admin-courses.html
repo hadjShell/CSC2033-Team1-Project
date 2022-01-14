@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta author="Jiayuan Zhang, Bootstrap contributors">
-	<title>Schools</title>
+	<title>Courses</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/dataTables.bootstrap5.min.css') }}">
@@ -70,7 +70,7 @@
 			        <h1 class="fw-light">Courses</h1>
                     <p>
 		          	<a href="{{ url_for('admins.create_course') }}" class="btn btn-primary my-1">Create Course</a>
-		          	<a href="{{ url_for('admins.create_school') }}" class="btn btn-primary my-1">Add people</a>
+		          	<a href="{{ url_for('admins.add_people') }}" class="btn btn-primary my-1">Add people</a>
 		          	<a href="{{ url_for('admins.create_school') }}" class="btn btn-primary my-1">Update Course</a>
 		          	<a href="{{ url_for('admins.create_school') }}" class="btn btn-primary my-1">Delete Course</a>
         			</p>
