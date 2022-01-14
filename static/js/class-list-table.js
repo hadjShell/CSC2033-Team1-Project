@@ -7,4 +7,5 @@ $(document).ready(function() {
     $('#assignment-student-list').DataTable();
     $('#result-list').DataTable();
     $('#schools-list').DataTable();
+    $('#courses-list').DataTable();
 } );

@@ -1,9 +1,11 @@
 # IMPORTS
+from pathlib import Path
 from flask import Blueprint, render_template, flash, request, redirect, url_for
 from flask_login import current_user
-from app import db, login_required, requires_roles
+from app import db, login_required, requires_roles, ROOT_DIR
 from models import School, User, Assignment, Course, Engage
 from administrator.forms import CreateSchoolForm
+from courses.forms import CourseForm
 
 # CONFIG
 administrator_blueprint = Blueprint('admins', __name__, template_folder='templates')
@@ -101,6 +103,37 @@ def create_school():
             flash('Success!')
 
     return render_template('admin-create-school.html', form=form)
+
+
+# Create Course
+# Author: Jiayuan Zhang
+@administrator_blueprint.route('/admin/create-course', methods=['POST', 'GET'])
+@login_required
+@requires_roles('admin')
+def create_course():
+    # create course form object
+    form = CourseForm()
+
+    # if request method is POST or form is valid
+    if form.validate_on_submit():
+        # if already have this course
+        if Course.query.filter_by(CID=form.course_id.data).first():
+            flash('This course is already existed!')
+            return render_template('admin-create-course.html', form=form)
+        else:
+            # create a new course object
+            new_course = Course(CID=form.course_id.data, courseName=form.course_name.data)
+            # add to database
+            db.session.add(new_course)
+            db.session.commit()
+            # create course folder
+            path = ROOT_DIR / Path("static/teachers_submission/" + str(form.course_id.data))
+            path.mkdir(parents=True, exist_ok=True)
+            # send user to course page
+            return redirect(url_for('admins.view_all_courses'))
+
+    # if request method is GET or form not valid re-render create course page
+    return render_template('admin-create-course.html', form=form)
 
 
 # Function that allows the admin to approve of user registration, either approving or declining it
