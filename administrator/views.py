@@ -53,13 +53,13 @@ def view_all_courses():
         for e in engage:
             user = User.query.filter_by(email=e.email).first()
             if user.role == 'teacher':
-                teachers.append(user.schoolID)
+                teachers.append(user.firstName + ' ' + user.surname)
 
         # get course set
         course = (c.CID, c.courseName, teachers)
         courses.append(course)
 
-    return render_template('', all_courses=courses)
+    return render_template('admin-courses.html', courses=courses)
 
 
 # gets all the assignments that exist within the database
