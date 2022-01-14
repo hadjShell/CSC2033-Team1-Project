@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, flash, request, redirect, url_for
 from flask_login import current_user
 from werkzeug.security import check_password_hash
 from app import db, login_required, requires_roles
-from models import School, User, Assignment
+from models import School, User, Assignment, Take, Create
 
 # CONFIG
 administrator_blueprint = Blueprint('admins', __name__, template_folder='templates')
@@ -158,7 +158,15 @@ def delete_assignment():
 
     if selected_assignment is not None:
         assignment_to_delete = Assignment.query.filter_by(AID=int(selected_assignment)).first()
+
+        Create.query.filter_by(AID=assignment_to_delete.AID).delete()
+
+        take_assignment = Take.query.filter_by(AID=assignment_to_delete.AID).all()
+        for per_user_take in take_assignment:
+            Take.query.filter_by(email=per_user_take.email, AID=per_user_take.AID).delete()
+
         Assignment.query.filter_by(AID=assignment_to_delete.AID).delete()
+
         db.session.commit()
         flash("Assignment with ID: " + selected_assignment + " has been deleted.")
 
