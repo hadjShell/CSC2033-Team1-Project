@@ -15,7 +15,7 @@ administrator_blueprint = Blueprint('admins', __name__, template_folder='templat
 @login_required
 @requires_roles('admin')
 def admin():
-    return render_template('admins.html')
+    return render_template('admin.html')
 
 
 # gets all users of the database, excluding the admin
@@ -61,12 +61,21 @@ def view_all_courses():
     return render_template('', all_courses=courses)
 
 
+# gets all the assignments that exist within the database
+# Author: Jiayuan Zhang
+@administrator_blueprint.route('/view-all-assignments')
+@login_required
+@requires_roles('admin')
+def view_all_assignments():
+    return render_template('', all_assignments=Assignment.query.all())
+
+
 # gets all the schools that exist within the database
 # Author: Harry Sayer
 @administrator_blueprint.route('/view-all-schools')
 @login_required
 @requires_roles('admin')
-def view_all_school():
+def view_all_schools():
     return render_template('', all_schools=School.query.all())
 
 
@@ -168,7 +177,7 @@ def security_log():
         chop = log.split('|')
         all_logs.append(chop)
 
-    return render_template('admins.html', logs=all_logs)
+    return render_template('', logs=all_logs)
 
 
 @administrator_blueprint.route('/delete-assignment', methods=['GET', 'POST'])
