@@ -132,6 +132,10 @@ def join_course():
         if not Course.query.filter_by(CID=course_id).first():
             flash('There is no such course in the system!')
             return render_template('join-course.html', form=form)
+        # if already joined
+        if Engage.query.filter_by(CID=course_id, email=current_user.email).first():
+            flash('You have already joined the course')
+            return render_template('join-course.html', form=form)
         else:
             # create a new engage object
             new_engage = Engage(email=current_user.email, CID=course_id)
