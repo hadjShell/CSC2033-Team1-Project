@@ -76,7 +76,7 @@ def view_all_assignments():
 @login_required
 @requires_roles('admin')
 def view_all_schools():
-    return render_template('', all_schools=School.query.all())
+    return render_template('admin-schools.html', schools=School.query.all())
 
 
 # allows the admin to create schools
