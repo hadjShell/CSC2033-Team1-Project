@@ -4,18 +4,15 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta author="Jiayuan Zhang, Bootstrap contributors">
-	<title>Schools</title>
+	<title>Welcome</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/base.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/dataTables.bootstrap5.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/create-course.css') }}" >
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300&display=swap" rel="stylesheet">
 	<script src="../static/js/jquery-3.6.0.js"></script>
 	<script src="../static/js/bootstrap.min.js"></script>
-    <script src="../static/js/dataTables.bootstrap5.min.js"></script>
-	<script src="../static/js/jquery.dataTables.min.js"></script>
-	<script src="../static/js/class-list-table.js"></script>
 
     <style>
         #page-container {
@@ -64,34 +61,37 @@
 	</header>
 
     <div id="page-container">
-       <section class="text-center container">
+        <section class="text-center container">
     		<div class="row py-4">
       			<div class="col-lg-6 col-md-8 mx-auto">
-			        <h1 class="fw-light">Schools</h1>
-                    <p>
-		          	<a href="{{ url_for('admins.create_school') }}" class="btn btn-primary my-1">Create School</a>
-        			</p>
+			        <h1 class="fw-light">Create School</h1>
       			</div>
     		</div>
   		</section>
 
-        <div class="container" style="padding-bottom: 3rem">
-            <table id="schools-list" class="table table-striped" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>School ID</th>
-                            <th>School Name</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for school in schools %}
-                            <tr>
-                                <td>{{ school.ID }}</td>
-                                <td>{{ school.schoolName }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-            </table>
+	  	<div class="form-signin container">
+            <form method="POST">
+                {{ form.csrf_token() }}
+
+                <!-- Flash error message if there is one -->
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                <div class="bg-danger text-white rounded">
+                                    {{ messages[0] }}
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+
+                <div class="form-floating">
+                    {{ form.schoolName(class="input form-control", id="floatingName", placeholder="School Name") }}
+                    {% for error in form.schoolName.errors %}
+                        {{ error }}
+                    {% endfor %}
+                    <label for="floatingName">School Name</label>
+                </div>
+
+                {{ form.submit(class="w-100 btn btn-lg btn-primary") }}
+            </form>
         </div>
 
         <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">

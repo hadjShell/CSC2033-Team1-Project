@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, flash, request, redirect, url_for
 from flask_login import current_user
 from app import db, login_required, requires_roles
 from models import School, User, Assignment, Course, Engage
+from administrator.forms import CreateSchoolForm
 
 # CONFIG
 administrator_blueprint = Blueprint('admins', __name__, template_folder='templates')
@@ -85,28 +86,21 @@ def view_all_schools():
 @login_required
 @requires_roles('admin')
 def create_school():
-    # input from the admin
-    name = request.form.get('name')
-    name.strip()
+    form = CreateSchoolForm()
 
-    # if the school already exists or field is left blank it is then it is not created
-    if (len(School.query.filter_by(schoolName=name).all())) == 0 and (len(name) > 0):
-        new_school = School(schoolName=name)
-        db.session.add(new_school)
-        db.session.commit()
+    if form.validate_on_submit():
+        # if school is already exist
+        if School.query.filter_by(schoolName=form.schoolName.data).first():
+            flash('School is already existed!')
+            return render_template('admin-create-school.html', form=form)
+        else:
+            # create new school object
+            new_school = School(schoolName=form.schoolName.data)
+            db.session.add(new_school)
+            db.session.commit()
+            flash('Success!')
 
-        flash('The school "%s" has been created' % name)
-        return render_template('admins.html')
-
-    # checks to make sure the entered school doesn't already exist
-    # if the length of list is greater than 0 obviously school exists in the table
-    elif len(School.query.filter_by(schoolName=name).all()) > 0:
-        flash('The school "%s" already exists' % name)
-        return render_template('admins.html')
-
-    else:
-        flash('Field was left blank')
-        return admin()
+    return render_template('admin-create-school.html', form=form)
 
 
 # Function that allows the admin to approve of user registration, either approving or declining it
