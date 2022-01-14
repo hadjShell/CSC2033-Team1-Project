@@ -1,9 +1,8 @@
 # IMPORTS
 from flask import Blueprint, render_template, flash, request, redirect, url_for
 from flask_login import current_user
-from werkzeug.security import check_password_hash
 from app import db, login_required, requires_roles
-from models import School, User, Assignment, Take, Create
+from models import School, User, Assignment, Course, Engage
 
 # CONFIG
 administrator_blueprint = Blueprint('admins', __name__, template_folder='templates')
@@ -16,7 +15,7 @@ administrator_blueprint = Blueprint('admins', __name__, template_folder='templat
 @login_required
 @requires_roles('admin')
 def admin():
-    return render_template('admin.html')
+    return render_template('admins.html')
 
 
 # gets all users of the database, excluding the admin
@@ -36,16 +35,39 @@ def view_all_users():
                     ("Approved" if cur.approved is True else "Needs Review"))
             users.append(user)
 
-    return render_template('admin.html', all_users=users)
+    return render_template('', all_users=users)
+
+
+# gets all the courses that exist within the database
+# Author: Jiayuan Zhang
+@administrator_blueprint.route('/view-all-courses')
+@login_required
+@requires_roles('admin')
+def view_all_courses():
+    courses = []
+    for c in Course.query.all():
+        # get engaged teachers
+        teachers = []
+        engage = Engage.query.filter_by(CID=c.CID).all()
+        for e in engage:
+            user = User.query.filter_by(email=e.email).first()
+            if user.role == 'teacher':
+                teachers.append(user.schoolID)
+
+        # get course set
+        course = (c.CID, c.courseName, teachers)
+        courses.append(course)
+
+    return render_template('', all_courses=courses)
 
 
 # gets all the schools that exist within the database
 # Author: Harry Sayer
-@administrator_blueprint.route('/view-all-schools', methods=['POST'])
+@administrator_blueprint.route('/view-all-schools')
 @login_required
 @requires_roles('admin')
 def view_all_school():
-    return render_template('admin.html', all_schools=School.query.all())
+    return render_template('', all_schools=School.query.all())
 
 
 # allows the admin to create schools
@@ -65,13 +87,13 @@ def create_school():
         db.session.commit()
 
         flash('The school "%s" has been created' % name)
-        return render_template('admin.html')
+        return render_template('admins.html')
 
     # checks to make sure the entered school doesn't already exist
     # if the length of list is greater than 0 obviously school exists in the table
     elif len(School.query.filter_by(schoolName=name).all()) > 0:
         flash('The school "%s" already exists' % name)
-        return render_template('admin.html')
+        return render_template('admins.html')
 
     else:
         flash('Field was left blank')
@@ -146,7 +168,7 @@ def security_log():
         chop = log.split('|')
         all_logs.append(chop)
 
-    return render_template('admin.html', logs=all_logs)
+    return render_template('admins.html', logs=all_logs)
 
 
 @administrator_blueprint.route('/delete-assignment', methods=['GET', 'POST'])
@@ -158,16 +180,8 @@ def delete_assignment():
 
     if selected_assignment is not None:
         assignment_to_delete = Assignment.query.filter_by(AID=int(selected_assignment)).first()
-
-        Create.query.filter_by(AID=assignment_to_delete.AID).delete()
-
-        take_assignment = Take.query.filter_by(AID=assignment_to_delete.AID).all()
-        for per_user_take in take_assignment:
-            Take.query.filter_by(email=per_user_take.email, AID=per_user_take.AID).delete()
-
         Assignment.query.filter_by(AID=assignment_to_delete.AID).delete()
-
         db.session.commit()
         flash("Assignment with ID: " + selected_assignment + " has been deleted.")
 
-    return render_template('admin.html', all_assignments=Assignment.query.all())
+    return render_template('admins.html', all_assignments=Assignment.query.all())
