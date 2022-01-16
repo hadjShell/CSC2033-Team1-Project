@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, flash, request, redirect, url_for
 from flask_login import current_user
 from app import db, login_required, requires_roles, ROOT_DIR
 from models import School, User, Assignment, Course, Engage, Create, Take
-from administrator.forms import CreateSchoolForm, AddPeopleForm
+from administrator.forms import CreateSchoolForm, AddPeopleForm, UpdateCourseForm
 from courses.forms import CourseForm
 from courses.views import get_courses
 
@@ -195,6 +195,31 @@ def add_people():
 
     # if request method is GET or form not valid re-render join course page
     return render_template('admin-add-people.html', form=form)
+
+
+# Update a course
+# Author: Jiayuan Zhang
+@administrator_blueprint.route('/admin/update-course', methods=['GET', 'POST'])
+@login_required
+@requires_roles('admin')
+def update_course():
+    form = UpdateCourseForm()
+    form.course_id.choices = get_courses()
+
+    # if request method is POST or form is valid
+    if form.validate_on_submit():
+        # update course name
+        new_course_name = form.new_course_name.data
+        course = Course.query.filter_by(CID=form.course_id.data).first()
+        course.courseName = new_course_name
+        db.session.commit()
+
+        # successful message
+        flash('Success!')
+        return render_template('admin-update-course.html', form=form)
+
+    # if request method is GET or form not valid re-render join course page
+    return render_template('admin-update-course.html', form=form)
 
 
 # Function that allows the admin to approve of user registration, either approving or declining it

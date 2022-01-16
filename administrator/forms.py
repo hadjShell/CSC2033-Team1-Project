@@ -14,3 +14,9 @@ class AddPeopleForm(FlaskForm):
     email = StringField(validators=[DataRequired(), Email()])
     role = SelectField('role', choices=['teacher', 'student'])
     submit = SubmitField()
+
+
+class UpdateCourseForm(FlaskForm):
+    course_id = SelectField('Course ID', choices=[])
+    new_course_name = StringField(validators=[DataRequired()])
+    submit = SubmitField()
