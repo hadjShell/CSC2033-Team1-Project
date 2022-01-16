@@ -31,3 +31,8 @@ class UpdateAssignmentForm(FlaskForm):
     assignment = SelectField('Assignment', choices=[])
     new_file = FileField(validators=[DataRequired()])
     submit = SubmitField()
+
+
+class DeleteAssignmentForm(FlaskForm):
+    assignment = SelectField('Assignment', choices=[])
+    submit = SubmitField()

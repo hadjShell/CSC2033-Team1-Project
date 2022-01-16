@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 from app import db, login_required, requires_roles, ROOT_DIR
 from models import School, User, Assignment, Course, Engage, Create, Take
 from administrator.forms import CreateSchoolForm, AddPeopleForm, UpdateCourseForm, DeleteCourseForm, \
-    UpdateAssignmentForm
+    UpdateAssignmentForm, DeleteAssignmentForm
 from courses.forms import CourseForm
 from courses.views import get_courses
 from assignments.views import get_assignments, allowed_file
@@ -259,7 +259,7 @@ def delete_course():
         # send user to course page
         return redirect(url_for('admins.view_all_courses'))
 
-    # if request method is GET or form not valid re-render join course page
+    # if request method is GET or form not valid re-render delete course page
     return render_template('admin-delete-course.html', form=form)
 
 
@@ -300,8 +300,37 @@ def update_assignment():
             flash('File extension is not allowed!')
             return render_template('admin-update-assignment.html', form=form)
 
-    # if request method is GET or form not valid re-render join course page
+    # if request method is GET or form not valid re-render update assignment page
     return render_template('admin-update-assignment.html', form=form)
+
+
+# Delete an assignment
+# Author: Jiayuan Zhang
+@administrator_blueprint.route('/admin/delete-assignment', methods=['GET', 'POST'])
+@login_required
+@requires_roles('admin')
+def delete_assignment():
+    form = DeleteAssignmentForm()
+    form.assignment.choices = get_assignments()
+
+    # if request method is POST or form is valid
+    if form.validate_on_submit():
+        # get assignment id
+        assignment_id = int(form.assignment.data.split(' ')[0])
+
+        # delete all create and take entities
+        Create.query.filter_by(AID=assignment_id).delete()
+        Take.query.filter_by(AID=assignment_id).delete()
+        db.session.commit()
+        # delete assignment entity
+        Assignment.query.filter_by(AID=assignment_id).delete()
+        db.session.commit()
+
+        # send user to assignment page
+        return redirect(url_for('admins.view_all_assignments'))
+
+    # if request method is GET or form not valid re-render delete assignment page
+    return render_template('admin-delete-assignment.html', form=form)
 
 
 # Function that allows the admin to approve of user registration, either approving or declining it
@@ -373,19 +402,3 @@ def security_log():
         all_logs.append(chop)
 
     return render_template('', logs=all_logs)
-
-
-@administrator_blueprint.route('/delete-assignment', methods=['GET', 'POST'])
-@requires_roles('admin')
-@login_required
-def delete_assignment():
-
-    selected_assignment = request.form.get('delete')
-
-    if selected_assignment is not None:
-        assignment_to_delete = Assignment.query.filter_by(AID=int(selected_assignment)).first()
-        Assignment.query.filter_by(AID=assignment_to_delete.AID).delete()
-        db.session.commit()
-        flash("Assignment with ID: " + selected_assignment + " has been deleted.")
-
-    return render_template('admins.html', all_assignments=Assignment.query.all())
