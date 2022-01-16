@@ -20,3 +20,8 @@ class UpdateCourseForm(FlaskForm):
     course_id = SelectField('Course ID', choices=[])
     new_course_name = StringField(validators=[DataRequired()])
     submit = SubmitField()
+
+
+class DeleteCourseForm(FlaskForm):
+    course_id = SelectField('Course ID', choices=[])
+    submit = SubmitField()

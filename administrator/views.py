@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, flash, request, redirect, url_for
 from flask_login import current_user
 from app import db, login_required, requires_roles, ROOT_DIR
 from models import School, User, Assignment, Course, Engage, Create, Take
-from administrator.forms import CreateSchoolForm, AddPeopleForm, UpdateCourseForm
+from administrator.forms import CreateSchoolForm, AddPeopleForm, UpdateCourseForm, DeleteCourseForm
 from courses.forms import CourseForm
 from courses.views import get_courses
 
@@ -84,7 +84,7 @@ def view_all_schools():
 
 
 # allows the admin to create schools
-# Author: Harry Sayer
+# Author: Jiayuan Zhang
 @administrator_blueprint.route('/create-school', methods=['POST', 'GET'])
 @login_required
 @requires_roles('admin')
@@ -220,6 +220,43 @@ def update_course():
 
     # if request method is GET or form not valid re-render join course page
     return render_template('admin-update-course.html', form=form)
+
+
+# Delete a course
+# Author: Jiayuan Zhang
+@administrator_blueprint.route('/admin/delete-course', methods=['GET', 'POST'])
+@login_required
+@requires_roles('admin')
+def delete_course():
+    form = DeleteCourseForm()
+    form.course_id.choices = get_courses()
+
+    # if request method is POST or form is valid
+    if form.validate_on_submit():
+        # get course id
+        course_id = form.course_id.data
+        # delete all engage entities
+        Engage.query.filter_by(CID=course_id).delete()
+        db.session.commit()
+        # get assignments in the course
+        assignments = Assignment.query.filter_by(CID=course_id).all()
+        # delete all create and take entities
+        for a in assignments:
+            Create.query.filter_by(AID=a.AID).delete()
+            Take.query.filter_by(AID=a.AID).delete()
+        db.session.commit()
+        # delete all assignment entities
+        Assignment.query.filter_by(CID=course_id).delete()
+        db.session.commit()
+        # delete course
+        Course.query.filter_by(CID=course_id).delete()
+        db.session.commit()
+
+        # send user to course page
+        return redirect(url_for('admins.view_all_courses'))
+
+    # if request method is GET or form not valid re-render join course page
+    return render_template('admin-delete-course.html', form=form)
 
 
 # Function that allows the admin to approve of user registration, either approving or declining it

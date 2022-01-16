@@ -4,18 +4,15 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta author="Jiayuan Zhang, Bootstrap contributors">
-	<title>Courses</title>
+	<title>Delete Course</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/base.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/dataTables.bootstrap5.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/create-course.css') }}" >
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300&display=swap" rel="stylesheet">
 	<script src="../static/js/jquery-3.6.0.js"></script>
 	<script src="../static/js/bootstrap.min.js"></script>
-    <script src="../static/js/dataTables.bootstrap5.min.js"></script>
-	<script src="../static/js/jquery.dataTables.min.js"></script>
-	<script src="../static/js/class-list-table.js"></script>
 
     <style>
         #page-container {
@@ -67,36 +64,34 @@
        <section class="text-center container">
     		<div class="row py-4">
       			<div class="col-lg-6 col-md-8 mx-auto">
-			        <h1 class="fw-light">Courses</h1>
-                    <p>
-		          	<a href="{{ url_for('admins.create_course') }}" class="btn btn-primary my-1">Create Course</a>
-		          	<a href="{{ url_for('admins.add_people') }}" class="btn btn-primary my-1">Add people</a>
-		          	<a href="{{ url_for('admins.update_course') }}" class="btn btn-primary my-1">Update Course</a>
-		          	<a href="{{ url_for('admins.delete_course') }}" class="btn btn-primary my-1">Delete Course</a>
-        			</p>
+			        <h1 class="fw-light">Delete Course</h1>
       			</div>
     		</div>
   		</section>
 
-        <div class="container" style="padding-bottom: 3rem">
-            <table id="courses-list" class="table table-striped" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Course ID</th>
-                            <th>Course Name</th>
-                            <th>Teachers</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for course in courses %}
-                            <tr>
-                                <td>{{ course[0] }}</td>
-                                <td>{{ course[1] }}</td>
-                                <td>{{ course[2] }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-            </table>
+        <div class="form-signin container">
+            <form method="POST">
+                {{ form.csrf_token() }}
+
+                <!-- Flash error message if there is one -->
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                <div class="bg-danger text-white rounded">
+                                    {{ messages[0] }}
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+
+                <div class="form-floating">
+                    {{ form.course_id(class="input form-control", id="floatingName", placeholder="Course ID") }}
+                    {% for error in form.course_id.errors %}
+                        {{ error }}
+                    {% endfor %}
+                    <label for="floatingName">Course ID</label>
+                </div>
+
+                {{ form.submit(class="w-100 btn btn-lg btn-primary") }}
+            </form>
         </div>
 
         <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
