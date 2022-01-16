@@ -1,12 +1,15 @@
 # IMPORTS
+import os
 from pathlib import Path
 from flask import Blueprint, render_template, flash, request, redirect, url_for
-from flask_login import current_user
+from werkzeug.utils import secure_filename
 from app import db, login_required, requires_roles, ROOT_DIR
 from models import School, User, Assignment, Course, Engage, Create, Take
-from administrator.forms import CreateSchoolForm, AddPeopleForm, UpdateCourseForm, DeleteCourseForm
+from administrator.forms import CreateSchoolForm, AddPeopleForm, UpdateCourseForm, DeleteCourseForm, \
+    UpdateAssignmentForm
 from courses.forms import CourseForm
 from courses.views import get_courses
+from assignments.views import get_assignments, allowed_file
 
 # CONFIG
 administrator_blueprint = Blueprint('admins', __name__, template_folder='templates')
@@ -71,7 +74,8 @@ def view_all_courses():
 @login_required
 @requires_roles('admin')
 def view_all_assignments():
-    return render_template('', all_assignments=Assignment.query.all())
+    assignments = Assignment.query.all()
+    return render_template('admin-assignments.html', assignments=assignments)
 
 
 # gets all the schools that exist within the database
@@ -257,6 +261,47 @@ def delete_course():
 
     # if request method is GET or form not valid re-render join course page
     return render_template('admin-delete-course.html', form=form)
+
+
+# Update an assignment file
+# Author: Jiayuan Zhang
+@administrator_blueprint.route('/admin/update-assignment', methods=['GET', 'POST'])
+@login_required
+@requires_roles('admin')
+def update_assignment():
+    form = UpdateAssignmentForm()
+    form.assignment.choices = get_assignments()
+
+    # if request method is POST or form is valid
+    if form.validate_on_submit():
+        # get assignment
+        assignment_id = int(form.assignment.data.split(' ')[0])
+        assignment = Assignment.query.filter_by(AID=assignment_id).first()
+        # get uploaded file
+        file = form.new_file.data
+        filename = secure_filename(file.filename)
+        # If file is allowed
+        if allowed_file(file.filename):
+            # delete old file
+            os.remove(ROOT_DIR / Path(assignment.doc_path))
+            # update assignment doc_name and doc_path
+            assignment.doc_name = filename
+            assignment.doc_path = "static/teachers_submission/" + assignment.CID + "/" + filename
+            db.session.commit()
+            # update file
+            file.save(ROOT_DIR / Path(assignment.doc_path))
+
+            # successful message
+            flash('Success!')
+            return render_template('admin-update-assignment.html', form=form)
+
+        # if file is not allowed
+        else:
+            flash('File extension is not allowed!')
+            return render_template('admin-update-assignment.html', form=form)
+
+    # if request method is GET or form not valid re-render join course page
+    return render_template('admin-update-assignment.html', form=form)
 
 
 # Function that allows the admin to approve of user registration, either approving or declining it

@@ -1,5 +1,5 @@
 # IMPORTS
-from wtforms import StringField, SubmitField, SelectField
+from wtforms import StringField, SubmitField, SelectField, FileField
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Email
 
@@ -24,4 +24,10 @@ class UpdateCourseForm(FlaskForm):
 
 class DeleteCourseForm(FlaskForm):
     course_id = SelectField('Course ID', choices=[])
+    submit = SubmitField()
+
+
+class UpdateAssignmentForm(FlaskForm):
+    assignment = SelectField('Assignment', choices=[])
+    new_file = FileField(validators=[DataRequired()])
     submit = SubmitField()

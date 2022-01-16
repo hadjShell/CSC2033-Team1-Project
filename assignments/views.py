@@ -165,40 +165,6 @@ def create_assignment():
     return render_template('create-assignment.html', form=form)
 
 
-'''# function to update an assignment which is in the database
-@assignments_blueprint.route('/assignments/assignment-update/<int:id>', methods=['GET', 'POST'])
-@login_required
-@requires_roles('teacher')
-def assignment_update(id):
-    form = AssignmentForm()
-    form.assignmentCID.choices = get_courses()
-    assignment_to_update = Assignment.query.filter_by(AID=id).all()
-    if form.validate_on_submit():
-        combined_date = datetime.datetime(form.assignmentDeadlineDay.data.year,
-                                          form.assignmentDeadlineDay.data.month,
-                                          form.assignmentDeadlineDay.data.day,
-                                          form.assignmentDeadlineTime.data.hour,
-                                          form.assignmentDeadlineTime.data.minute)
-
-        assignment_to_update.assignmentName = form.assignmentTitle.data
-        assignment_to_update.description = form.assignmentDescription.data
-        assignment_to_update.deadline = combined_date
-        assignment_to_update.CID = form.assignmentCID.data
-
-        try:
-            db.session.commit()
-            flash("Assignment successfully updated")
-            return render_template('assignment-update.html', form=form, assignment_to_update=assignment_to_update)
-
-        except:
-            flash("Assignment couldn't be updated")
-            return render_template('assignment-update.html', form=form, assignment_to_update=assignment_to_update)
-
-
-    else:
-        return render_template("assignment-update.html", form=form, assignment_to_update=assignment_to_update)'''
-
-
 # Student view of assignment
 # Author: Jiayuan Zhang
 @assignments_blueprint.route('/assignments/content', methods=('GET', 'POST'))

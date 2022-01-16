@@ -8,4 +8,5 @@ $(document).ready(function() {
     $('#result-list').DataTable();
     $('#schools-list').DataTable();
     $('#courses-list').DataTable();
+    $('#assignments-list').DataTable();
 } );
