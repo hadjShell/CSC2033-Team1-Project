@@ -197,7 +197,7 @@ def add_people():
     return render_template('admin-add-people.html', form=form)
 
 
-# Function that allows the admin to approve of user registration, either approving or declining it
+# Function that allows the admin to approve of user registration
 # Author: Harry Sayer
 @administrator_blueprint.route('/approve', methods=['GET', 'POST'])
 @login_required
@@ -218,6 +218,8 @@ def approve_user():
     return render_template('approve.html', to_be_approved=get_unapproved_members())
 
 
+# Function that allows the admin to decline of user registration
+# Author: Harry Sayer
 @administrator_blueprint.route('/decline', methods=['GET', 'POST'])
 @login_required
 @requires_roles('admin')
@@ -239,6 +241,7 @@ def decline_user():
 
 
 # gets all the current unapproved users
+# Author: Harry Sayer
 def get_unapproved_members():
     to_approve = []
     all_users = User.query.filter_by(approved=False)
@@ -268,6 +271,9 @@ def security_log():
     return render_template('', logs=all_logs)
 
 
+# Displays all assignments to the admin and allows the admin to delete the assignment and all the relations to that
+# assignment.
+# Author: Harry Sayer
 @administrator_blueprint.route('/delete-assignment', methods=['GET', 'POST'])
 @requires_roles('admin')
 @login_required
