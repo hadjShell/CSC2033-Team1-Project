@@ -376,7 +376,7 @@ def approve_user():
 
 # Displays all the security logs to the admin
 # Author: Harry Sayer
-@administrator_blueprint.route('/security-logs', methods=['POST'])
+@administrator_blueprint.route('/security-logs')
 @requires_roles('admin')
 @login_required
 def security_log():
@@ -390,4 +390,4 @@ def security_log():
         chop = log.split('|')
         all_logs.append(chop)
 
-    return render_template('', logs=all_logs)
+    return render_template('admin-log.html', logs=all_logs)
