@@ -274,7 +274,7 @@ def delete_course():
 
 
 # Update an assignment file
-# Author: Jiayuan Zhang
+# Author: Jiayuan Zhang, Tom Dawson
 @administrator_blueprint.route('/admin/update-assignment', methods=['GET', 'POST'])
 @login_required
 @requires_roles('admin')
