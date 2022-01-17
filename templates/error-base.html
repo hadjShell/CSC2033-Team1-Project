@@ -13,53 +13,26 @@
 	<script src="../static/js/jquery-3.6.0.js"></script>
 	<script src="../static/js/bootstrap.min.js"></script>
 
-    <style>
-        #page-container {
-            min-height: 80vh;
-        }
-    </style>
 </head>
 <body>
 
 	<header>
 		<nav id="header-nav" class="navbar navbar-expand-lg navbar-light">
 			<div class="container">
-				<a class="navbar-brand" href="{{ url_for('users.welcome') }}">
+				<a class="navbar-brand" href="#">
 					<img src="../static/image/logo.png" alt="Logo" width="40" height="37.6" class="d-inline-block align-text-center">
 					<span>Odin AMS</span>
 				</a>
-
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      				<span class="navbar-toggler-icon"></span>
-   				</button>
-
-		        <div id="navbarSupportedContent" class="collapse navbar-collapse">
-		           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-			        	<li class="nav-item">
-			            	<a class="nav-link" href="{{ url_for('users.profile') }}"><span>Profile</span></a>
-			            </li>
-			            <li class="nav-item">
-			            	<a class="nav-link" href="{{ url_for('courses.courses') }}"><span>Courses</span></a>
-			            </li>
-			            <li class="nav-item">
-			            	<a class="nav-link" href="{{ url_for('assignments.assignments') }}"><span>Assignments</span></a>
-			            </li>
-			            <li class="nav-item">
-			            	<a class="nav-link" href="{{ url_for('users.student_info') }}"><span>Student Info</span></a>
-			            </li>
-			            <li class="nav-item">
-			            	<a class="nav-link" href="{{ url_for('users.logout') }}"><span>Logout</span></a>
-			            </li>
-		          	</ul>
-		        </div>
-			</div>
+            </div>
 		</nav>
 	</header>
 
     <div id="page-container">
-        <div class="container text-center">
-            {% block content %}
-            {% endblock %}
+        <div class="container text-center" style="padding-bottom: 3rem">
+            <div style="padding-top: 170px">
+                {% block content %}
+                {% endblock %}
+            </div>
         </div>
 
         <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
