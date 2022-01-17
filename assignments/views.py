@@ -41,6 +41,16 @@ def get_assignments():
     return assignment_content
 
 
+# get all assignments a student takes
+def get_assignments_student():
+    take = Take.query.filter_by(email=current_user.email).all()
+    assignments = []
+    for t in take:
+        assignment = Assignment.query.filter_by(AID=t.AID).first()
+        assignments.append(str(assignment.AID) + ' ' + assignment.CID + ' ' + assignment.assignmentName)
+    return assignments
+
+
 # VIEW
 # Assignment page view
 # Author: Jiayuan Zhang
@@ -215,7 +225,7 @@ def download():
 def upload_answer():
     # create a submit form
     form = AnswerSubmissionForm()
-    form.assignment.choices = get_assignments()
+    form.assignment.choices = get_assignments_student()
 
     # if request method is POST or form is valid
     if form.validate_on_submit():
