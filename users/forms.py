@@ -29,6 +29,13 @@ def validate_password(form, field):
             "Password must contain at least 1 digit, 1 lowercase, 1 uppercase and 1 special character.")
 
 
+# check if user school card number contains 8 digits
+def validate_UID(form, field):
+    p = re.compile(r'[0-9]{8}]')
+    if not p.match(field.data):
+        raise ValidationError("School card number must be 8 digits!")
+
+
 # FORMS
 class LoginForm(FlaskForm):
     email = StringField(validators=[DataRequired(), Email()])
@@ -45,10 +52,10 @@ class RegisterForm(FlaskForm):
                                          validate_password])
     confirm_password = PasswordField(validators=[DataRequired(), EqualTo('password', message='Both password fields '
                                                                                              'must be equal!')])
-    role = StringField(validators=[DataRequired()])
-    schoolID = StringField(validators=[DataRequired()])
-    UID = StringField(validators=[DataRequired(), Length(min=9, max=9)])
-    register = SubmitField()
+    role = SelectField('role', choices=['teacher', 'student'])
+    school = SelectField('School', choices=[])
+    UID = StringField(validators=[DataRequired(), validate_UID])
+    submit = SubmitField()
 
 
 class ChangePasswordForm(FlaskForm):

@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <meta author="Jiayuan Zhang, Bootstrap contributors">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Register</title>
-    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
-    <link href="../static/css/register.css" rel="stylesheet">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/register.css') }}" >
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300&display=swap" rel="stylesheet">
@@ -15,47 +15,81 @@
   </head>
 
   <body class="text-center">
-    <main class="form-register">
-      <form>
-        <img class="mb-3" src="../static/image/logo.png" alt="Logo" width="120" height="120">
-        <h1 class="h3 mb-3 fw-normal">Register</h1>
+    <main class="form-signin">
+        <form method="POST">
+            {{ form.csrf_token() }}
+            <img class="mb-4" src="../static/image/logo.png" alt="Logo" width="150" height="150">
+            <h1 class="h3 mb-3 fw-normal">Please Login in</h1>
 
-        <div class="form-floating">
-          <input type="email" class="form-control" id="floatingInput" placeholder="Email">
-          <label for="floatingInput">Email</label>
-        </div>
-        <div class="form-floating">
-          <input type="text" class="form-control" id="floatingSchool" placeholder="School">
-          <label for="floatingSchool">School</label>
-        </div>
-        <div class="form-floating">
-          <input type="text" class="form-control" id="floatingRole" placeholder="Role">
-          <label for="floatingSchool">Role</label>
-        </div>
-        <div class="form-floating">
-          <input type="text" class="form-control" id="floatingFirstName" placeholder="First Name">
-          <label for="floatingFirstName">First Name</label>
-        </div>
-        <div class="form-floating">
-          <input type="text" class="form-control" id="floatingLastName" placeholder="Last Name">
-          <label for="floatingLastName">Last Name</label>
-        </div>
-        <div class="form-floating">
-          <input type="text" class="form-control" id="floatingID" placeholder="ID">
-          <label for="floatingSchool">ID</label>
-        </div>
-        <div class="form-floating">
-          <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-          <label for="floatingPassword">Password</label>
-        </div>
-        <div class="form-floating">
-          <input type="password" class="form-control" id="floatingConfirmPassword" placeholder="Confirm Password">
-          <label for="floatingConfirmPassword">Confirm Password</label>
-        </div>
+            <!-- Flash error message if there is one -->
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <div class="bg-danger text-white rounded">
+                                {{ messages[0] }}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
 
-        <button class="w-100 btn btn-lg btn-primary" type="submit">Register</button>
-        <p class="mt-5 mb-3 text-muted">&copy; Odin AMS 2021-</p>
-      </form>
+            <div class="form-floating">
+                {{ form.email(class="input form-control", id="floatingEmail", placeholder="Email") }}
+                {% for error in form.email.errors %}
+                    {{ error }}
+                {% endfor %}
+                <label for="floatingEmail">Email</label>
+            </div>
+            <div class="form-floating">
+                {{ form.firstName(class="input form-control", id="floatingFirstName", placeholder="First Name") }}
+                {% for error in form.firstName.errors %}
+                    {{ error }}
+                {% endfor %}
+                <label for="floatingFirstName">First Name</label>
+            </div>
+            <div class="form-floating">
+                {{ form.lastName(class="input form-control", id="floatingLastName", placeholder="Last Name") }}
+                {% for error in form.lastName.errors %}
+                    {{ error }}
+                {% endfor %}
+                <label for="floatingLastName">Last Name</label>
+            </div>
+            <div class="form-floating">
+                {{ form.school(class="input form-control", id="floatingSchool", placeholder="School") }}
+                {% for error in form.school.errors %}
+                    {{ error }}
+                {% endfor %}
+                <label for="floatingSchool">School</label>
+            </div>
+            <div class="form-floating">
+                {{ form.role(class="input form-control", id="floatingRole", placeholder="Role") }}
+                {% for error in form.role.errors %}
+                    {{ error }}
+                {% endfor %}
+                <label for="floatingRole">Role</label>
+            </div>
+            <div class="form-floating">
+                {{ form.UID(class="input form-control", id="floatingID", placeholder="School Card Number") }}
+                {% for error in form.UID.errors %}
+                    {{ error }}
+                {% endfor %}
+                <label for="floatingID">School Card Number</label>
+            </div>
+            <div class="form-floating">
+                {{ form.password(class="input form-control", id="floatingPassword", placeholder="Password") }}
+                {% for error in form.password.errors %}
+                    {{ error }}
+                {% endfor %}
+                <label for="floatingPassword">Password</label>
+            </div>
+            <div class="form-floating">
+                {{ form.confirm_password(class="input form-control", id="floatingConfirmedPassword", placeholder="Confirm Password") }}
+                {% for error in form.confirm_password.errors %}
+                    {{ error }}
+                {% endfor %}
+                <label for="floatingConfirmedPassword">Confirm Password</label>
+            </div>
+
+            {{ form.submit(class="w-100 btn btn-lg btn-primary") }}
+            <p class="mt-5 mb-3 text-muted">&copy; Odin AMS 2021-</p>
+        </form>
     </main>  
   </body>
 

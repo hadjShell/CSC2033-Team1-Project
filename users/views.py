@@ -13,6 +13,16 @@ from pathlib import Path
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
 
+# HELP METHOD
+# get all school names
+# Author: Jiayuan Zhang
+def get_schools():
+    schools = []
+    for s in School.query.all():
+        schools.append(s.schoolName)
+    return schools
+
+
 # VIEWS
 # view registration
 # Authors: Uzair Yousaf, Harry Sayer, Jiayuan Zhang
@@ -21,40 +31,39 @@ users_blueprint = Blueprint('users', __name__, template_folder='templates')
 def register():
     # create signup form object
     form = RegisterForm()
+    form.school.choices = get_schools()
 
     # if request method is POST or form is valid
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        # if this returns a user, then the email already exists in database
-
-        # if email already exists redirect user back to signup page with error message so user can try again
+        # if user already exist
         if user:
             flash('Email address already exists')
             return render_template('register.html', form=form)
+        else:
+            # create a new user with the form data
+            new_user = User(email=form.email.data,
+                            role=form.role.data,
+                            password=form.password.data,
+                            schoolID=School.query.filter_by(schoolName=form.school.data).first().ID,
+                            firstName=form.firstName.data,
+                            surname=form.lastName.data,
+                            UID=form.UID.data,
+                            approved=False)
+            # add the new user to the database
+            db.session.add(new_user)
+            db.session.commit()
 
-        # create a new user with the form data
-        new_user = User(email=form.email.data,
-                        role=form.role.data,
-                        password=form.password.data,
-                        schoolID=form.schoolID.data,
-                        firstName=form.firstName.data,
-                        surname=form.lastName.data,
-                        UID=form.UID.data,
-                        approved=False)
-#
-        # add the new user to the database
-        db.session.add(new_user)
-        db.session.commit()
+            # create submission folder
+            path = ROOT_DIR / Path("static/students_submission/" + str(form.email.data))
+            path.mkdir(parents=True, exist_ok=True)
 
-        # create submission folder
-        path = ROOT_DIR / Path("static/students_submission/" + str(form.email.data))
-        path.mkdir(parents=True, exist_ok=True)
+            logging.warning('SECURITY - USER REGISTRATION|%s|%s|%s', new_user.UID, new_user.email,
+                            request.remote_addr)
 
-        logging.warning('SECURITY - USER REGISTRATION|%s|%s|%s', new_user.UID, new_user.email,
-                        request.remote_addr)
+            # success message
+            return redirect((url_for('users.login')))
 
-        # sends user to login page
-        return redirect((url_for('users.profile')))
     # if request method is GET or form not valid re-render signup page
     return render_template('register.html', form=form)
 
