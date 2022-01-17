@@ -26,6 +26,15 @@ def get_courses():
     return courses_ids
 
 
+# get all course id a teacher engaged
+def get_courses_teacher():
+    engage = Engage.query.filter_by(email=current_user.email).all()
+    courses_ids = []
+    for e in engage:
+        courses_ids.append(e.CID)
+    return courses_ids
+
+
 # VIEWS
 # Courses page view
 # Author: Jiayuan Zhang

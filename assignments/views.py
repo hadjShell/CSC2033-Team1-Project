@@ -6,7 +6,7 @@ from flask_login import current_user
 from app import db, login_required, requires_roles
 from assignments.forms import AssignmentForm, AnswerSubmissionForm
 from models import Assignment, Create, Take, User, Engage
-from courses.views import get_courses
+from courses.views import get_courses_teacher
 from app import ALLOWED_EXTENSIONS, ROOT_DIR
 from werkzeug.utils import secure_filename
 
@@ -121,7 +121,7 @@ def assignments_detail():
 def create_assignment():
     # create an assignment form
     form = AssignmentForm()
-    form.assignmentCID.choices = get_courses()
+    form.assignmentCID.choices = get_courses_teacher()
 
     # if request method is POST or form is valid
     if form.validate_on_submit():
@@ -139,11 +139,11 @@ def create_assignment():
                 data_folder = Path("static/teachers_submission/" + str(form.assignmentCID.data) + '/' + filename)
                 file.save(ROOT_DIR / data_folder)
                 # composite date and time
-                combined_date = datetime.datetime(form.assignmentDeadlineDay.data.year,
-                                                  form.assignmentDeadlineDay.data.month,
-                                                  form.assignmentDeadlineDay.data.day,
-                                                  form.assignmentDeadlineTime.data.hour,
-                                                  form.assignmentDeadlineTime.data.minute)
+                combined_date = datetime(form.assignmentDeadlineDay.data.year,
+                                         form.assignmentDeadlineDay.data.month,
+                                         form.assignmentDeadlineDay.data.day,
+                                         form.assignmentDeadlineTime.data.hour,
+                                         form.assignmentDeadlineTime.data.minute)
                 # create new assignment object
                 assignment_number = len(Assignment.query.all())
                 new_assignment = Assignment(AID=assignment_number + 1,
