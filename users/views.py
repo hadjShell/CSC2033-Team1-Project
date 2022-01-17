@@ -194,6 +194,7 @@ def student_results():
     if request.method == 'POST':
         email = request.form.get('student_email')
     student = User.query.filter_by(email=email).first()
+    school = School.query.filter_by(ID=student.schoolID).first().schoolName
 
     # get all results of this student
     results = []
@@ -211,7 +212,7 @@ def student_results():
 
         results.append(list_item)
 
-    return render_template('student-result.html', student=student, results=results)
+    return render_template('student-result.html', student=student, results=results, school=school)
 
 
 # add student to a course
