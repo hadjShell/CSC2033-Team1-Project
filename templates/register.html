@@ -14,12 +14,12 @@
     <script src="../static/js/bootstrap.min.js"></script>
   </head>
 
-  <body class="text-center">
+  <body class="text-center pt-0">
     <main class="form-signin">
         <form method="POST">
             {{ form.csrf_token() }}
-            <img class="mb-4" src="../static/image/logo.png" alt="Logo" width="150" height="150">
-            <h1 class="h3 mb-3 fw-normal">Please Login in</h1>
+            <img class="mb-1" src="../static/image/logo.png" alt="Logo" width="150" height="150">
+            <h1 class="h3 mb-3 fw-normal">Register</h1>
 
             <!-- Flash error message if there is one -->
                     {% with messages = get_flashed_messages() %}

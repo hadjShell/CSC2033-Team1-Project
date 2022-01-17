@@ -31,7 +31,7 @@ def validate_password(form, field):
 
 # check if user school card number contains 8 digits
 def validate_UID(form, field):
-    p = re.compile(r'[0-9]{8}]')
+    p = re.compile(r'[0-9]{8}')
     if not p.match(field.data):
         raise ValidationError("School card number must be 8 digits!")
 
