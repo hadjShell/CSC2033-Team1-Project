@@ -9,4 +9,5 @@ $(document).ready(function() {
     $('#schools-list').DataTable();
     $('#courses-list').DataTable();
     $('#assignments-list').DataTable();
+    $('#users-list').DataTable();
 } );

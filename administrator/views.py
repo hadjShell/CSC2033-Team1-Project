@@ -1,18 +1,28 @@
 # IMPORTS
 import os
 from pathlib import Path
-from flask import Blueprint, render_template, flash, request, redirect, url_for
+from flask import Blueprint, render_template, flash, redirect, url_for
 from werkzeug.utils import secure_filename
 from app import db, login_required, requires_roles, ROOT_DIR
 from models import School, User, Assignment, Course, Engage, Create, Take
 from administrator.forms import CreateSchoolForm, AddPeopleForm, UpdateCourseForm, DeleteCourseForm, \
-    UpdateAssignmentForm, DeleteAssignmentForm
+    UpdateAssignmentForm, DeleteAssignmentForm, ApproveForm
 from courses.forms import CourseForm
 from courses.views import get_courses
 from assignments.views import get_assignments, allowed_file
 
 # CONFIG
 administrator_blueprint = Blueprint('admins', __name__, template_folder='templates')
+
+
+# HELP FUNCTION
+# get all unapproved user email
+# Author: Jiayuan Zhang
+def get_unapproved():
+    unapproved = []
+    for user in User.query.filter_by(approved=False).all():
+        unapproved.append(user.email)
+    return unapproved
 
 
 # VIEW
@@ -25,24 +35,18 @@ def admin():
     return render_template('admin.html')
 
 
-# gets all users of the database, excluding the admin
-# Author: Harry Sayer
-@administrator_blueprint.route('/view-all-users', methods=['POST'])
+# gets all users of the database
+# Author: Harry Sayer, Jiayuan Zhang
+@administrator_blueprint.route('/view-all-users', methods=['POST', 'GET'])
 @login_required
 @requires_roles('admin')
 def view_all_users():
     users = []
-    for cur in User.query.all():
-        # admin is not appended to the list
-        if cur.role == "admin":
-            continue
-        else:
-            user_school = School.query.filter_by(ID=cur.schoolID).first()
-            user = (cur.UID, cur.email, cur.firstName, cur.surname, cur.role, user_school.schoolName,
-                    ("Approved" if cur.approved is True else "Needs Review"))
-            users.append(user)
-
-    return render_template('', all_users=users)
+    for u in User.query.all():
+        school = School.query.filter_by(ID=u.schoolID).first().schoolName
+        user = (u.email, school, u.role, u.UID, u.firstName, u.surname, u.approved)
+        users.append(user)
+    return render_template('admin-users.html', users=users)
 
 
 # gets all the courses that exist within the database
@@ -334,55 +338,40 @@ def delete_assignment():
 
 
 # Function that allows the admin to approve of user registration, either approving or declining it
-# Author: Harry Sayer
-@administrator_blueprint.route('/approve', methods=['GET', 'POST'])
+# Author: Harry Sayer, Jiayuan Zhang
+@administrator_blueprint.route('/admin/approve', methods=['GET', 'POST'])
 @login_required
 @requires_roles('admin')
 def approve_user():
-    if request.method == 'POST':
+    form = ApproveForm()
+    form.email.choices = get_unapproved()
 
-        # whether the approve or decline button has been pressed
-        approved = request.form.get("approve")
-
-        if approved is not None:
-            user = User.query.filter_by(email=approved).first()
-            # approves the user - no longer needs to be reviewed and can access page
+    # if request method is POST or form is valid
+    if form.validate_on_submit():
+        # get user email and decision
+        email = form.email.data
+        decision = form.decision.data
+        # if approved
+        if decision == "Yes":
+            # set approved
+            user = User.query.filter_by(email=email).first()
             user.approved = True
             db.session.commit()
-            flash(user.firstName + " " + user.surname + " has been approved of registration")
 
-    return render_template('approve.html', to_be_approved=get_unapproved_members())
-
-
-@administrator_blueprint.route('/decline', methods=['GET', 'POST'])
-@login_required
-@requires_roles('admin')
-def decline_user():
-
-    if request.method == 'POST':
-
-        # whether the approve or decline button has been pressed
-        declined = request.form.get("decline")
-
-        if declined is not None:
-            user = User.query.filter_by(email=declined).first()
-            # when user is declined they are deleted from the database
-            User.query.filter_by(UID=user.UID).delete()
+            # successful message
+            flash('Success!')
+            return render_template('admin-approve.html', form=form)
+        else:
+            # delete user
+            User.query.filter_by(email=email).delete()
             db.session.commit()
-            flash(user.firstName + " " + user.surname + " has been declined of registration")
 
-    return render_template('approve.html', to_be_approved=get_unapproved_members())
+            # successful message
+            flash('Success!')
+            return render_template('admin-approve.html', form=form)
 
-
-# gets all the current unapproved users
-def get_unapproved_members():
-    to_approve = []
-    all_users = User.query.filter_by(approved=False)
-    for user in all_users:
-        # gets the name of the school the user attends
-        their_school = School.query.filter_by(ID=user.schoolID).first()
-        to_approve.append((user, their_school))
-    return to_approve
+    # if request method is GET or form not valid re-render approve page
+    return render_template('admin-approve.html', form=form)
 
 
 # Displays all the security logs to the admin

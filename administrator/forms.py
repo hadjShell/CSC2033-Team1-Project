@@ -36,3 +36,9 @@ class UpdateAssignmentForm(FlaskForm):
 class DeleteAssignmentForm(FlaskForm):
     assignment = SelectField('Assignment', choices=[])
     submit = SubmitField()
+
+
+class ApproveForm(FlaskForm):
+    email = SelectField('Unapproved', choices=[])
+    decision = SelectField('Decision', choices=['Yes', 'No'])
+    submit = SubmitField()
