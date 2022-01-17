@@ -67,7 +67,7 @@ def register():
                             request.remote_addr)
 
             # success message
-            return redirect((url_for('index')))
+            return redirect((url_for('users.login')))
 
     # if request method is GET or form not valid re-render signup page
     return render_template('register.html', form=form)
