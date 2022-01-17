@@ -11,6 +11,12 @@ from courses.forms import CourseForm
 from courses.views import get_courses
 from assignments.views import get_assignments, allowed_file
 
+"""
+This python file handles the views and operations of admin users.
+-------------------------------------------------------------------------------------------------------------------
+Created by Jiayuan Zhang, Harry Sayer
+"""
+
 # CONFIG
 administrator_blueprint = Blueprint('admins', __name__, template_folder='templates')
 

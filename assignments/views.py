@@ -10,18 +10,24 @@ from courses.views import get_courses
 from app import ALLOWED_EXTENSIONS, ROOT_DIR
 from werkzeug.utils import secure_filename
 
+"""
+This python file handles the views and operations of assignments.
+-------------------------------------------------------------------------------------------------------------------
+Created by Jiayuan Zhang, Tom Dawson
+"""
+
 # CONFIG
 assignments_blueprint = Blueprint('assignments', __name__, template_folder='templates')
 
 
 # HELP FUNCTIONS
 # Author: Jiayuan Zhang
-
 # A function that returns the 'deadline' value
 def deadlineValue(a):
     return a.deadline
 
 
+# Check whether a file extension is allowed
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 

@@ -6,6 +6,12 @@ from app import db, login_required, requires_roles, ROOT_DIR
 from courses.forms import CourseForm, JoinForm
 from models import Course, Engage, User, Assignment, Create
 
+"""
+This python file handles the views and activities related to course.
+-------------------------------------------------------------------------------------------------------------------
+Created by Jiayuan Zhang
+"""
+
 # CONFIG
 courses_blueprint = Blueprint('courses', __name__, template_folder='templates')
 

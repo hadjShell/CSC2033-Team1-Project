@@ -3,7 +3,14 @@ from wtforms import StringField, SubmitField, SelectField, FileField
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Email
 
+"""
+This python file contains all WTForms and restrictions related to admin activities.
+-------------------------------------------------------------------------------------------------------------------
+Created by Jiayuan Zhang
+"""
 
+
+# FORMS
 class CreateSchoolForm(FlaskForm):
     schoolName = StringField(validators=[DataRequired()])
     submit = SubmitField()

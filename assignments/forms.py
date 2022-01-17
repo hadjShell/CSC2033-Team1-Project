@@ -1,12 +1,13 @@
+# IMPORTS
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, DateField, SelectField, TimeField, TextAreaField, FileField
 from wtforms.validators import DataRequired
-from app import db
-from models import Course
 
-
-def get_courses():
-    return db.session.query(Course.CID).all()
+"""
+This python file contains all WTForms and restrictions related to assignment activities.
+-------------------------------------------------------------------------------------------------------------------
+Created by Jiayuan Zhang, Tom Dawson
+"""
 
 
 # Form for creating an assignment

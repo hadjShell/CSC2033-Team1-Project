@@ -9,6 +9,12 @@ from courses.views import get_courses
 from werkzeug.security import check_password_hash
 from pathlib import Path
 
+"""
+This python file handles the views and operations of teacher and student users.
+-------------------------------------------------------------------------------------------------------------------
+Created by Jiayuan Zhang, Harry Sayer
+"""
+
 # CONFIG
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
