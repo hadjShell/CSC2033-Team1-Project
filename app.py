@@ -25,7 +25,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///odin.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
-'''tunnel = sshtunnel.SSHTunnelForwarder('linux.cs.ncl.ac.uk', ssh_username='UniUsername (cXXXXXXX)', ssh_password='UniPassword',
+'''tunnel = sshtunnel.SSHTunnelForwarder('linux.cs.ncl.ac.uk', ssh_username='c0057833', ssh_password='zjy26.10.25ZJY',
                                       remote_bind_address=('cs-db.ncl.ac.uk', 3306))
 tunnel.start()
 

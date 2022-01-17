@@ -6,7 +6,7 @@ from app import db, login_required, requires_roles, ROOT_DIR
 from models import User, School, Take, Assignment, Engage, Course
 from users.forms import LoginForm, RegisterForm, ChangePasswordForm, AddStudentForm, GradeForm
 from courses.views import get_courses
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from pathlib import Path
 
 """
@@ -155,9 +155,9 @@ def change_password():
     if form.validate_on_submit():
         # get current user
         user = User.query.filter_by(email=current_user.email).first()
-        if form.old_password.data == user.password:
+        if check_password_hash(user.password, form.old_password.data):
             # update new password to database
-            user.password = form.new_password.data
+            user.password = generate_password_hash(form.new_password.data)
             db.session.commit()
             # successfully updated, log out
             logout_user()
