@@ -177,8 +177,8 @@ def init_db():
                     password="Student1!",
                     role="student",
                     schoolID=1,
-                    firstName="Rob",
-                    surname="Baker",
+                    firstName="Jiayuan",
+                    surname="Zhang",
                     UID="10000001",
                     approved=True)
     # create submission folder
