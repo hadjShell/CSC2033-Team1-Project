@@ -27,7 +27,6 @@ def get_schools():
 # view registration
 # Authors: Uzair Yousaf, Harry Sayer, Jiayuan Zhang
 @users_blueprint.route('/register', methods=['GET', 'POST'])
-@requires_roles('student')
 def register():
     # create signup form object
     form = RegisterForm()
@@ -94,7 +93,7 @@ def login():
             logging.warning('SECURITY - USER FAILED LOGIN ATTEMPT|%s|%s|%s', user.UID, user.email,
                             request.remote_addr)
         elif user and check_password_hash(user.password, form.password.data) and user.approved is False:
-            return render_template('errors/waiting-approval.html')
+            flash("Please wait for admin approved!")
 
         else:
             flash("Please check your login detail and try again!")

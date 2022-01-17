@@ -1,22 +1,16 @@
 body {
 	font-size: 16px;
 	font-family: 'Readex Pro', sans-serif;
-	background: #eeeeee;
+	background: url("../image/welcome.jpg") no-repeat center center fixed;
+	background-size: cover;
 	color: black;
 }
 
 h1 {
-	font: 3em bolder;
+	font: 3em bolder white;
 	text-align: center;
 	margin-top: 50px;
 	margin-bottom: 10px;
-}
-
-#login-welcome {
-	font: 1.5em;
-	text-align: center;
-	margin-top: 10px;
-	margin-bottom: 100px;
 }
 
 section {

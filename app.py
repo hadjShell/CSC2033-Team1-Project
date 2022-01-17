@@ -61,12 +61,6 @@ def index():
     return render_template('index.html')
 
 
-# REGISTER PAGE VIEW
-@app.route('/register')
-def register():
-    return render_template('register.html')
-
-
 # ERROR PAGE VIEWS
 # Author: Jiayuan Zhang
 @app.errorhandler(400)

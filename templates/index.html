@@ -6,17 +6,24 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>AWS Login</title>
 	<link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
-	<link rel="stylesheet" href="{{ url_for('static',filename='css/style-index.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/index.css') }}">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300&display=swap" rel="stylesheet">
 </head>
 <body>
 
-	<h1>System Login</h1>
-	<p id="login-welcome">Select from the options below to get started</p>
+    <div class="text-center container">
+        <div class="row">
+      			<div class="col-lg-6 col-md-8 mx-auto">
+	                <h1>System Login</h1>
+	                <p class="lead">Select from the options below to get started</p>
+                    <a href="{{ url_for('users.register') }}" class="btn btn-outline-primary btn-lg my-2">Register</a>
+                </div>
+        </div>
+    </div>
 
-	<div class="container">
+	<div class="container" style="margin-top: 4rem">
 		<div class="row text-center">
 			<div class="col-gt-4 col-md-4 col-sm-12">
 				<section>
