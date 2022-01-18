@@ -366,6 +366,8 @@ def approve_user():
 
             # successful message
             flash('Success!')
+            # checks for unapproved users again since the table has been now updated
+            form.email.choices = get_unapproved()
             return render_template('admin-approve.html', form=form)
         else:
             # delete user
@@ -374,6 +376,8 @@ def approve_user():
 
             # successful message
             flash('Success!')
+            # checks for unapproved users again since the table has been now updated
+            form.email.choices = get_unapproved()
             return render_template('admin-approve.html', form=form)
 
     # if request method is GET or form not valid re-render approve page
