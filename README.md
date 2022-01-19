@@ -58,4 +58,7 @@ assignments that they have been set.
 view courses they teach as well as create new ones and
 add students to a course. They are also able to create
 and update assignments and view student information.
-- **Admins** - 
+- **Admins** - Admins are able to create and view schools
+create, update, delete and add people to a course. Able to
+update and delete assignments. Approve users. View
+security log
