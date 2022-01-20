@@ -13,7 +13,7 @@ to keep track of what they have been set
 ```Flask, Bootstrap, DataTable.net```
 
 **Database:**
-```MySQL```
+```MySQL, SQLite```
 
 ### ➔ Project Setup
 Install all requirements by running command below -
