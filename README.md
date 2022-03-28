@@ -5,12 +5,16 @@ paper homework diaries and instead use a more intuitive online
 homework and assignment system which will make it easier for students
 to keep track of what they have been set
 
+### ➔ GitHub Repository
+[Link](https://github.com/HarrySayer/CSC2033-Team1-Project)
+
+`hadjShell` is Jiayuan Zhang's nickname.
 ### ➔ Technical Details
 **Languages:**
 ```Python3, HTML5, CSS3, JavaScript```
 
 **Frameworks:**
-```Flask, Bootstrap, DataTable.net```
+```Flask, Jinja, Werkzeug, WTForms, Bootstrap, jQuery, DataTables```
 
 **Database:**
 ```MySQL, SQLite```
@@ -62,3 +66,13 @@ and update assignments and view student information.
 create, update, delete and add people to a course. Able to
 update and delete assignments. Approve users. View
 security log
+  
+### ➔ Dependency
+There are two folders `students_submission` and `teachers_submission` in the 
+`static` folder. You can reset the student one by `init_db()`. Please 
+bear with us submitting some files inside the teacher one, because it is crucial 
+to the testing. Assignments must exist if there are students taking it.
+
+### ➔ Deployment
+The university virtual machine did not work well, and the deployment services online 
+take charges. Therefore, We do not deploy this project.
